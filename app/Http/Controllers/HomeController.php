@@ -127,24 +127,118 @@ class HomeController extends Controller
         }
     }
 
+
+    //  西友スクレイピング関係　↓↓↓
+
+    private function separate_address(string $address)
+    {
+        if (preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $address, $matches) !== 1) {
+            return [
+                'state' => null,
+                'city' => null,
+                'other' => null
+            ];
+        }
+        $pattern = '/([\w\-\.]+)([0-9０-９]+|[一二三四五六七八九十百千万]+)*(([0-9０-９]+|[一二三四五六七八九十百千万]+)|(丁目|丁|番地|番|号|-|‐|ー|−|の|東|西|南|北){1,2})*(([0-9０-９]+|[一二三四五六七八九十百千万]}+)|(丁目|丁|番地|番|号){1,2})(.*)/';
+        // dd($matches);
+        $matches[3] = preg_replace($pattern, '', $matches[3]);
+        return [
+            'state' => $matches[1],
+            'city' => $matches[2],
+            'district' => $matches[3],
+        ];
+
+
+    }
+
+
     public function seiyuData(){
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
         
-        $sql = 'select url, element_path from scrape where id in (8,9,10)';
-        $select = DB::select($sql);
+        $obj = new \stdClass();
+        $obj->store_name = "";
+        $obj->store_url = "";
+        $obj->event_day = "";
+        $obj->address = "";
 
-        foreach($select as $data){
+
+        $sql_8 = 'select url, element_path from scrape where id = 8';
+        $s_8 = DB::select($sql_8);
+        foreach($s_8 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $obj->store_name = $crawler->filter('li .shop_search_individual')
+            ->filter($data->element_path)
+            ->each(function($node){
+                return $node->text();
+            });
+            $obj->store_url = $crawler->filter('li .shop_search_individual')
+            ->filter($data->element_path)
+            ->each(function($node){
+                return $node->attr("href");
+            });
+
+            // オブジェクトをログ出力させるときはprint_rを使う
+            // Log::debug(print_r($obj), true);
+        }
+
+
+        $sql_9 = 'select url, element_path from scrape where id = 9';
+        $s_9 = DB::select($sql_9);
+        foreach($s_9 as $data){
             $url = $data->url;
             // 8~10のelement_pathの値を途中まで一緒にして、each()以降はfilter()でそれぞれのelementを記すとか
             $crawler = $client->request('GET', $url);
-            $text = $crawler->filter($data->element_path)
+            $obj->event_day = $crawler->filter('li .shop_search_individual')
+            ->filter($data->element_path)
             ->each(function($node){
                 return $node->text();
-                return $node->attr("href");
             });
-            var_dump($text);
             
         }
+
+
+        $sql_10 = 'select url, element_path from scrape where id = 10';
+        $s_10 = DB::select($sql_10);
+        foreach($s_10 as $data){
+            $url = $data->url;
+            // 8~10のelement_pathの値を途中まで一緒にして、each()以降はfilter()でそれぞれのelementを記すとか
+            $crawler = $client->request('GET', $url);
+            $obj->address = $crawler->filter('li .shop_search_individual')
+            ->filter($data->element_path)
+            ->each(function($node){
+                return $node->text();
+            });
+            
+        }
+        // dd($obj);
+        for($i = 0; $i < count($obj->store_name); $i++){
+            $store_name = $obj->store_name[$i];
+            $s_url = $obj->store_url[$i];
+            $urlplus = "https://www.seiyu.co.jp" . $s_url;
+            $address = $obj->address[$i];
+            $sepa_addr = $this->separate_address($address);
+            dd($sepa_addr);
+
+            
+
+            $count = "select count(*) as cnt from store where store_name = '$store_name[$i]'";
+            $exist = DB::select($count);
+
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+    
+                $sql = "insert into store(shop_id, store_id, store_name, store_address, store_url, prefectures, town, ss_town)
+                values(1, $max_id, '$store_name[$i]', '$address[$i]', '$urlplus[$i]', '東京都', '', '') ";
+            }
+           
+        }
+
+
+
+
         
 
     }

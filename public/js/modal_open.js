@@ -1,4 +1,3 @@
-
 function initMap(){
     let convas = document.getElementById('map_convas');
     let centerp = {lat:35.73529673720239, lng:139.6281261687641};
@@ -11,12 +10,12 @@ function initMap(){
 
 
 
-
 $(function(){
 
     $("#kensaku-map").on('click', function(e){
 
-        let name = $("input[name='search']").val();
+        let name = $("input[name='map_search']").val();
+        // console.log(name);
 
         if(name == ''){
             $('[data-toggle="tooltip"]')
@@ -66,7 +65,7 @@ $(function(){
                     let zahyo = row.lat + "," + row.lng;
 
                     let tag = $('<div>').append($('<a></a>', {href: '#'}).addClass("modal_link")
-                    .text(row.shop_name).data('value', zahyo));
+                    .text(row.shop_name + row.store_name).data('value', zahyo));
 
                     modal_body.append(tag);
                 }
@@ -81,107 +80,8 @@ $(function(){
         
     });
 
-    function getParam(url, name) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)" ),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-
-    $(document).on('click', '.modal_link', function(){
-        console.log("modal link click!!");
-        let obj = $(this);
-
-        console.log('obj=%o', obj);
-        console.log("link data-value:" + obj.data('value'));
-        console.log($(this));
-        console.log(getParam(obj.data('value')));
-
-        $("#list_modal").modal("hide");
-
-        const url = "map_data";
-        let modal_body = $("#modalHtml");
-        let data = modal_body.append($('<input/>', {type: "hidden", value: data.list[i]}));
-            modal_body.append($('<input/>', {type: "hidden", name: "_token", value: csrf }));
-        $.ajax({
-            type:"GET",
-            url: url,
-            data: data,
-            dataType: 'json',
-            success: function(data){
-                console.log(data.location);
-                markerData = data.location;
-
-                let map;
-                let marker = [];
-                let infoWindow = [];
-
-                for(let i = 0; i < markerData.length; i++){
-
-                    let latS = parseFloat(markerData[i]['lat']);
-                    let lngS = parseFloat(markerData[i]['lng']);
-                    let markerStore = {lat: latS, lng: lngS};
-        
-                    let latL = parseFloat(markerData[i]['L_lat']);
-                    let lngL = parseFloat(markerData[i]['L_lng']);
-                    let markerLocal = {lat: latL, lng: lngL};
-        
-                    icon = new google.maps.MarkerImage('./img/cart.png');
-        
-                    marker[i] = new google.maps.Marker({
-                        position: markerStore,
-                        map: map,
-                        icon: icon
-                    });
-        
-                    marker[i] = new google.maps.Marker({
-                        position: markerLocal,
-                        map: map,
-                    });
-        
-                    // console.log(marker[i]);
-        
-                    infoWindow[i] = new google.maps.InfoWindow({
-                        content: markerData[i]['shop_name'] + markerData[i]['store_name'] + '<br><br>'
-                            + markerData[i]['event_start'] + ' ~ ' + markerData[i]['event_end'] + '<br><br>'
-                            + markerData[i]['sp_title'] + ': ' + markerData[i]['sp_subtilte']
-                    });
-        
-                    markerEvent(i);
-                }
-                
-                let openWindow;
-
-                function markerEvent(i){
-                    marker[i].addListener('click', function(){
-                        myclick(i);
-                    });
-                }
-
-
-                function myclick(i){
-                    if(openWindow){
-                        openWindow.close();
-                    }
-
-                    infoWindow[i].open(map, marker[i]);
-                    openWindow = infoWindow[i];
-
-                }
-            },
-            error: function(data){
-                alert("例外が発生しました");
-                console.log('Error:', data);
-            }
-        });
-        
-        
-
-        
-    });
+   
+    
 
 
 
@@ -242,5 +142,6 @@ $(function(){
 
     
  });
+ 
 
     

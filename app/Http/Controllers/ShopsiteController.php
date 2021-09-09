@@ -23,7 +23,7 @@ class ShopsiteController extends Controller
         $output['key_7'] = '';
         $output['key_8'] = '';
         $output['key_9'] = '';
-        $output['data'] = '';
+        $output['map_search'] = '';
         
         // dd($output);
         return view('page.top', $output);
@@ -157,6 +157,8 @@ class ShopsiteController extends Controller
 
     public function mapModal(Request $request){
         $req = $request->input('name');
+        Log::debug($req);
+        
 
         // dd($req);
         config(['database.connections.mysql.strict' => false]);
@@ -179,6 +181,7 @@ class ShopsiteController extends Controller
         Log::debug($list);
         $response = [];
         $response['list'] = $list;
+        $response['map_search'] = $req; 
         return Response::json($response);
     
     }
