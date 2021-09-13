@@ -1,12 +1,101 @@
 function initMap(){
     let convas = document.getElementById('map_convas');
-    let centerp = {lat:35.73529673720239, lng:139.6281261687641};
-
+    let h_lat = parseFloat($('#h_lat').val());
+    let h_lng = parseFloat($('#h_lng').val());
+    let centerp = {lat: h_lat, lng: h_lng};
+    // console.log(h_lat);
+    // console.log(h_lng);
     map = new google.maps.Map(convas, {
         center: centerp,
         zoom: 16
     });
+
+    
+    // 地域用のL_lat,L_lngもそれぞれの変数に渡して、下記を訂正
+    let S_lat = parseFloat($('#S_lat').val());
+    let S_lng = parseFloat($('#S_lng').val());
+    let L_lat = parseFloat($('#L_lat').val());
+    let L_lng = parseFloat($('#L_lng').val());
+    // for(let i = 0; i < S_lat.length; i++){
+    let latlng = {'lat': S_lat, 'lng': S_lng, 'L_lat': L_lat, 'L_lng': L_lng };
+    
+    // let latlng = {markerStore, markerLocal};
+    const url = "map_data";
+    // 初期表示用のajax
+    $.ajax({
+        type:"GET",
+        url: url,
+        data: latlng,
+        dataType: 'json',
+        success: function(data){
+            // console.log(data.location);
+            markerData = data.location;
+            setMarker(markerData);
+
+
+        },
+        error: function(data){
+            alert("駄目です");
+            console.log('Error:', data);
+        }
+    });
+    // }
+    
+    
 };
+
+let map;
+let icon;
+let marker = [];
+let infoWindow = [];
+
+function setMarker(markerData){
+    for(let i = 0; i < markerData.length; i++){
+
+        let latS = parseFloat(markerData[i]['lat']);
+        let lngS = parseFloat(markerData[i]['lng']);
+        let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
+        
+
+        // let latL = parseFloat(markerData[i]['L_lat']);
+        // let lngL = parseFloat(markerData[i]['L_lng']);
+        // let markerLocal = new google.maps.LatLng({ latL: latL, lngL: lngL });
+        
+
+        icon = new google.maps.MarkerImage('./img/cart.png');
+
+        marker[i] = new google.maps.Marker({
+            position: markerStore,
+            map: map,
+            icon: icon
+        });
+
+        infoWindow[i] = new google.maps.InfoWindow({
+            content: markerData[i]['shop_name'] + markerData[i]['store_name'] + '<br><br>'
+            + markerData[i]['event_start'] + ' ~ ' + markerData[i]['event_end'] + '<br><br>'
+            + markerData[i]['sp_title'] + ': ' + markerData[i]['sp_subtilte']
+        });
+        // console.log(infoWindow);
+
+        markerEvent(i);
+    }
+}  
+
+let openWindow;
+
+function markerEvent(i){
+    google.maps.event.addDomListener(marker[i], 'click', function(){
+        if(openWindow){
+            openWindow.close();
+        }
+    
+        infoWindow[i].open(map, marker[i]);
+        openWindow = infoWindow[i];
+    
+    })
+}
+
+
 
 
 
@@ -14,10 +103,10 @@ $(function(){
 
     $("#kensaku-map").on('click', function(e){
 
-        let name = $("input[name='map_search']").val();
-        // console.log(name);
+        let namae = $("#map_search").val();
+        console.log(namae);
 
-        if(name == ''){
+        if(namae == ''){
             $('[data-toggle="tooltip"]')
             .tooltip({
                 trigger: "manual",
@@ -31,7 +120,7 @@ $(function(){
             return false;
         }
 
-
+    
         const url = "map_modal";
         $.ajaxSetup({
             headers: {
@@ -40,25 +129,15 @@ $(function(){
         });
         e.preventDefault();
 
-        // let formData = {
-        //     shop_name: name.shop_name,
-        //     store_name: name.store_name,
-        //     lat: name.lat,
-        //     lng: name.lng,
-        //     // L_lat: name.L_lat,
-        //     // L_lng: name.L_lng,
-        //     // distance: name.distance,
-        //     // distance2: name.distance_2
-        // }
 
         $('#modalHtml').empty();
         $.ajax({
             type:"GET",
             url: url,
-            data: name,
+            data: namae,
             dataType: 'json',
             success: function(data){
-                console.log(data);
+                // console.log(data);
                 let modal_body = $("#modalHtml");
                 for(let i = 0; i < data.list.length; i++){
                     let row = data.list[i];
@@ -70,6 +149,8 @@ $(function(){
                     modal_body.append(tag);
                 }
                 $("#list_modal").modal('show');
+
+                
 
             },
             error: function(data){
@@ -141,7 +222,7 @@ $(function(){
 //     });
 
     
- });
+});
  
 
     

@@ -11,6 +11,14 @@ use Response;
 class ShopsiteController extends Controller
 {
     public function index(){
+
+        $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name,
+        X(s2.location) as lat, Y(s2.location) as lng, 
+        X(l.L_location) as L_lat, Y(l.L_location) as L_lng
+        from shop s inner join store s2 on s.shop_id = s2.shop_id
+        left join localdata l on s2.local_id = l.local_id";
+        $init = DB::select($sql);
+
         $output = [];
         $output['shop'] = '';
         $output['schedule'] = '';
@@ -23,10 +31,13 @@ class ShopsiteController extends Controller
         $output['key_7'] = '';
         $output['key_8'] = '';
         $output['key_9'] = '';
-        $output['map_search'] = '';
-        
-        // dd($output);
+        $output['init'] = $init;
+        // $output['map_search'] = '';
+        $output['lat'] = '35.73529673720239';
+        $output['lng'] = '139.6281261687641';
         return view('page.top', $output);
+
+    
     }
 
     public function result(Request $request){
@@ -37,23 +48,25 @@ class ShopsiteController extends Controller
 
         // dd($schedule);
         // dd($shop);
-        $base_sql = "select sp.shop_id, s.shop_name, sp.sp_title, sp.event_start, sp.event_end 
-        from shop s inner join sale_point sp on s.shop_id = sp.shop_id where ";
+        $base_sql = "select s.shop_name, s2.store_name, sp.sp_title, event_start, event_end,
+        cast(sp.event_start as date), cast(sp.event_end as date) 
+                from shop s left join store s2 on s.shop_id = s2.shop_id
+                left join sale_point sp on s.shop_id = sp.shop_id where ";
         // 「今日・明日」の場合
         if ($schedule == '1') {
-            $add_where = "event_end = curdate() or event_end = date_add(curdate(), interval 1 day) ";
+            $add_where = "event_end between curdate() and ( curdate() + INTERVAL 1 DAY ) ";
         // １週間の場合
         }elseif($schedule == '2'){
-            $add_where = "event_end between curdate() and date_add(curdate(), interval 7 day) ";
+            $add_where = "event_end between curdate() and ( curdate() + INTERVAL 7 DAY ) ";
         }elseif($schedule == '3'){
-            $add_where = "event_end between curdate() and date_add(curdate(), interval 30 day) ";
+            $add_where = "event_end between curdate() and ( curdate() + INTERVAL 30 day) ";
         }else{
-            $add_where = "event_end > now() ";
+            $add_where = "event_end >= curdate() ";
         }
 
         if($shop !== '' && $add_where !== ''){
             $add_where = $add_where . "and s.shop_name LIKE '%$shop%' order by event_end desc";
-        }elseif($shop !== '' && $add_where == ''){
+        }elseif($shop !== '' && $add_where == 'event_end > now()'){
             $add_where = $add_where . "s.shop_name LIKE '%$shop%'";
         }elseif($shop == '' && $add_where !== ''){
             $add_where . "order by event_end desc";
@@ -97,9 +110,9 @@ class ShopsiteController extends Controller
         $key_8 = $request->input('key_8');
         $key_9 = $request->input('key_9');
 
+        // Log::debug($key_1);
         dd($key_1);
-        // dd($key_1);
-        $base_sql = "select s2.shop_id, s3.store_id, s2.shop_name, s3.store_name, 
+        $base_sql = "select s2.shop_name, s3.store_name, 
         sp.event_start, sp.event_end, sp.sp_title
         from shop s2 left join store s3 on s2.shop_id = s3.shop_id 
         left join sale_point sp on s2.shop_id = sp.shop_id where ";
@@ -124,17 +137,17 @@ class ShopsiteController extends Controller
         );
         // dd($collect);
         dd($sch);
-        $key = array( 
-            'key_1' => $key_1,
-            'key_2' => $key_2,
-            'key_3' => $key_3,
-            'key_4' => $key_4,
-            'key_5' => $key_5,
-            'key_6' => $key_6,
-            'key_7' => $key_7,
-            'key_8' => $key_8,
-            'key_9' => $key_9
-        );
+        // $key = array( 
+        //     'key_1' => $key_1,
+        //     'key_2' => $key_2,
+        //     'key_3' => $key_3,
+        //     'key_4' => $key_4,
+        //     'key_5' => $key_5,
+        //     'key_6' => $key_6,
+        //     'key_7' => $key_7,
+        //     'key_8' => $key_8,
+        //     'key_9' => $key_9
+        // );
 
 
         $output = [];
@@ -148,7 +161,7 @@ class ShopsiteController extends Controller
         $output['key_7'] = $key_7;
         $output['key_8'] = $key_8;
         $output['key_9'] = $key_9;
-        $output['pagenate_params'] = ['key'=> $key];
+        $output['params'] = ['key'=> $key];
         // dd($output);
         return view('page.subResult', $output);
     }
@@ -156,7 +169,7 @@ class ShopsiteController extends Controller
 
 
     public function mapModal(Request $request){
-        $req = $request->input('name');
+        $req = $request->input('namae');
         Log::debug($req);
         
 
@@ -178,41 +191,41 @@ class ShopsiteController extends Controller
         $list = DB::select($sql);
     
         // dd($list);
-        Log::debug($list);
+        // Log::debug($list);
         $response = [];
-        $response['list'] = $list;
-        $response['map_search'] = $req; 
+        $response['list'] = $list; 
         return Response::json($response);
     
     }
 
     public function mapData(Request $request){
-        $lat = $request->input('data.lat');
-        $lng = $request->input('data.lng');
-        $L_lat = $request->input('data.L_lat');
-        $L_lng = $request->input('data.L_lng');
-
-        Log::debug($lat);
+        $S_lat = $request->input('lat');
+        $S_lng = $request->input('lng');
+        $L_lat = $request->input('L_lat');
+        $L_lng = $request->input('L_lng');
+        
+        // Log::debug($S_lat);
         config(['database.connections.mysql.strict' => false]);
         DB::reconnect();
 
         $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
         sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle,
         X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
-                GLength(GeomFromText(CONCAT('LineString('$L_lat' '$L_lng', ', 
+                GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
                        X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-                GLength(GeomFromText(CONCAT('LineString('$lat' '$lng', ', 
+                GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
                        X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
                        from shop s inner join store s2 on s.shop_id = s2.shop_id 
                        left join localdata l on s2.local_id = l.local_id 
                        left join sale_point sp on s.shop_id = sp.shop_id
                        GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
                        ORDER BY greatest(distance, distance_2)";
+        // Log::debug($sql);
 
         $location = DB::select($sql);
 
         // dd($list);
-        Log::debug($location);
+        // Log::debug($location);
         $response = [];
         $response['location'] = $location;
         return Response::json($response);

@@ -128,8 +128,9 @@ class HomeController extends Controller
     }
 
 
-    //  西友スクレイピング関係　↓↓↓
+/**********************   西友スクレイピング関係　↓↓↓   ********************************/  
 
+    // 都道府県 | 市区町村 | 地区 毎に分割する関数
     private function separate_address(string $address)
     {
         if (preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $address, $matches) !== 1) {
@@ -141,6 +142,7 @@ class HomeController extends Controller
         }
         $pattern = '/([\w\-\.]+)([0-9０-９]+|[一二三四五六七八九十百千万]+)*(([0-9０-９]+|[一二三四五六七八九十百千万]+)|(丁目|丁|番地|番|号|-|‐|ー|−|の|東|西|南|北){1,2})*(([0-9０-９]+|[一二三四五六七八九十百千万]}+)|(丁目|丁|番地|番|号){1,2})(.*)/';
         // dd($matches);
+        // 地区の番地以降を削除する処理
         $matches[3] = preg_replace($pattern, '', $matches[3]);
         return [
             'state' => $matches[1],
@@ -181,28 +183,12 @@ class HomeController extends Controller
             // オブジェクトをログ出力させるときはprint_rを使う
             // Log::debug(print_r($obj), true);
         }
-
-
-        $sql_9 = 'select url, element_path from scrape where id = 9';
-        $s_9 = DB::select($sql_9);
-        foreach($s_9 as $data){
-            $url = $data->url;
-            // 8~10のelement_pathの値を途中まで一緒にして、each()以降はfilter()でそれぞれのelementを記すとか
-            $crawler = $client->request('GET', $url);
-            $obj->event_day = $crawler->filter('li .shop_search_individual')
-            ->filter($data->element_path)
-            ->each(function($node){
-                return $node->text();
-            });
-            
-        }
-
+        
 
         $sql_10 = 'select url, element_path from scrape where id = 10';
         $s_10 = DB::select($sql_10);
         foreach($s_10 as $data){
             $url = $data->url;
-            // 8~10のelement_pathの値を途中まで一緒にして、each()以降はfilter()でそれぞれのelementを記すとか
             $crawler = $client->request('GET', $url);
             $obj->address = $crawler->filter('li .shop_search_individual')
             ->filter($data->element_path)
@@ -213,14 +199,18 @@ class HomeController extends Controller
         }
         // dd($obj);
         for($i = 0; $i < count($obj->store_name); $i++){
-            $store_name = $obj->store_name[$i];
+            // Uninitialized string offsetのため$store_nameを配列にしている
+            $store_name = [];
+            $store_name[$i] = $obj->store_name[$i];
             $s_url = $obj->store_url[$i];
             $urlplus = "https://www.seiyu.co.jp" . $s_url;
             $address = $obj->address[$i];
             $sepa_addr = $this->separate_address($address);
-            dd($sepa_addr);
 
-            
+
+            $city = $sepa_addr['city'];
+            $district = $sepa_addr['district'];
+
 
             $count = "select count(*) as cnt from store where store_name = '$store_name[$i]'";
             $exist = DB::select($count);
@@ -230,18 +220,19 @@ class HomeController extends Controller
                 $max = DB::select($id);
                 $max_id = $max[0]->max_id;
     
-                $sql = "insert into store(shop_id, store_id, store_name, store_address, store_url, prefectures, town, ss_town)
-                values(1, $max_id, '$store_name[$i]', '$address[$i]', '$urlplus[$i]', '東京都', '', '') ";
+                // 上で$store_name[$i]として格納しているので、insertでも$store_name[$i]とする必要があった
+                $insert = "insert into store(shop_id, store_id, store_name, store_address, store_url, prefectures, town, ss_town)
+                values(1, $max_id, '$store_name[$i]', '$address', '$urlplus', '東京都', '$city', '$district')";
+                // dd($insert);
+                DB::insert($insert);
+                DB::commit();
             }
            
         }
 
-
-
-
-        
-
     }
+
+    /**********************   localdataへの区と地区を投入　↓↓↓   ********************************/
 
     // localdataテーブルの23区とその地区一覧の投入
     // 郵便番号別なので千代田区や中央区など一部取得に向かない区がある
