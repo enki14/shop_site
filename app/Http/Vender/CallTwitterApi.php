@@ -32,7 +32,7 @@ class callTwitterApi
         return $st;
     }
 
-
+    // タイムライン　
     public function userTimeline(String $searchWord)
     {
         $tl = $this->t->get('statuses/user_timeline', [
@@ -42,17 +42,6 @@ class callTwitterApi
 
         return $tl;
     }
-
-    //ツイート検索
-    // public function searchTweets(String $searchWord)
-    // {
-    //     $d = $this->t->get('search/tweets', [
-    //         'q' => $searchWord,
-    //         'count' => '10',
-    //      ]);
-         
-    //     return $d->statuses;
-    // }
 
     //ユーザー検索
     public function searchUser(String $searchUser)
@@ -68,17 +57,5 @@ class callTwitterApi
         }
         
     }
-
-    // public function userShow(string $user_S)
-    // {
-    //     $u_s = $this->t->get('users/show',[
-    //         'screen_name' => $user_S,
-    //     ]);
-
-    //     if(isset($u_s)){
-    //         return $u_s;
-    //     }
-        
-    // }
 
 }

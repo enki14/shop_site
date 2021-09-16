@@ -22,15 +22,15 @@ class ShopsiteController extends Controller
         $output = [];
         $output['shop'] = '';
         $output['schedule'] = '';
-        $output['key_1'] = '';
-        $output['key_2'] = '';
-        $output['key_3'] = '';
-        $output['key_4'] = '';
-        $output['key_5'] = '';
-        $output['key_6'] = '';
-        $output['key_7'] = '';
-        $output['key_8'] = '';
-        $output['key_9'] = '';
+        // $output['key_1'] = '';
+        // $output['key_2'] = '';
+        // $output['key_3'] = '';
+        // $output['key_4'] = '';
+        // $output['key_5'] = '';
+        // $output['key_6'] = '';
+        // $output['key_7'] = '';
+        // $output['key_8'] = '';
+        // $output['key_9'] = '';
         $output['init'] = $init;
         // $output['map_search'] = '';
         $output['lat'] = '35.73529673720239';
@@ -48,28 +48,32 @@ class ShopsiteController extends Controller
 
         // dd($schedule);
         // dd($shop);
-        $base_sql = "select s.shop_name, s2.store_name, sp.sp_title, event_start, event_end,
-        cast(sp.event_start as date), cast(sp.event_end as date) 
+        $base_sql = "select s.shop_name, s2.store_name, sp.sp_title, sp.sp_subtitle 
+        event_start, event_end
                 from shop s left join store s2 on s.shop_id = s2.shop_id
                 left join sale_point sp on s.shop_id = sp.shop_id where ";
         // 「今日・明日」の場合
         if ($schedule == '1') {
-            $add_where = "event_end between curdate() and ( curdate() + INTERVAL 1 DAY ) ";
+            $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 1 DAY ) 
+            or event_start between curdate() and ( curdate( ) + INTERVAL 1 DAY )) ";
         // １週間の場合
         }elseif($schedule == '2'){
-            $add_where = "event_end between curdate() and ( curdate() + INTERVAL 7 DAY ) ";
+            $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 6 DAY ) 
+            or event_start between curdate() and ( curdate( ) + INTERVAL 6 DAY )) ";
         }elseif($schedule == '3'){
-            $add_where = "event_end between curdate() and ( curdate() + INTERVAL 30 day) ";
+            $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 29 DAY ) 
+            or event_start between curdate() and ( curdate( ) + INTERVAL 29 DAY ))";
         }else{
             $add_where = "event_end >= curdate() ";
         }
 
-        if($shop !== '' && $add_where !== ''){
-            $add_where = $add_where . "and s.shop_name LIKE '%$shop%' order by event_end desc";
-        }elseif($shop !== '' && $add_where == 'event_end > now()'){
-            $add_where = $add_where . "s.shop_name LIKE '%$shop%'";
-        }elseif($shop == '' && $add_where !== ''){
-            $add_where . "order by event_end desc";
+        if($shop !== ''){
+            $add_where = $add_where . "and (s.shop_name LIKE '%$shop%' or s2.store_name like '%$shop%'
+            or s2.town LIKE '%$shop%' or s2.ss_town like '%$shop%') and (event_start is not null and event_start != '') 
+            order by '%$shop%' asc, event_start desc";
+        }else{
+            $add_where = $add_where . "and (event_start is not null and event_start != '')
+             event_start desc";
         }
 
         // where構文はそれぞれ別だが$add_whereに統一することでif文にも対応できている
@@ -85,8 +89,6 @@ class ShopsiteController extends Controller
             $request->page,
             ['path'=> $request->url()]
         );
-        // dd($collect);
-        // dd($sch);
         
         $output = [];
         $output['sch'] = $sch;

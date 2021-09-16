@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class TwitterController extends Controller
 {
-        
+    // ４桁数字の分割（月日の４桁）。
     private function dateFormat(string $mm, string $dd){
         // str_padで2桁の左寄せで0埋め
         $mm = str_pad($mm, 2, "0", STR_PAD_LEFT);
@@ -24,6 +24,7 @@ class TwitterController extends Controller
 
     }
 
+    // ○○月○○日、及び○○/○○の日付抽出の関数。
     private function regExpressionTweet($replace_text){
 
         $retObj = new \stdClass();
@@ -70,21 +71,23 @@ class TwitterController extends Controller
     }
 
 
-
+    // tweet情報とその日付を抽出
     public function index(Request $request)
     {
         $sql = $sql = "select * from shop where twitter_user_id != ''
         and shop_id not in (4,7,8,14,28,98,127)";
         $list = DB::select($sql);
 
+         //  Http/Vender/CallTitterApi.phpのインスタンスを呼びしている。
         $t = new CallTwitterApi();
 
         $ad = [];
         $shop_count = 0;
         foreach($list as $data){
+            // CallTwitterApi.phpのuserTimelineメソッドを呼び出し
             $apilist = $t->userTimeline($data->twitter_user_id);
             
-
+            // オブジェクトクラス
             $obj = new \stdClass();
             $obj->shop_name = $data->shop_name;
             $apicount = 0;
@@ -102,6 +105,7 @@ class TwitterController extends Controller
                     '/[\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF]/',
                     '/(?:\xEE[\x80\x81\x84\x85\x88\x89\x8C\x8D\x90-\x9D\xAA-\xAE\xB1-\xB3\xB5\xB6\xBD-\xBF]|\xEF[\x81-\x83])[\x80-\xBF]/'
                 );
+                // tweetの絵文字やurlなど余分なものを削除している
                 $replace_text = preg_replace($pattern, '', strstr($apidata->text, 'http', true));
                 
                 if($replace_text != ''){
@@ -135,6 +139,7 @@ class TwitterController extends Controller
                 }
                 
             }   
+            // この時点で$objにはmessages(text)と$shop_countが入っている
             $obj->messages = $adsub;
             $ad[$shop_count] = $obj;
             $shop_count++;
@@ -151,6 +156,7 @@ class TwitterController extends Controller
  
     public function uSearch(Request $request)
     {
+        // twitterアカウントの設定
         $t_u = new CallTwitterApi();
         $daiei = $t_u->searchUser("daieiOFFICIAL");
         $donki = $t_u->searchUser("donki_donki");
@@ -205,49 +211,5 @@ class TwitterController extends Controller
         // dd($output);
         return view('twitter', ['output' => $output]);
 
-
-    //     $d = $t_u->searchTweets("スーパーマーケット");
-
-
-    //     $user = array("AEON_JAPAN", "Seiyu_Japan", "Lets_go_Yokado");
-        
-    //     //代入するための変数をセット
-    //     $u_s = [];
-    //     for($i = 0; $i < count($user); $i++){
-
-    //         //代入する $u_s側にも[$i]を指定しなければ、配列が上書きされるだけの仕様になってしまう
-    //         $u_s[$i] = $t_u->userShow($user[$i]);
-    //     }
-        
-    //     $output = [];
-    //     $output['account'] = $d_u;
-    //     $output['keyword'] = $d;
-    //     $output['user'] = $u_s;
-        
-    //     //dd($d);
-    //     //dd($u_s);
-    //     return view('twitter', $output);
-
-    
-    
-    // dd($daiei);
-        // for($i = 0; $i < count($aeon); $i++){
-        //     //dd($at);
-
-        //     $at = $aeon[$i]->text;
-
-        //     $sqlc = 'select max(sp.sp_code) + 1 as max_code from sale_point sp';
-        //     $max_c = DB::select($sqlc);
-        //     $max_code = $max_c[0]->max_code;
-
-        //     $sqlid = 'select max(sp.shop_id) + 1 as max_id from sale_point sp';
-        //     $max_i = DB::select($sqlid);
-        //     $max_id = $max_i[0]->max_id;
-
-        //     $sql_is = "insert into sale_point(sp_code, shop_id, sp_title) values($max_code, $max_id, '$at[$i]')";
-        //     DB::insert($sql_is);
-        //     DB::commit();
-
-        //     //dd($aeon);
     }
 }

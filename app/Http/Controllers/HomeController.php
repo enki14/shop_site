@@ -55,7 +55,7 @@ class HomeController extends Controller
         foreach($list as $data){
             $apilist = $t->userTimeline($data->usertimeline);
 
-            //dd($apires);
+            
             foreach($apilist as $apidata){
                 $at = $apidata->text;
 
@@ -152,6 +152,152 @@ class HomeController extends Controller
 
 
     }
+
+    // private function goutte_scrap($sql){
+    //     $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+    //     foreach($sql as $data){
+    //         $url = $data->url;
+    //         $crawler = $client->request('GET', $url);
+    //         $crawler->filter($data->element_path)
+    //         ->each(function($node){
+    //             return$node->text();
+    //         });
+
+    //     }
+    // }
+
+
+    public function lifeinfo(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+        
+        $obj = new \stdClass();
+        $obj->store_name = "";
+        $obj->store_url = "";
+        $obj->hours = "";
+        $obj->address = "";
+        $obj->shop_tel = "";
+
+
+        $sql_11 = 'select url, element_path from scrape where id = 11';
+        $s_11 = DB::select($sql_11);
+        foreach($s_11 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $obj->store_name = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->text();
+            });
+            $obj->store_url = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->attr("href");
+            });
+
+        }
+
+        $sql_12 = 'select url, element_path from scrape where id = 12';
+        $s_12 = DB::select($sql_12);
+        foreach($s_12 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $obj->shop_tel = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->text();
+            });
+            
+        }
+        // dd($obj->shop_tel);　電話番号のみを使う
+        // ^(0{1}\d{1,4}-{0,1}\d{1,4}-{0,1}\d{4})(.*)　　→これのmatches[1]
+        
+        $sql_13 = 'select url, element_path from scrape where id = 13';
+        $s_13 = DB::select($sql_13);
+        foreach($s_13 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $obj->address = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->text();
+            });
+            
+        }
+        // dd($obj->address);
+
+        $sql_14 = 'select url, element_path from scrape where id = 14';
+        $s_14 = DB::select($sql_14);
+        foreach($s_14 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $obj->hours = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->first()->text();
+            });
+             
+        }
+      
+        for($i = 0; $i < count($obj->store_name); $i++){
+            // Uninitialized string offsetのため$store_nameを配列にしている
+            // $store_name = [];
+            $store_name = $obj->store_name[$i];
+            $s_url = $obj->store_url[$i];
+            $urlplus = "http://www.lifecorp.jp/store/syuto/" . $s_url;
+            $address = $obj->address[$i];
+            $sepa_addr = $this->separate_address($address);
+            $s_tel = $obj->shop_tel[$i];
+            $hours = $obj->hours[$i];
+
+            // 住所の分割
+            $state = $sepa_addr['state'];
+            $city = $sepa_addr['city'];
+            $district = $sepa_addr['district'];
+
+            
+            // 電話番号
+            $tel_pattern = '/^(0{1}\d{1,4}-{0,1}\d{1,4}-{0,1}\d{4})(.*)/u';
+            preg_match($tel_pattern, $s_tel, $tel_match);
+
+            // dd($store_name);
+
+            if(!empty($hours)){
+                // 営業時間
+                $start_end_pattern = '/[0-9|０-９]{1,2}[:：][0-9|０-９]{2}[~～][0-9|０-９]{1,2}[:：][0-9|０-９]{2}/u';
+                $in_brackets = '/（[^）]+）（[^）]+）|（[^）]+）/u';
+                preg_match($start_end_pattern, $hours, $matches);
+                preg_match($in_brackets, $hours, $match);
+                
+                
+                dd($matches);
+                if(!empty($match[0])){
+                    $b_hours = $matches[0] . $match[0];
+                }else{
+                    $b_hours = $matches[0];
+                }
+                Log::debug($b_hours);
+                // dd($b_hours);
+            }
+            
+            
+
+            $count = "select count(*) as cnt from store where store_name = '$store_name[$i]'";
+            $exist = DB::select($count);
+
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+    
+                // 上で$store_name[$i]として格納しているので、insertでも$store_name[$i]とする必要があった
+                $insert = "insert into store(shop_id, store_id, store_name, store_address, store_url, business_hours, prefectures, town, ss_town)
+                values(9, $max_id, '$store_name', '$address', '$urlplus', '$b_hours[$i]', '$state', '$city', '$district')";
+                // dd($insert);
+                DB::insert($insert);
+                DB::commit();
+            }
+           
+        }
+
+    }
+
+
 
 
     public function seiyuData(){

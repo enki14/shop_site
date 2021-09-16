@@ -113,10 +113,10 @@
                 </ul>
             </div>
             <div class="container">
-                <h2>localdataテーブルの編集</h2>
-                <form method="post" action="home_local">
+                <h2>スクレイピング用</h2>
+                <form method="post" action="home_life">
                     @csrf
-                    <button type="submit">localdata登録</button>
+                    <button type="submit">life登録</button>
                 </form>
             </div> 
         </div>

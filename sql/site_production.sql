@@ -9,7 +9,7 @@ create table sale_point
 
 create table store
 (shop_id int(4), store_id int(5), store_name varchar(90), store_address varchar(120),
- store_tel int(13), store_url varchar(255), from_hours varchar(15), to_hours varchar(15),
+ store_tel int(13), store_url varchar(255), business_hours varchar(100),
  prefectures varchar(15), town varchar(30), ss_town varchar(30), station varchar(40), location geometry, 
  local_id int(4), primary key(shop_id, store_id));
 

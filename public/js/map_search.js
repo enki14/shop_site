@@ -8,8 +8,9 @@ $(document).on('click', '.modal_link', function(){
     console.log(latlng);
 
     // コントローラー側に送るリクエストパラメーター
-    let lat_lng = latlng.split(',');
-    location.href = "?lat=" + lat_lng['lat'] + "&lng=" + lat_lng['lng'];
+    let lat = latlng.split(',')[0];
+    let lng = latlng.split(',')[1];
+    location.href = "?lat=" + lat + "&lng=" + lng;
     console.log(location.href);
     
     

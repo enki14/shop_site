@@ -97,5 +97,6 @@ Route::post('/home_syokai', 'HomeController@syokai')->name('home_syokai');
 Route::post('/home_local', 'HomeController@localData')->name('home_local');
 Route::post('/home_dataplus', 'HomeController@dataplus')->name('home_dataplus');
 Route::post('/home_seiyu', 'HomeController@seiyuData');
+Route::post('/home_life', 'HomeController@lifeinfo');
 // Route::post('/home_update', 'HomeController@update')->name('home_update');
 // Route::post('/home_delete', 'HomeController@delete')->name('home_delete');

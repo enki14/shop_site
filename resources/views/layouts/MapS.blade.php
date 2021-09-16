@@ -15,7 +15,8 @@
         @endforeach
         </div>
         <div class="col-3">
-            <input id="kensaku-map" class="btn kensaku-btn" type="button" value="検索" data-toggle="modal" data-target="#list_modal" data-backdrop="true"/>
+            <input id="kensaku-map" class="btn kensaku-btn" type="button" value="検索" style="width: 130px; height: 48px;" 
+            data-toggle="modal" data-target="#list_modal" data-backdrop="true"/>
         </div>
     </div>
     <div id="map" class="col-md">
