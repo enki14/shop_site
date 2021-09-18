@@ -1,8 +1,8 @@
 <div class="container py-4">
     <h4 class="py-3 pl-5">絞り込み条件</h4>
     <p class="py-3 pl-5">○○駅 / ○○店 / 本日・明日</p>
-@if(isset($sch))
-    @foreach($sch as $data)
+@if(isset($pagenater))
+    @foreach($pagenater as $data)
     <div class="card mx-auto rounded-3" style="width: 50.5rem;">
         <div class="card-body shadow">
             @csrf
@@ -30,5 +30,5 @@
     </div>    
     @endforeach
 @endif
-{{ $sch->appends($params)->links() }} 
+{{ $pagenater->appends($params)->links() }} 
 </div>

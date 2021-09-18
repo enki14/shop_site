@@ -229,15 +229,16 @@ class HomeController extends Controller
             $crawler = $client->request('GET', $url);
             $obj->hours = $crawler->filter($data->element_path)
             ->each(function($node){
-                return $node->first()->text();
+                return $node->text();
             });
              
         }
+        // dd($obj->hours);
       
         for($i = 0; $i < count($obj->store_name); $i++){
             // Uninitialized string offsetのため$store_nameを配列にしている
-            // $store_name = [];
-            $store_name = $obj->store_name[$i];
+            $store_name = [];
+            $store_name[$i] = $obj->store_name[$i];
             $s_url = $obj->store_url[$i];
             $urlplus = "http://www.lifecorp.jp/store/syuto/" . $s_url;
             $address = $obj->address[$i];
@@ -245,6 +246,7 @@ class HomeController extends Controller
             $s_tel = $obj->shop_tel[$i];
             $hours = $obj->hours[$i];
 
+            Log::debug($hours);
             // 住所の分割
             $state = $sepa_addr['state'];
             $city = $sepa_addr['city'];
@@ -265,13 +267,28 @@ class HomeController extends Controller
                 preg_match($in_brackets, $hours, $match);
                 
                 
-                dd($matches);
-                if(!empty($match[0])){
-                    $b_hours = $matches[0] . $match[0];
+                Log::debug($matches);
+                Log::debug($match);
+                // $b_hours = [];
+                if(count($matches) == 0 && count($match) == 0){
+                    $b_hours = '';
                 }else{
-                    $b_hours = $matches[0];
+                    if(!empty($matches[0])){
+                        if(count($match) == 0){
+                            $b_hours = $matches[0];
+                        }else{
+                            $b_hours = $matches[0] . $match[0];
+                        }
+                    }else{
+                        if(!empty($match[0])){
+                            $b_hours = $match[0];
+                        }
+                    }
                 }
-                Log::debug($b_hours);
+
+
+                
+                // Log::debug($b_hours);
                 // dd($b_hours);
             }
             
@@ -287,20 +304,21 @@ class HomeController extends Controller
     
                 // 上で$store_name[$i]として格納しているので、insertでも$store_name[$i]とする必要があった
                 $insert = "insert into store(shop_id, store_id, store_name, store_address, store_url, business_hours, prefectures, town, ss_town)
-                values(9, $max_id, '$store_name', '$address', '$urlplus', '$b_hours[$i]', '$state', '$city', '$district')";
+                values(9, $max_id, '$store_name[$i]', '$address', '$urlplus', '$b_hours', '$state', '$city', '$district')";
+                // Log::debug($insert);
                 // dd($insert);
                 DB::insert($insert);
                 DB::commit();
             }
            
         }
-
+    
     }
 
 
-
-
     public function seiyuData(){
+
+    
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
         
         $obj = new \stdClass();

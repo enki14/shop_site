@@ -10,14 +10,19 @@ use Response;
 
 class ShopsiteController extends Controller
 {
-    public function index(){
-
-        $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name,
-        X(s2.location) as lat, Y(s2.location) as lng, 
-        X(l.L_location) as L_lat, Y(l.L_location) as L_lng
-        from shop s inner join store s2 on s.shop_id = s2.shop_id
-        left join localdata l on s2.local_id = l.local_id";
-        $init = DB::select($sql);
+    public function index(Request $request){
+        $lat = $request->input('lat');
+        $lng = $request->input('lng');
+        
+        if($lat == '' or $lng == ''){
+            // ないときは初期表示用の座標
+            $search_lat = '35.73529673720239';
+            $search_lng = '139.6281261687641';
+        }else{
+            $search_lat = $lat;
+            $search_lng = $lng;
+        }
+        
 
         $output = [];
         $output['shop'] = '';
@@ -31,10 +36,8 @@ class ShopsiteController extends Controller
         // $output['key_7'] = '';
         // $output['key_8'] = '';
         // $output['key_9'] = '';
-        $output['init'] = $init;
-        // $output['map_search'] = '';
-        $output['lat'] = '35.73529673720239';
-        $output['lng'] = '139.6281261687641';
+        $output['lat'] = $search_lat;
+        $output['lng'] = $search_lng;
         return view('page.top', $output);
 
     
@@ -113,16 +116,16 @@ class ShopsiteController extends Controller
         $key_9 = $request->input('key_9');
 
         // Log::debug($key_1);
-        dd($key_1);
+        // dd($key_1);
         $base_sql = "select s2.shop_name, s3.store_name, 
         sp.event_start, sp.event_end, sp.sp_title
         from shop s2 left join store s3 on s2.shop_id = s3.shop_id 
         left join sale_point sp on s2.shop_id = sp.shop_id where ";
 
         if($key_1){
-            $add_where = "sp.sp_title like "%お中元%" or sp.sp_title like "%お盆%" or sp.sp_title like "%ギフト%"";
+            $add_where = "sp.sp_title like '%お中元%' or sp.sp_title like '%お盆%' or sp.sp_title like '%ギフト%'";
         }elseif($key_2){
-            $add_where = "sp.sp_title like "%祭り%" or sp.sp_title like "%納涼%"";
+            $add_where = "sp.sp_title like '%お祭り%' or sp.sp_title like '%納涼%'";
         }
 
         $sql = $base_sql . $add_where;
@@ -130,30 +133,16 @@ class ShopsiteController extends Controller
 
         $collect = collect($list); 
         
-        $sch = new LengthAwarePaginator(
+        $pagenater = new LengthAwarePaginator(
             $collect->forpage($request->page, 2),
             $collect->count(),
             2,
             $request->page,
-            ['path'=> $request->url()]
+            ['path2'=> $request->url()]
         );
-        // dd($collect);
-        dd($sch);
-        // $key = array( 
-        //     'key_1' => $key_1,
-        //     'key_2' => $key_2,
-        //     'key_3' => $key_3,
-        //     'key_4' => $key_4,
-        //     'key_5' => $key_5,
-        //     'key_6' => $key_6,
-        //     'key_7' => $key_7,
-        //     'key_8' => $key_8,
-        //     'key_9' => $key_9
-        // );
-
 
         $output = [];
-        $output['sch'] = $sch;
+        $output['pagenater'] = $pagenater;
         $output['key_1'] = $key_1;
         $output['key_2'] = $key_2;
         $output['key_3'] = $key_3;
@@ -163,13 +152,24 @@ class ShopsiteController extends Controller
         $output['key_7'] = $key_7;
         $output['key_8'] = $key_8;
         $output['key_9'] = $key_9;
-        $output['params'] = ['key'=> $key];
+
+        $output['params'] = [
+            'key_1'=> $key_1,
+            'key_2'=> $key_2, 
+            'key_3'=> $key_3, 
+            'key_4'=> $key_4,
+            'key_5'=> $key_5,
+            'key_6'=> $key_6, 
+            'key_7'=> $key_7, 
+            'key_8'=> $key_8,
+            'key_9'=> $key_9
+        ];
         // dd($output);
         return view('page.subResult', $output);
     }
 
 
-
+    // モーダル表示用メソッド
     public function mapModal(Request $request){
         $req = $request->input('namae');
         Log::debug($req);
@@ -192,6 +192,7 @@ class ShopsiteController extends Controller
                ORDER BY greatest(distance, distance_2)";
         $list = DB::select($sql);
     
+
         // dd($list);
         // Log::debug($list);
         $response = [];
@@ -200,6 +201,7 @@ class ShopsiteController extends Controller
     
     }
 
+    // 店舗と地域の初期表示用
     public function mapData(Request $request){
         $S_lat = $request->input('lat');
         $S_lng = $request->input('lng');

@@ -7,12 +7,6 @@
             style="width: 20rem; height: 3.3rem;" data-toggle="tooltip" />
             <input type="hidden" id="h_lat" value="{{ $lat }}" />
             <input type="hidden" id="h_lng" value="{{ $lng }}" />
-        @foreach($init as $data)
-            <input type="hidden" id="S_lat" value="{{ $data->lat }}" />
-            <input type="hidden" id="S_lng" value="{{ $data->lng }}" />
-            <input type="hidden" id="L_lat" value="{{ $data->L_lat }}" />
-            <input type="hidden" id="L_lng" value="{{ $data->L_lng }}" />
-        @endforeach
         </div>
         <div class="col-3">
             <input id="kensaku-map" class="btn kensaku-btn" type="button" value="検索" style="width: 130px; height: 48px;" 
