@@ -1,4 +1,4 @@
-<div class="container py-4">
+<div id="main-result" class="container py-4">
     <h4 class="py-3 pl-5">絞り込み条件</h4>
     <p class="py-3 pl-5">○○駅 / ○○店 / 本日・明日</p>
 @if(isset($sch))

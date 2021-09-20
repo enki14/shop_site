@@ -34,5 +34,6 @@ role="dialog" aria-hidden="true">
             @include('layouts.MapS')
         </div>
     </div>
-</div> 
+</div>
+
 @endsection

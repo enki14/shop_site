@@ -20,10 +20,11 @@
                     <option value="3">Three</option>
                 </select>    
                 <input type="text" id="search-shop" name="search-shop" class="form-control input-lg border-success mr-3" 
-                value="{{ $shop }}" placeholder="店名・地域など" aria-label="keyword" style="width: 300px; height: 45px;" />
-                <input type="submit" id="kensaku-main" 
-                class="kensaku-btn btn" value="検索" data-toggle="popover" style="width: 150px; height: 45px;" />     
+                value="{{ $shop }}" placeholder="店名・地域など" aria-label="店名・地域検索" style="width: 300px; height: 45px;" />
+                <input type="submit" id="kensaku-main" class="kensaku-btn btn" 
+                value="検索" data-toggle="popover" style="width: 150px; height: 45px;" />     
             </div>
         </form>
     </div>
 </div>
+

@@ -12,9 +12,7 @@
     <div id="content-container" class="card mt-3 align-items-center  bg-light mx-auto" 
         style="height: auto; width: 65rem;">
         <div class="card-body">
-            @include('layouts.search_value')
             @include('layouts.keyS')
-            @include('layouts.MapS')
             @include('layouts.itiran2')
         </div>        
     </div>

@@ -86,9 +86,9 @@ class ShopsiteController extends Controller
         $collect = collect($s); 
         
         $sch = new LengthAwarePaginator(
-            $collect->forpage($request->page, 2),
+            $collect->forpage($request->page, 10),
             $collect->count(),
-            2,
+            10,
             $request->page,
             ['path'=> $request->url()]
         );
@@ -118,14 +118,28 @@ class ShopsiteController extends Controller
         // Log::debug($key_1);
         // dd($key_1);
         $base_sql = "select s2.shop_name, s3.store_name, 
-        sp.event_start, sp.event_end, sp.sp_title
+        sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle
         from shop s2 left join store s3 on s2.shop_id = s3.shop_id 
         left join sale_point sp on s2.shop_id = sp.shop_id where ";
 
         if($key_1){
-            $add_where = "sp.sp_title like '%お中元%' or sp.sp_title like '%お盆%' or sp.sp_title like '%ギフト%'";
+            $add_where = "sp.sp_title like '%$key_1%' or sp.sp_subtitle like '%$key_1%'";
         }elseif($key_2){
-            $add_where = "sp.sp_title like '%お祭り%' or sp.sp_title like '%納涼%'";
+            $add_where = "sp.sp_title like '%$key_2%' or sp.sp_subtitle like '%$key_2%'";
+        }elseif($key_3){
+            $add_where = "sp.sp_title like '%$key_3%' or sp.sp_subtitle like '%$key_3%'";
+        }elseif($key_4){
+            $add_where = "sp.sp_title like '%$key_4%' or sp.sp_subtitle like '%$key_4%'";
+        }elseif($key_5){
+            $add_where = "sp.sp_title like '%$key_5%' or sp.sp_subtitle like '%$key_5%'";
+        }elseif($key_6){
+            $add_where = "sp.sp_title like '%$key_6%' or sp.sp_subtitle like '%$key_6%'";
+        }elseif($key_7){
+            $add_where = "sp.sp_title like '%$key_7%' or sp.sp_subtitle like '%$key_7%'";
+        }elseif($key_8){
+            $add_where = "sp.sp_title like '%$key_8%' or sp.sp_subtitle like '%$key_8%'";
+        }else{
+            $add_where = "sp.sp_title like '%$key_9%' or sp.sp_subtitle like '%$key_9%'";
         }
 
         $sql = $base_sql . $add_where;
@@ -239,5 +253,3 @@ class ShopsiteController extends Controller
 
 
 }
-
-

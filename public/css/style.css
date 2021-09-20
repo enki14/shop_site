@@ -199,6 +199,10 @@ header{
     border-bottom-color: transparent;
 } */
 
+#fixed-button{
+    position: fixed;
+}
+
 footer{
     background-color: #decc54;
 } 

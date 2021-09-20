@@ -175,6 +175,7 @@ class HomeController extends Controller
         $obj->store_name = "";
         $obj->store_url = "";
         $obj->hours = "";
+        // $obj->hours_2 = "";
         $obj->address = "";
         $obj->shop_tel = "";
 
@@ -233,7 +234,19 @@ class HomeController extends Controller
             });
              
         }
-        // dd($obj->hours);
+
+        // $sql_15 = 'select url, element_path from scrape where id = 15';
+        // $s_15 = DB::select($sql_15);
+        // foreach($s_15 as $data){
+        //     $url = $data->url;
+        //     $crawler = $client->request('GET', $url);
+        //     $obj->hours_2 = $crawler->filter($data->element_path)
+        //     ->each(function($node){
+        //         return $node->text();
+        //     });
+             
+        // }
+        // dd($obj->hours_2);
       
         for($i = 0; $i < count($obj->store_name); $i++){
             // Uninitialized string offsetのため$store_nameを配列にしている
@@ -245,6 +258,8 @@ class HomeController extends Controller
             $sepa_addr = $this->separate_address($address);
             $s_tel = $obj->shop_tel[$i];
             $hours = $obj->hours[$i];
+            // $hours_2 = $obj->hours[$i];
+
 
             Log::debug($hours);
             // 住所の分割
@@ -257,7 +272,7 @@ class HomeController extends Controller
             $tel_pattern = '/^(0{1}\d{1,4}-{0,1}\d{1,4}-{0,1}\d{4})(.*)/u';
             preg_match($tel_pattern, $s_tel, $tel_match);
 
-            // dd($store_name);
+            // dd($tel_match);
 
             if(!empty($hours)){
                 // 営業時間
@@ -303,8 +318,8 @@ class HomeController extends Controller
                 $max_id = $max[0]->max_id;
     
                 // 上で$store_name[$i]として格納しているので、insertでも$store_name[$i]とする必要があった
-                $insert = "insert into store(shop_id, store_id, store_name, store_address, store_url, business_hours, prefectures, town, ss_town)
-                values(9, $max_id, '$store_name[$i]', '$address', '$urlplus', '$b_hours', '$state', '$city', '$district')";
+                $insert = "insert into store(shop_id, store_id, store_name, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town)
+                values(9, $max_id, '$store_name[$i]', '$address', '$tel_match[1]', '$urlplus', '$b_hours', '$state', '$city', '$district')";
                 // Log::debug($insert);
                 // dd($insert);
                 DB::insert($insert);

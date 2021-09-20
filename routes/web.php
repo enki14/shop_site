@@ -17,7 +17,7 @@ Route::any('/', 'ShopsiteController@index');
 // Route::get('/result', 'ShopsiteController@pagination');
 Route::any('/result', 'ShopsiteController@result');
 Route::get('/result-2', 'ShopsiteController@keyRes');
-Route::any('/result-2', 'ShopsiteController@index');
+// Route::any('/result-2', 'ShopsiteController@index');
 Route::get('/map_modal', 'ShopsiteController@mapModal');
 Route::get('/map_data', 'ShopsiteController@mapData');
 

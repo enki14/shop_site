@@ -1,8 +1,8 @@
 
 $(function(){
 
-
     $('#search-form').on('submit', function(){
+
         let search_schedule = $('#search-schedule').val();
         let search_shop = $('#search-shop').val();
         console.log(search_schedule);
