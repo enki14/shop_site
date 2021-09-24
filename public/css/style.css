@@ -150,11 +150,30 @@ header{
     text-align: center;
 }
 
+.history_back{
+    position: fixed;
+    right: 50px;
+    bottom: 150px;
+    color: #87cefa;
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    z-index: 4;
+}
+
 .itiran{
     border-radius: 5px;
     width: 840px;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+#itiran-card:nth-child(odd){
+    background-color: #EDFFBE;
+}
+
+#itiran-card:nth-child(even){
+    background-color: #FFEEFF;
 }
 
 #ribbon{

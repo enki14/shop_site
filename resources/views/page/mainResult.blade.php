@@ -18,6 +18,7 @@
            @include('layouts.itiran')
         </div>
     </div>
+    <a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-home fa-5x" data-toggle="backtip"></i></a>
 </div>  
 @endsection
 

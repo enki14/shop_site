@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class TwitterController extends Controller
 {
-    // ４桁数字の分割（月日の４桁）。
+    // 固定長の４桁数字生成（月日の４桁）。
     private function dateFormat(string $mm, string $dd){
         // str_padで2桁の左寄せで0埋め
         $mm = str_pad($mm, 2, "0", STR_PAD_LEFT);

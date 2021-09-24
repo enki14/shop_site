@@ -128,7 +128,7 @@ class HomeController extends Controller
     }
 
 
-/**********************   西友スクレイピング関係　↓↓↓   ********************************/  
+/**********************   ライフ・西友スクレイピング関係　↓↓↓   ********************************/  
 
     // 都道府県 | 市区町村 | 地区 毎に分割する関数
     private function separate_address(string $address)
@@ -175,7 +175,6 @@ class HomeController extends Controller
         $obj->store_name = "";
         $obj->store_url = "";
         $obj->hours = "";
-        // $obj->hours_2 = "";
         $obj->address = "";
         $obj->shop_tel = "";
 
@@ -235,18 +234,6 @@ class HomeController extends Controller
              
         }
 
-        // $sql_15 = 'select url, element_path from scrape where id = 15';
-        // $s_15 = DB::select($sql_15);
-        // foreach($s_15 as $data){
-        //     $url = $data->url;
-        //     $crawler = $client->request('GET', $url);
-        //     $obj->hours_2 = $crawler->filter($data->element_path)
-        //     ->each(function($node){
-        //         return $node->text();
-        //     });
-             
-        // }
-        // dd($obj->hours_2);
       
         for($i = 0; $i < count($obj->store_name); $i++){
             // Uninitialized string offsetのため$store_nameを配列にしている
@@ -258,7 +245,7 @@ class HomeController extends Controller
             $sepa_addr = $this->separate_address($address);
             $s_tel = $obj->shop_tel[$i];
             $hours = $obj->hours[$i];
-            // $hours_2 = $obj->hours[$i];
+            
 
 
             Log::debug($hours);
@@ -272,8 +259,6 @@ class HomeController extends Controller
             $tel_pattern = '/^(0{1}\d{1,4}-{0,1}\d{1,4}-{0,1}\d{4})(.*)/u';
             preg_match($tel_pattern, $s_tel, $tel_match);
 
-            // dd($tel_match);
-
             if(!empty($hours)){
                 // 営業時間
                 $start_end_pattern = '/[0-9|０-９]{1,2}[:：][0-9|０-９]{2}[~～][0-9|０-９]{1,2}[:：][0-9|０-９]{2}/u';
@@ -284,7 +269,6 @@ class HomeController extends Controller
                 
                 Log::debug($matches);
                 Log::debug($match);
-                // $b_hours = [];
                 if(count($matches) == 0 && count($match) == 0){
                     $b_hours = '';
                 }else{
@@ -301,12 +285,7 @@ class HomeController extends Controller
                     }
                 }
 
-
-                
-                // Log::debug($b_hours);
-                // dd($b_hours);
             }
-            
             
 
             $count = "select count(*) as cnt from store where store_name = '$store_name[$i]'";
@@ -320,8 +299,7 @@ class HomeController extends Controller
                 // 上で$store_name[$i]として格納しているので、insertでも$store_name[$i]とする必要があった
                 $insert = "insert into store(shop_id, store_id, store_name, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town)
                 values(9, $max_id, '$store_name[$i]', '$address', '$tel_match[1]', '$urlplus', '$b_hours', '$state', '$city', '$district')";
-                // Log::debug($insert);
-                // dd($insert);
+
                 DB::insert($insert);
                 DB::commit();
             }

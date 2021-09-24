@@ -8,9 +8,9 @@
                 style="width: 160px; height: 45px;" aria-label="Default select example"
                 >
                     <option value="">-- 日程 --</option>
-                    <option value="1" @if($schedule == '1') selected @endif>今日・明日</option>
-                    <option value="2" @if($schedule == '2') selected @endif>１週間</option>
-                    <option value="3" @if($schedule == '3') selected @endif>今月</option>
+                    <option value="今日・明日" @if($schedule == '今日・明日') selected @endif>今日・明日</option>
+                    <option value="１週間" @if($schedule == '１週間') selected @endif>１週間</option>
+                    <option value="１ヵ月" @if($schedule == '１ヵ月') selected @endif>１ヵ月</option>
                 </select>    
                 <select id="search-select" class="search-select form-select border-success mr-2" style="width: 180px; height: 45px;" 
                 aria-label="Default select example">

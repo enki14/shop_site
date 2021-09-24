@@ -34,6 +34,7 @@ role="dialog" aria-hidden="true">
             @include('layouts.MapS')
         </div>
     </div>
+    <a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-chevron-circle-up fa-5x" data-toggle="scroll_top"></i></a>
 </div>
-
+<script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places" async defer></script>
 @endsection

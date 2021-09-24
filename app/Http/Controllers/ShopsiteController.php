@@ -27,15 +27,7 @@ class ShopsiteController extends Controller
         $output = [];
         $output['shop'] = '';
         $output['schedule'] = '';
-        // $output['key_1'] = '';
-        // $output['key_2'] = '';
-        // $output['key_3'] = '';
-        // $output['key_4'] = '';
-        // $output['key_5'] = '';
-        // $output['key_6'] = '';
-        // $output['key_7'] = '';
-        // $output['key_8'] = '';
-        // $output['key_9'] = '';
+        $output['keyword'] = '';
         $output['lat'] = $search_lat;
         $output['lng'] = $search_lng;
         return view('page.top', $output);
@@ -51,19 +43,19 @@ class ShopsiteController extends Controller
 
         // dd($schedule);
         // dd($shop);
-        $base_sql = "select s.shop_name, s2.store_name, sp.sp_title, sp.sp_subtitle 
-        event_start, event_end
-                from shop s left join store s2 on s.shop_id = s2.shop_id
-                left join sale_point sp on s.shop_id = sp.shop_id where ";
+        $base_sql = "select s.shop_name, s2.store_name, s.shop_url, s2.store_url, 
+        sp.sp_title, sp.sp_subtitle, sp.event_start, sp.event_end
+        from shop s left join store s2 on s.shop_id = s2.shop_id
+        left join sale_point sp on s.shop_id = sp.shop_id where ";
         // 「今日・明日」の場合
-        if ($schedule == '1') {
+        if ($schedule == '今日・明日') {
             $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 1 DAY ) 
             or event_start between curdate() and ( curdate( ) + INTERVAL 1 DAY )) ";
         // １週間の場合
-        }elseif($schedule == '2'){
+        }elseif($schedule == '１週間'){
             $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 6 DAY ) 
             or event_start between curdate() and ( curdate( ) + INTERVAL 6 DAY )) ";
-        }elseif($schedule == '3'){
+        }elseif($schedule == '１ヵ月'){
             $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 29 DAY ) 
             or event_start between curdate() and ( curdate( ) + INTERVAL 29 DAY ))";
         }else{
@@ -73,10 +65,10 @@ class ShopsiteController extends Controller
         if($shop !== ''){
             $add_where = $add_where . "and (s.shop_name LIKE '%$shop%' or s2.store_name like '%$shop%'
             or s2.town LIKE '%$shop%' or s2.ss_town like '%$shop%') and (event_start is not null and event_start != '') 
-            order by '%$shop%' asc, event_start desc";
+            order by '%$shop%', event_start";
         }else{
             $add_where = $add_where . "and (event_start is not null and event_start != '')
-             event_start desc";
+            order by event_start";
         }
 
         // where構文はそれぞれ別だが$add_whereに統一することでif文にも対応できている
@@ -85,16 +77,47 @@ class ShopsiteController extends Controller
 
         $collect = collect($s); 
         
-        $sch = new LengthAwarePaginator(
+        $pagenate = new LengthAwarePaginator(
             $collect->forpage($request->page, 10),
             $collect->count(),
             10,
             $request->page,
             ['path'=> $request->url()]
         );
+
+        
+        // $retObj = new \stdClass();
+        // $retObj->event_start = "";
+        // $retObj->event_end = "";
+
+        
+        // for($i = 0; $i < count($s); $i++){
+        //     if(!empty($s[$i]->event_end)){
+        //         $event_start_half = str_split($s[$i]->event_start, 4);
+        //         $event_end_half = str_split($s[$i]->event_end, 4);
+        //         $mmdd_start = str_split($event_start_half[1], 2);
+        //         $mmdd_end = str_split($event_end_half[1], 2);
+        //         $yyyy_start = $event_start_half[0];
+        //         $yyyy_end = $event_end_half[0];
+    
+        //         $retObj->event_start = $yyyy_start . '年' . ltrim($mmdd_start[0], '0') . '月' . ltrim($mmdd_start[1], '0') . '日';
+        //         $retObj->event_end = $yyyy_end . '年' . ltrim($mmdd_end[0], '0') . '月' .  ltrim($mmdd_start[1], '0') . '日';
+
+        //         // dd($retObj->event_start);
+        //     }else{
+        //         $event_start_half = str_split($s[$i]->event_start, 4);
+        //         $mmdd_start = str_split($event_start_half[1], 2);
+        //         $yyyy_start = $event_start_half[0];
+    
+        //         $retObj->event_start = $yyyy_start . '年' . ltrim($mmdd_start[0], '0') . '月' . ltrim($mmdd_start[1], '0') . '日';
+        //     }
+
+        // }
+        
+            
         
         $output = [];
-        $output['sch'] = $sch;
+        $output['pagenate'] = $pagenate;
         $output['schedule'] = $schedule;
         $output['shop'] = $shop;
         $output['pagenate_params'] = ['search-schedule'=> $schedule, 'search-shop'=> $shop];
@@ -105,80 +128,42 @@ class ShopsiteController extends Controller
 
 
     public function keyRes(Request $request){
-        $key_1 = $request->input('key_1');
-        $key_2 = $request->input('key_2');
-        $key_3 = $request->input('key_3');
-        $key_4 = $request->input('key_4');
-        $key_5 = $request->input('key_5');
-        $key_6 = $request->input('key_6');
-        $key_7 = $request->input('key_7');
-        $key_8 = $request->input('key_8');
-        $key_9 = $request->input('key_9');
+        $keyword = $request->input('keyword');
 
-        // Log::debug($key_1);
+        // Log::debug($keyword);
         // dd($key_1);
-        $base_sql = "select s2.shop_name, s3.store_name, 
+        $base_sql = "select s2.shop_name, s3.store_name, s2.shop_url, s3.store_url, 
         sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle
         from shop s2 left join store s3 on s2.shop_id = s3.shop_id 
         left join sale_point sp on s2.shop_id = sp.shop_id where ";
 
-        if($key_1){
-            $add_where = "sp.sp_title like '%$key_1%' or sp.sp_subtitle like '%$key_1%'";
-        }elseif($key_2){
-            $add_where = "sp.sp_title like '%$key_2%' or sp.sp_subtitle like '%$key_2%'";
-        }elseif($key_3){
-            $add_where = "sp.sp_title like '%$key_3%' or sp.sp_subtitle like '%$key_3%'";
-        }elseif($key_4){
-            $add_where = "sp.sp_title like '%$key_4%' or sp.sp_subtitle like '%$key_4%'";
-        }elseif($key_5){
-            $add_where = "sp.sp_title like '%$key_5%' or sp.sp_subtitle like '%$key_5%'";
-        }elseif($key_6){
-            $add_where = "sp.sp_title like '%$key_6%' or sp.sp_subtitle like '%$key_6%'";
-        }elseif($key_7){
-            $add_where = "sp.sp_title like '%$key_7%' or sp.sp_subtitle like '%$key_7%'";
-        }elseif($key_8){
-            $add_where = "sp.sp_title like '%$key_8%' or sp.sp_subtitle like '%$key_8%'";
-        }else{
-            $add_where = "sp.sp_title like '%$key_9%' or sp.sp_subtitle like '%$key_9%'";
-        }
-
+        $add_where = "event_start between curdate() and ( curdate( ) + INTERVAL 30 DAY )
+        and (sp.sp_title like '%$keyword%' or sp.sp_subtitle like '%$keyword%') and 
+        (event_start is not null and event_start != '') order by sp.event_start";
+        
+        
         $sql = $base_sql . $add_where;
+        Log::debug($sql);
         $list = DB::select($sql);
 
+        
         $collect = collect($list); 
         
-        $pagenater = new LengthAwarePaginator(
-            $collect->forpage($request->page, 2),
+        $pagenate = new LengthAwarePaginator(
+            $collect->forpage($request->page, 10),
             $collect->count(),
-            2,
+            10,
             $request->page,
-            ['path2'=> $request->url()]
+            ['path'=> $request->url()]
         );
 
-        $output = [];
-        $output['pagenater'] = $pagenater;
-        $output['key_1'] = $key_1;
-        $output['key_2'] = $key_2;
-        $output['key_3'] = $key_3;
-        $output['key_4'] = $key_4;
-        $output['key_5'] = $key_5;
-        $output['key_6'] = $key_6;
-        $output['key_7'] = $key_7;
-        $output['key_8'] = $key_8;
-        $output['key_9'] = $key_9;
+        Log::debug($pagenate);
 
-        $output['params'] = [
-            'key_1'=> $key_1,
-            'key_2'=> $key_2, 
-            'key_3'=> $key_3, 
-            'key_4'=> $key_4,
-            'key_5'=> $key_5,
-            'key_6'=> $key_6, 
-            'key_7'=> $key_7, 
-            'key_8'=> $key_8,
-            'key_9'=> $key_9
-        ];
-        // dd($output);
+        $output = [];
+        $output['keyword'] = $keyword;
+        $output['pagenate_params'] = [ 'keyword'=> $keyword ];
+        $output['pagenate'] = $pagenate;
+       
         return view('page.subResult', $output);
     }
 

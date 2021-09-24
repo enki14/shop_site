@@ -8,7 +8,7 @@ $(function(){
         console.log(search_schedule);
         console.log(search_shop);
         // console.logで値を確認して「null」か「''」かを判断できる。
-        if(search_schedule === null && search_shop === ''){
+        if(search_schedule === '' && search_shop === ''){
             $('[data-toggle="popover"]')
             .tooltip({
                 trigger: "manual",

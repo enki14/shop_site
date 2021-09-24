@@ -32,6 +32,6 @@
         <script src="{{ asset('js/keys_form.js') }}"></script>
         <script src="{{ asset('/js/modal_open.js') }}"></script> 
         <script src="{{ asset('/js/map_search.js') }}"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places" async defer></script>
+        <script src="{{ asset('js/home_back.js')}}"></script>
     </body>
 </html> 
