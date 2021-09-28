@@ -3,10 +3,12 @@
 @extends('layouts.footer')
 
 
+
 @section('title', 'メイン検索の結果')
 @section('description', 'スーパーマーケットのポイント情報や、セール情報が検索できるサイトです')
-
-
+@section('resultCss')
+<link href="css/result.css" rel="stylesheet" type="text/css">
+@endsection
 
 @section('layouts.content')
 {{-- topページと違い、content-mainとcontent-containerには"height: auto;をブレード内で採用している --}}

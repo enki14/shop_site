@@ -86,36 +86,6 @@ class ShopsiteController extends Controller
         );
 
         
-        // $retObj = new \stdClass();
-        // $retObj->event_start = "";
-        // $retObj->event_end = "";
-
-        
-        // for($i = 0; $i < count($s); $i++){
-        //     if(!empty($s[$i]->event_end)){
-        //         $event_start_half = str_split($s[$i]->event_start, 4);
-        //         $event_end_half = str_split($s[$i]->event_end, 4);
-        //         $mmdd_start = str_split($event_start_half[1], 2);
-        //         $mmdd_end = str_split($event_end_half[1], 2);
-        //         $yyyy_start = $event_start_half[0];
-        //         $yyyy_end = $event_end_half[0];
-    
-        //         $retObj->event_start = $yyyy_start . '年' . ltrim($mmdd_start[0], '0') . '月' . ltrim($mmdd_start[1], '0') . '日';
-        //         $retObj->event_end = $yyyy_end . '年' . ltrim($mmdd_end[0], '0') . '月' .  ltrim($mmdd_start[1], '0') . '日';
-
-        //         // dd($retObj->event_start);
-        //     }else{
-        //         $event_start_half = str_split($s[$i]->event_start, 4);
-        //         $mmdd_start = str_split($event_start_half[1], 2);
-        //         $yyyy_start = $event_start_half[0];
-    
-        //         $retObj->event_start = $yyyy_start . '年' . ltrim($mmdd_start[0], '0') . '月' . ltrim($mmdd_start[1], '0') . '日';
-        //     }
-
-        // }
-        
-            
-        
         $output = [];
         $output['pagenate'] = $pagenate;
         $output['schedule'] = $schedule;
@@ -143,7 +113,6 @@ class ShopsiteController extends Controller
         
         
         $sql = $base_sql . $add_where;
-        Log::debug($sql);
         $list = DB::select($sql);
 
         
@@ -157,10 +126,9 @@ class ShopsiteController extends Controller
             ['path'=> $request->url()]
         );
 
-        Log::debug($pagenate);
-
         $output = [];
         $output['keyword'] = $keyword;
+        // リクエストパラメータのキーは上のキーと合わせるようにする
         $output['pagenate_params'] = [ 'keyword'=> $keyword ];
         $output['pagenate'] = $pagenate;
        
@@ -171,7 +139,7 @@ class ShopsiteController extends Controller
     // モーダル表示用メソッド
     public function mapModal(Request $request){
         $req = $request->input('namae');
-        Log::debug($req);
+        // Log::debug($req);
         
 
         // dd($req);
@@ -207,7 +175,7 @@ class ShopsiteController extends Controller
         $L_lat = $request->input('L_lat');
         $L_lng = $request->input('L_lng');
         
-        // Log::debug($S_lat);
+        // Log::debug($S_lng);
         config(['database.connections.mysql.strict' => false]);
         DB::reconnect();
 
@@ -223,16 +191,45 @@ class ShopsiteController extends Controller
                        left join sale_point sp on s.shop_id = sp.shop_id
                        GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
                        ORDER BY greatest(distance, distance_2)";
-        // Log::debug($sql);
 
         $location = DB::select($sql);
 
-        // dd($list);
+
         // Log::debug($location);
         $response = [];
         $response['location'] = $location;
         return Response::json($response);
     
+    }
+
+    
+    public function mapItiran(Request $request){
+        $S_lat = $request->input('lat');
+        $S_lng = $request->input('lng');
+        $L_lat = $request->input('L_lat');
+        $L_lng = $request->input('L_lng');
+        
+        // Log::debug($st_lat);
+        config(['database.connections.mysql.strict' => false]);
+        DB::reconnect();
+
+        $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name,
+        X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng, 
+        GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
+               X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
+        GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
+               X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
+               from shop s inner join store s2 on s.shop_id = s2.shop_id 
+               left join localdata l on s2.local_id = l.local_id 
+               GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
+               ORDER BY greatest(distance, distance_2)";
+        $list_2 = DB::select($sql);
+
+        // Log::debug($list_2);
+        $response = [];
+        $response['list_2'] = $list_2;
+        return Response::json($response); 
+
     }
 
 

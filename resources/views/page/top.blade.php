@@ -32,6 +32,7 @@ role="dialog" aria-hidden="true">
             @include('layouts.search_value')
             @include('layouts.keyS')
             @include('layouts.MapS')
+            @include('layouts.itiran2')
         </div>
     </div>
     <a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-chevron-circle-up fa-5x" data-toggle="scroll_top"></i></a>

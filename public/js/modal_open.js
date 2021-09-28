@@ -3,8 +3,8 @@ function initMap(){
     let h_lat = parseFloat($('#h_lat').val());
     let h_lng = parseFloat($('#h_lng').val());
     
-    console.log(h_lat);
-    console.log(h_lng);
+    // console.log(h_lat);
+    // console.log(h_lng);
     let centerp = {'lat': h_lat, 'lng': h_lng};
     map = new google.maps.Map(convas, {
         center: centerp,
@@ -14,7 +14,7 @@ function initMap(){
     // 店舗用と地域用の座標を取得できるようにセット
     // 初期の座標でajaxに送信して、コントローラー側で改めて店舗用と地域用を取得している
     let latlng = {'lat': h_lat, 'lng': h_lng, 'L_lat': h_lat, 'L_lng': h_lng };
-    console.log(latlng);
+    // console.log(latlng);
     
     const url = "map_data";
     // 初期表示用のajax（常に店舗と地域を表示させるためのもの）
@@ -24,7 +24,7 @@ function initMap(){
         data: latlng,
         dataType: 'json',
         success: function(data){
-            console.log(data.location);
+            // console.log(data.location);
             markerData = data.location;
             setMarker(markerData);
 
@@ -32,7 +32,7 @@ function initMap(){
         },
         error: function(data){
             alert("駄目です");
-            console.log('Error:', data);
+            // console.log('Error:', data);
         }
     });
     
@@ -49,8 +49,8 @@ function setMarker(markerData){
 
         let latS = parseFloat(markerData[i]['lat']);
         let lngS = parseFloat(markerData[i]['lng']);
-        console.log(latS);
-        console.log(lngS);
+        // console.log(latS);
+        // console.log(lngS);
         // コーテーションで囲わなくて良いのか
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
         
@@ -95,7 +95,7 @@ function markerEvent(i){
 $(function(){
 
     $("#kensaku-map").on('click', function(e){
-
+        
         let namae = $("#map_search").val();
         console.log(namae);
 

@@ -35,7 +35,7 @@ nav{
 }
 
 header{
-    background-color: #f2f28c;
+    background-color: #ffd1e8;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
@@ -51,7 +51,7 @@ header{
 
 #content-main{
     top: 580px;
-    background: #f9fdba;
+    background: #fde3e5;
     width: 100%;
     z-index: 2;
 }
@@ -94,13 +94,13 @@ header{
 .kensaku-btn{
     width: 120px;
     height: 37px;
-    background-color: #e5ed5a;
+    background-color: #ffd1e8;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
 
 .kensaku-btn:hover{
-    background: #dcf66a;
+    background: #fdaad3;
 }
 
 .keys-container{
@@ -154,7 +154,7 @@ header{
     position: fixed;
     right: 50px;
     bottom: 150px;
-    color: #87cefa;
+    color: #fd8d72;
     font-size: 15px;
     font-weight: bold;
     text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -162,7 +162,7 @@ header{
 }
 
 .history_back:hover{
-    color: #4c58eb;
+    color: #fec5a5;
 }
 
 .itiran{
@@ -227,7 +227,7 @@ header{
 }
 
 footer{
-    background-color: #decc54;
+    background-color: #e39c68;
 } 
 
 .cart{

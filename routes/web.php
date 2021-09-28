@@ -20,6 +20,7 @@ Route::any('/result-2', 'ShopsiteController@keyRes');
 // Route::any('/result-2', 'ShopsiteController@index');
 Route::get('/map_modal', 'ShopsiteController@mapModal');
 Route::get('/map_data', 'ShopsiteController@mapData');
+Route::get('/map_itiran', 'ShopsiteController@mapItiran');
 
 
 
@@ -62,6 +63,8 @@ Route::get('maps', function () {
 Route::get('google', 'GMapController@index');
 Route::get('google_shop', 'GMapController@shopInfo');
 
+
+Route::any('calendar', 'GMapController@calendar');
 
 /*************************** 管理画面用↓↓↓ *************************/
 

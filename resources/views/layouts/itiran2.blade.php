@@ -1,14 +1,13 @@
-<div id="keyS-data" class="container py-4">
+<div id="map-data" class="container py-4">
     <h4 class="py-3 pl-5">絞り込み条件</h4>
     <p class="py-3 pl-5">○○駅 / ○○店 / 本日・明日</p>
-@if(isset($pagenater))
-    @foreach($pagenater as $data)
-    <div class="card mx-auto rounded-3" style="width: 50.5rem;">
-        <div class="card-body shadow">
+    <div  id="itiran2-card" class="card mx-auto rounded-3" style="width: 50.5rem;">
+        <div id="card_body" class="card-body shadow">
             @csrf
             <div id="ribbon"><span id="new">new!!</span></div>
-            <div class="row">
-                <h5 class="col-md-12 text-center font-weight-bold mt-2">{{ $data->shop_name }}</h5>
+            
+            <div id="shop-name" class="row">
+               
             </div>
             <div class="row g-0 mx-auto">
                 <div class="col-md-4">
@@ -16,8 +15,8 @@
                 </div>
                 <div class="col-md-8"> 
                     <p class="card-text">お支払方法：○○××▢▢</p>
-                    <p class="card-text">期間：{{ $data->event_start }} ～ {{ $data->event_end }}</p>
-                        <h5 class="card-title">{{ $data->sp_title }}</h5>
+                    <p class="card-text">期間：〇〇月○○日 ～ ○○月○○日</p>
+                        <h5 class="card-title">イベントタイトル</h5>
                         <p class="card-text">
                             ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
                             ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
@@ -28,7 +27,4 @@
             </div>
         </div>
     </div>    
-    @endforeach
-@endif
-{{ $pagenater->appends($params)->links() }} 
 </div>

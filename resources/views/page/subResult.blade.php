@@ -5,6 +5,9 @@
 
 @section('title', 'キーワード検索の結果')
 @section('description', 'スーパーマーケットのポイント情報や、セール情報が検索できるサイトです')
+@section('subResultCss')
+<link href="css/subResult.css" rel="stylesheet" type="text/css">
+@endsection
 
 
 @section('layouts.content')
