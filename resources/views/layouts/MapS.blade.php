@@ -1,4 +1,4 @@
-<div id="maps-container" class="container mx-auto">
+<div id="maps-container" class="container mx-auto mt-5">
     <h3 class="maps-h3 text-center">ご近所検索</h3>
     <div class="row justify-content-center m-5">
         <div class="col-5">
@@ -14,6 +14,6 @@
         </div>
     </div>
     <div id="map" class="col-md">
-        <div id="map_convas" style="width:750px; height:562px;"></div>
+        <div id="map_convas" class="mx-auto" style="width:750px; height:562px;"></div>
     </div>
 </div>
