@@ -1,13 +1,13 @@
-<div id="map-data" class="container py-4">
+<div id="map-data" class="map-data container py-4">
     <h4 class="py-3 pl-5">絞り込み条件</h4>
     <p class="py-3 pl-5">○○駅 / ○○店 / 本日・明日</p>
-    <div  id="itiran2-card" class="card mx-auto rounded-3" style="width: 50.5rem;">
+    <div id="itiran2-card" class="itiran2-card card mx-auto rounded-3" style="width: 50.5rem;">
         <div id="card_body" class="card-body shadow">
             @csrf
             <div id="ribbon"><span id="new">new!!</span></div>
             
-            <div id="shop-name" class="row">
-               
+            <div class="shop-name" class="row">
+               <h5 class="h_5"></h5>
             </div>
             <div class="row g-0 mx-auto">
                 <div class="col-md-4">

@@ -21,12 +21,11 @@ Route::any('/result-2', 'ShopsiteController@keyRes');
 Route::get('/map_modal', 'ShopsiteController@mapModal');
 Route::get('/map_data', 'ShopsiteController@mapData');
 Route::get('/map_itiran', 'ShopsiteController@mapItiran');
+Route::get('/eventCalendar_2', 'ShopsiteController@eventCalendar_2');
 
 
-
-
-// Route::get('/', 'KeysController@index');
-// Route::post('/result-2', 'KeysController@keyRes');
+// 画像の文字認識
+Route::get('business_card', 'DetectDocumentController@detect_document_text');
 
 
 // Route::get('/sample', 'SampleController@index');  //sampleはurl、controllerはどのメソッドまでかを指定
@@ -63,8 +62,8 @@ Route::get('maps', function () {
 Route::get('google', 'GMapController@index');
 Route::get('google_shop', 'GMapController@shopInfo');
 
-
-Route::any('calendar', 'GMapController@calendar');
+Route::get('calendar', 'CalendarController@index');
+Route::any('calendar_event', 'CalendarController@eventCalendar');
 
 /*************************** 管理画面用↓↓↓ *************************/
 

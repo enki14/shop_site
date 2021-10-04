@@ -9,4 +9,11 @@ class Common {
         return date('Y年n月j日', strtotime($ymd));
     }
 
+    // 8桁数字からのハイフン付き変換
+    public static function  hyphenFormat($data){
+        if(!empty($data)){
+            return date('Y-m-d', strtotime($data));
+        }
+      }
+
 }

@@ -22,7 +22,6 @@ $(function(){
         }
     }
 
-    // $('.histoty_back').hide();
     $(window).on('scroll', function(){
         let backtip = $('[data-toggle="backtip"]');
         let Title_1 = "トップページへ戻れます";
@@ -32,5 +31,31 @@ $(function(){
 
         openTooltip(backtip, Title_1);
         openTooltip(scroll_top, Title_2);
+    });
+
+
+    /******************** 下降するボタンの仕様　↓↓↓ *********************/
+    $('.top_down').on('click', function(){
+        let pos = $('#maps-container').offset().top;
+        if($(window).scrollTop() < pos){
+            $('html, body').animate({
+                scrollTop: pos
+            }, 1000);
+            return false;
+        }
+    });
+
+    let scroll_down = $('[data-toggle="scroll_down"]');
+    $(scroll_down).on('mouseover', function(){
+        $(scroll_down).tooltip({
+            trigger: "manual",
+            title: "地図検索へ",
+            placement: "top"
+        });
+        $(scroll_down).tooltip("show");
+        $(scroll_down).on('animationend webkitTransitionEnd', function(){
+            $(this).tooltip("hide");
+        });
+
     });
 });

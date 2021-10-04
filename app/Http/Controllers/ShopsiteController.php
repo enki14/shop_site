@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Lib\common;
 use Response;
 
 class ShopsiteController extends Controller
@@ -22,7 +23,6 @@ class ShopsiteController extends Controller
             $search_lat = $lat;
             $search_lng = $lng;
         }
-        
 
         $output = [];
         $output['shop'] = '';
@@ -31,9 +31,11 @@ class ShopsiteController extends Controller
         $output['lat'] = $search_lat;
         $output['lng'] = $search_lng;
         return view('page.top', $output);
+        
+    }
+
 
     
-    }
 
     public function result(Request $request){
 
@@ -230,6 +232,59 @@ class ShopsiteController extends Controller
         $response['list_2'] = $list_2;
         return Response::json($response); 
 
+    }
+
+    
+    public function eventCalendar_2(Request $request){
+        $sql = "select sp.sp_code, s.shop_name, s2.store_name, s.shop_url, s2.store_url, 
+        sp.sp_title, sp.sp_subtitle, sp.event_start, sp.event_end
+        from shop s left join store s2 on s.shop_id = s2.shop_id
+        left join sale_point sp on s.shop_id = sp.shop_id";
+        $list = DB::select($sql);
+
+        // dd($list);
+        $response = [];
+        $output = [];
+        foreach($list as $data){
+            $output['id'] = $data->sp_code;
+            
+            $start = Common::hyphenFormat($data->event_start);
+            $end = Common::hyphenFormat($data->event_end);
+            // Log::debug($start);
+
+            if($start == ''){
+                $data;
+                continue;
+            }else{
+                if($data->sp_title == '' && $data->sp_subtitle != ''){
+                    $output['title'] = $data->shop_name . $data->store_name . 'からのお知らせ';
+                    $output['tooltip'] = $data->sp_subtitle;
+                }elseif($data->sp_title != '' && $data->sp_subtitle == ''){
+                    $output['title'] = $data->sp_title;
+                    $output['tootip'] = $data->sp_title;
+                }else{
+                    $output['title'] = '';
+                    $output['tooltip'] = null;
+                }
+                
+                
+                if($end != '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = $end;
+                }elseif($end == '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = null;   
+                }
+                
+            }        
+            
+            Log::debug($output);
+            $response[] = $output;
+            
+
+        }
+
+        return Response::json($response);
     }
 
 

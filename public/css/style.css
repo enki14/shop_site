@@ -127,7 +127,9 @@ header{
 
 #maps-container{
     padding: 2rem;
+    margin: 1rem;
     z-index: 4;
+    border-top: 1px solid #392605;
 }
 
 .maps-h3{
@@ -148,6 +150,21 @@ header{
 
 #map{
     text-align: center;
+}
+
+.top_down{
+    position: fixed;
+    left: 50px;
+    top: 200px;
+    color: #ffd700;
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    z-index: 4;
+}
+
+.top_down:hover{
+    color: #ff8c00;
 }
 
 .history_back{
@@ -225,6 +242,51 @@ header{
 #fixed-button{
     position: fixed;
 }
+
+
+
+/******************* calendar **********************/
+
+a.fc-daygrid-event{
+    padding: 0.5em 1em;
+    margin: 2em 0;
+    color: #474747;
+    background: #CEF9DC;/*背景色*/
+    border-left: double 7px #000066;/*左線*/
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+}
+
+
+div.fc-event-title-container{
+    z-index: 2;
+}
+
+div .fc-event-title {
+    white-space: normal;
+    color: captiontext;
+} 
+
+
+div.fc-header-toolbar{
+    margin-top: 48px !important;
+}
+
+.fc-prev-button,
+.fc-today-button,
+.fc-next-button,
+.fc-dayGridMonth-button,
+.fc-listweek-button{
+    background-color: #e5ed5a;
+}
+
+
+.fc-toolbar-title{
+    font-size: 1.2em;
+}
+
+
 
 footer{
     background-color: #decc54;
