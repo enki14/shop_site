@@ -258,13 +258,13 @@ class ShopsiteController extends Controller
             }else{
                 if($data->sp_title == '' && $data->sp_subtitle != ''){
                     $output['title'] = $data->shop_name . $data->store_name . 'からのお知らせ';
-                    $output['tooltip'] = $data->sp_subtitle;
+                    $output['description'] = $data->sp_subtitle;
                 }elseif($data->sp_title != '' && $data->sp_subtitle == ''){
                     $output['title'] = $data->sp_title;
-                    $output['tootip'] = $data->sp_title;
+                    $output['description'] = $data->sp_title;
                 }else{
                     $output['title'] = '';
-                    $output['tooltip'] = null;
+                    $output['description'] = '';
                 }
                 
                 

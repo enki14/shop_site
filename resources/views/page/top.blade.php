@@ -41,6 +41,7 @@ role="dialog" aria-hidden="true">
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        let cal_tip = $('[data-toggle="cal_tip"]');
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -70,13 +71,26 @@ role="dialog" aria-hidden="true">
                         url: '#'
                     }
             ],
-            eventMouseover: function(event) {
-                let tooltip = new Tooltip(event.calendarEl, {
-                title: event.extendedProps.description,
-                placement: 'top',
-                trigger: 'hover',
-                container: 'body'
+            eventDidMount: function(eventObj) {
+                console.log(cal_tip);
+                // for(let i = 0; i < eventObj.length; i++){
+                $(cal_tip).tooltip({
+                    title: 'test',
+                    content: eventObj.description,
+                    trigger: 'hover',
+                    placement: 'top',
+                    container: 'body',
+                    html: true
                 });
+                // }
+                
+                       
+            },
+            dayMaxEventRows: true, 
+            views: {
+                dayGrid: {
+                    dayMaxEventRows: 6 
+                }
             },
             // あとはShopsiteController@eventCalendar_2メソッドでDBをレスポンスすればうまくやってくれる
             // indexメソッドの方には特に初期値など要らない
