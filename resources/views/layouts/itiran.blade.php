@@ -40,11 +40,15 @@
                             {{ Common::dateFormat($data->event_start) }}
                         @endif
                     </p>
-                        <h5 class="card-title">{{ $data->sp_title }}</h5>
-                        <p class="card-text">
-                            {{ $data->sp_subtitle }}
-                        </p>
-                    <p class="card-text"><a href="#"><small class="text-muted">詳しくはこちら</small></a></p>
+                    <h5 class="card-title">{{ $data->sp_title }}</h5>
+                    <p class="card-text">{{ $data->sp_subtitle }}</p>
+                    <p class="card-text">
+                    @if(!empty($data->sp_url))
+                        <a href="{{ $data->sp_url }}" target="_blank">
+                            <small class="text-muted">詳しくはこちら</small>
+                        </a>
+                    @endif
+                    </p>
                 </div>
             </div>
         </div>

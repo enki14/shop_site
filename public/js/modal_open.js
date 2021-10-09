@@ -43,6 +43,8 @@ let icon;
 let marker = [];
 let infoWindow = [];
 
+
+
 // マーカーや吹き出しの表示
 function setMarker(markerData){
     for(let i = 0; i < markerData.length; i++){
@@ -52,9 +54,25 @@ function setMarker(markerData){
         // console.log(latS);
         // console.log(lngS);
         // コーテーションで囲わなくて良いのか
-        let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
+
+        let start = DateFormat(markerData[i]['event_start']);
+        let end = DateFormat(markerData[i]['event_end']);
+        let wave = waveDash(start, end);
+        let col = colon(markerData[i]['sp_subtilte']);
+        
+        // nullやundefiendが表示されないようにパイプで空も設定している
+        // 空値も変数にして含めないと、逆にほとんど表示されなくなる
+        let event_start = start || '';
+        let event_end = end || '';
+        let store_name = markerData[i]['store_name'] || '';
+        let sp_title = markerData[i]['sp_title'] || '';
+        let sp_subtitle = markerData[i]['sp_subtilte'] || '';
+        
         
 
+
+        let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
+        
         icon = new google.maps.MarkerImage('./img/cart.png');
 
         marker[i] = new google.maps.Marker({
@@ -64,15 +82,46 @@ function setMarker(markerData){
         });
 
         infoWindow[i] = new google.maps.InfoWindow({
-            content: markerData[i]['shop_name'] + markerData[i]['store_name'] + '<br><br>'
-            + markerData[i]['event_start'] + ' ~ ' + markerData[i]['event_end'] + '<br><br>'
-            + markerData[i]['sp_title'] + ': ' + markerData[i]['sp_subtilte']
+            content: markerData[i]['shop_name'] + store_name + '<br><br>'
+            + event_start + wave + event_end + '<br><br>'
+            + sp_title + col + sp_subtitle
         });
-        // console.log(infoWindow);
-
+        console.log(infoWindow);
+    
         markerEvent(i);
+        
     }
 }  
+
+// event_startやevent_endの日付フォーマット
+function DateFormat(date){
+    if(date != null){
+        let yyyy = date.slice(0, 4);
+        let mm = date.slice(4, 6);
+        let dd = date.slice(6, 8);
+        return yyyy + '年' + mm + '月' + dd + '日';
+    }
+    
+}
+
+// infoWindowの波ダッシュ
+function waveDash(start, end){
+    if(start || end){
+        return ' ~ ';
+    }else{
+        return '';
+    }
+}
+
+// infoWindowのコロン
+function colon(title){
+    if(!title){
+        return '';
+    }else{
+        return ': ';
+    }
+}
+
 
 let openWindow;
 

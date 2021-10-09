@@ -72,9 +72,9 @@ role="dialog" aria-hidden="true">
                     }
             ],
             eventDidMount: function(eventObj) {
-                console.log(cal_tip);
+                // console.log(eventObj);
                 // for(let i = 0; i < eventObj.length; i++){
-                $(cal_tip).tooltip({
+                $(calendarEl).tooltip({
                     title: 'test',
                     content: eventObj.description,
                     trigger: 'hover',

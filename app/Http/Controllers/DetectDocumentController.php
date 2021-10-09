@@ -14,6 +14,48 @@ use Log;
 
 class DetectDocumentController extends Controller
 {
+
+    // つまり流れとしてはscrapingした上で、imgsrcのurlをocrの処理にセットさせればよい。そうすれば
+    // 文字の読み込み要素とその他のスクレイピングの処理が一致する
+    public function detect_document_text_2() {
+        
+       
+        $imageAnnotator = new ImageAnnotatorClient();
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        // $pathは$imgpathと一致する。サーバーの方で文字を読み込むことができる
+        $path = "https://www.aeonretail.jp/otoku/img/bnr_aeonapp2020030720.png";
+        $image = file_get_contents($path);
+        $response = $imageAnnotator->documentTextDetection($image);
+        $annotation = $response->getFullTextAnnotation();
+
+        # Log::debug out detailed and structured information about document text
+        if ($annotation) {
+            $allblockText = '';
+            // getPages() : OCRによって検出されたページのリスト
+            foreach ($annotation->getPages() as $page) {
+                foreach ($page->getBlocks() as $block) {
+                    $block_text = '';
+                    foreach ($block->getParagraphs() as $paragraph) {
+                        foreach ($paragraph->getWords() as $word) {
+                            foreach ($word->getSymbols() as $symbol) {
+                                $block_text .= $symbol->getText();
+                            }
+                            // ↓↓↓　あとで要るかもしれないけど、スペースがあると日付が抽出できないのでコメントアウトにしている
+                            // $block_text .= ' ';
+                        }
+                        $block_text .= "\n";
+                    }
+                    $allblockText .= $block_text;
+                    
+                }
+            }
+            Log::debug($allblockText);    
+        }    
+        return redirect('/');
+    }
+
+
     public function detect_document_text() {
         
         // 一般公開ではない画像ファイルはlaravel_project/storage配下に置く

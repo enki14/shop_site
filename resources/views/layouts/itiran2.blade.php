@@ -1,13 +1,17 @@
+@if(count($shop_list) > 0)
 <div id="map-data" class="map-data container py-4">
-    <h4 class="py-3 pl-5">絞り込み条件</h4>
-    <p class="py-3 pl-5">○○駅 / ○○店 / 本日・明日</p>
-    <div id="itiran2-card" class="itiran2-card card mx-auto rounded-3" style="width: 50.5rem;">
+    {{-- $shop_list[0]は、モーダルをクリックしたときの店名そのもの --}}
+    <h4 class="py-3 pl-5">絞り込み条件：{{ $shop_list[0]->shop_name }}</h4>
+    @foreach($shop_list as $data)
+    <div id="itiran-card" class="card mx-auto my-3" style="width: 50.5rem;">
         <div id="card_body" class="card-body shadow">
-            @csrf
             <div id="ribbon"><span id="new">new!!</span></div>
-            
-            <div class="shop-name" class="row">
-               <h5 class="h_5"></h5>
+            <div class="row">
+                <h5 class="col-md-12 text-center font-weight-bold mt-2">
+                    <a href="@if(!empty($data->shop_url)){{ $data->shop_url }}@endif" target="_blank">
+                        {{ $data->shop_name }}{{ $data->store_name }}
+                    </a>
+                </h5>
             </div>
             <div class="row g-0 mx-auto">
                 <div class="col-md-4">
@@ -15,16 +19,24 @@
                 </div>
                 <div class="col-md-8"> 
                     <p class="card-text">お支払方法：○○××▢▢</p>
-                    <p class="card-text">期間：〇〇月○○日 ～ ○○月○○日</p>
-                        <h5 class="card-title">イベントタイトル</h5>
-                        <p class="card-text">
-                            ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
-                            ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
-                            ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
-                        </p>
-                    <p class="card-text"><a href="#"><small class="text-muted">詳しくはこちら</small></a></p>
+                    <p class="card-text">期間：
+                        @if(!empty($data->event_end))
+                            {{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat($data->event_end) }}
+                        @elseif(empty($data->event_end))
+                            {{ Common::dateFormat($data->event_start) }}
+                        @endif
+                    </p>
+                    <h5 class="card-title">{{ $data->sp_title }}</h5>
+                    <p class="card-text">{{ $data->sp_subtitle }}</p>
+                    @if(!empty($data->sp_url))
+                        <a href="{{ $data->sp_url }}" target="_blank">
+                            <small class="text-muted">詳しくはこちら</small>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
+    @endforeach    
 </div>
+@endif

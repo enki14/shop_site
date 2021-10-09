@@ -14,6 +14,6 @@
         </div>
     </div>
     <div id="map" class="col-md">
-        <div id="map_convas" class="mx-auto" style="width:750px; height:562px;"></div>
+        <div id="map_convas" class="mx-auto" style="width:900px; height:600px;"></div>
     </div>
 </div>
