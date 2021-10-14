@@ -27,6 +27,7 @@ Route::get('/eventCalendar_2', 'ShopsiteController@eventCalendar_2');
 // 画像の文字認識
 Route::get('business_card', 'DetectDocumentController@detect_document_text');
 Route::get('business_card_2', 'DetectDocumentController@detect_document_text_2');
+Route::get('itoyokado_event', 'DetectDocumentController@itoyokado_event');
 
 
 // Route::get('/sample', 'SampleController@index');  //sampleはurl、controllerはどのメソッドまでかを指定

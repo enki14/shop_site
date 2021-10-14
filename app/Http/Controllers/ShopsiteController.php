@@ -269,7 +269,7 @@ class ShopsiteController extends Controller
                 
             }        
             
-            Log::debug($output);
+            // Log::debug($output);
             $response[] = $output;
             
 

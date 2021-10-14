@@ -3,6 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Goutte\Client;
+use Symfony\Component\HttpClient\HttpClient;
+
 
 class ScrapeCommand extends Command
 {
@@ -37,7 +41,7 @@ class ScrapeCommand extends Command
      */
     public function handle()
     {
-        $client = new Client();
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
         $url = 'https://www.seiyu.co.jp';
         $crawler = $client->request('GET', $url);
@@ -71,15 +75,6 @@ class ScrapeCommand extends Command
             }
             
         }
-        
-            //データベースに保存する    
-        
-        $output = [];
-        $output['url'] = $url;
-        $output['title'] = $title;
-        $output['link'] = $link;
-
-        return view('scrape', $output);
 
     }
 }

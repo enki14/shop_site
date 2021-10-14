@@ -33,11 +33,13 @@
                 </div>
                 <div class="col-md-8"> 
                     <p class="card-text">お支払方法：○○××▢▢</p>
-                    <p class="card-text">期間：
-                        @if(!empty($data->event_end))
-                            {{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat($data->event_end) }}
-                        @elseif(empty($data->event_end))
-                            {{ Common::dateFormat($data->event_start) }}
+                    <p class="card-text">
+                        @if(!empty($data->event_start) && !empty($data->event_end))
+                            期間：{{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat($data->event_end) }}
+                        @elseif(!empty($data->event_start) && empty($data->event_end))
+                            期間：{{ Common::dateFormat($data->event_start) }}
+                        @elseif(empty($data->event_start) && !empty($data->event_end))
+                            期間：～ {{ Common::dateFormat($data->event_end) }}
                         @endif
                     </p>
                     <h5 class="card-title">{{ $data->sp_title }}</h5>

@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('command:scrapecommand')->weeklyOn(1, '21:20');
+        $schedule->command('command:scrapecommand')->hourlyAt(10);
     }
 
     /**

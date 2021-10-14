@@ -153,20 +153,6 @@ class HomeController extends Controller
 
     }
 
-    // private function goutte_scrap($sql){
-    //     $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
-
-    //     foreach($sql as $data){
-    //         $url = $data->url;
-    //         $crawler = $client->request('GET', $url);
-    //         $crawler->filter($data->element_path)
-    //         ->each(function($node){
-    //             return$node->text();
-    //         });
-
-    //     }
-    // }
-
 
     public function lifeinfo(){
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));

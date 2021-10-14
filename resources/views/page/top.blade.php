@@ -50,41 +50,23 @@ role="dialog" aria-hidden="true">
                     center: 'title',
                     right: 'dayGridMonth,listWeek'
             },
-            events: [
-                    {
-                        id: '1',
-                        title: 'event1',
-                        start: '2021-09-07',
-                        url: '#',
-                    },
-                    {
-                        id: '2',
-                        title: 'birth day!!',
-                        start: '2021-10-14',
-                        url: '#'
-                    },
-                    {
-                        id: '3',
-                        title: 'event3',
-                        start: '2021-09-26',
-                        end: '2021-09-30', 
-                        url: '#'
-                    }
-            ],
-            eventDidMount: function(eventObj) {
-                // console.log(eventObj);
-                // for(let i = 0; i < eventObj.length; i++){
+            // あとはShopsiteController@eventCalendar_2メソッドでDBをレスポンスすればうまくやってくれる
+            // indexメソッドの方には特に初期値など要らない
+            events: "http://localhost/shop_site/public/eventCalendar_2",
+            eventDidMount: function(eventObj, calendarEl) {
+                console.log(eventObj);
+                titleStr = $(calendarEl).find('span.fc-event-title').text();
+                elem = $(calendarEl).find('span.fc-event-title');
+                console.log(elem);
+                elem = $(elem).html(titleStr);
                 $(calendarEl).tooltip({
-                    title: 'test',
+                    title: eventObj.title,
                     content: eventObj.description,
                     trigger: 'hover',
                     placement: 'top',
-                    container: 'body',
+                    container: elem,
                     html: true
-                });
-                // }
-                
-                       
+                });           
             },
             dayMaxEventRows: true, 
             views: {
@@ -92,9 +74,6 @@ role="dialog" aria-hidden="true">
                     dayMaxEventRows: 6 
                 }
             },
-            // あとはShopsiteController@eventCalendar_2メソッドでDBをレスポンスすればうまくやってくれる
-            // indexメソッドの方には特に初期値など要らない
-            events: "http://localhost/shop_site/public/eventCalendar_2",
             locale: 'ja',
             buttonText: {
                 prev:     '<',
