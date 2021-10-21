@@ -99,6 +99,15 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        // 定期実行用
+        'command' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/command.log'),
+            'level' => 'debug',
+            'days' => 3,
+        ],
+        
     ],
 
 ];

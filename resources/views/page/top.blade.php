@@ -9,31 +9,28 @@
 
 <div class="modal fade" id="list_modal" tabindex="-1" style="display: none"
 role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="left: -27rem;">       
+    <div class="modal-dialog modal-dialog-centered" role="document">       
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="modalHtml">
-                <div>
-                    
-                </div>
-            </div>
+            <div class="modal-body" id="modalHtml"></div>
         </div>
     </div>
 </div>
 @section('layouts.content')
 <div id="content-main" class="mx-auto">
-    <div id="content-container" class="card mt-3 align-items-center  bg-light mx-auto" 
-        style="height: auto; width: 65rem;">
-        <div class="card-body">
-            @include('layouts.search_value')
-            @include('layouts.keyS')
-            @include('layouts.calendar_2')
-            @include('layouts.MapS')
-            @include('layouts.itiran2')
+    <div id="content_row" class="row">
+        <div id="content-container" class="card mt-3 bg-light mx-auto col-lg-8">
+            <div class="card-body">
+                @include('layouts.search_value')
+                @include('layouts.keyS')
+                @include('layouts.calendar_2')
+                @include('layouts.MapS')
+                @include('layouts.itiran2')
+            </div>
         </div>
     </div>
     <a href="http://localhost/shop_site/public/" class="top_down"><i class="fas fa-cloud-download-alt fa-5x" data-toggle="scroll_down"></i></a>
@@ -41,7 +38,7 @@ role="dialog" aria-hidden="true">
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let cal_tip = $('[data-toggle="cal_tip"]');
+        // let cal_tip = $('[data-toggle="cal_tip"]');
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -55,16 +52,16 @@ role="dialog" aria-hidden="true">
             events: "http://localhost/shop_site/public/eventCalendar_2",
             eventDidMount: function(eventObj, calendarEl) {
                 console.log(eventObj);
-                titleStr = $(calendarEl).find('span.fc-event-title').text();
-                elem = $(calendarEl).find('span.fc-event-title');
-                console.log(elem);
-                elem = $(elem).html(titleStr);
-                $(calendarEl).tooltip({
+                let elem = $(calendarEl).find('span.fc-event-title');
+                let popover = elem.attr("data-toggle", "popover");
+
+                console.log(popover);
+                $(popover).tooltip({
                     title: eventObj.title,
                     content: eventObj.description,
                     trigger: 'hover',
                     placement: 'top',
-                    container: elem,
+                    container: 'body',
                     html: true
                 });           
             },

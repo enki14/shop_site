@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Goutte\Client;
 use Symfony\Component\HttpClient\HttpClient;
+use Log;
 
 
 class ScrapeCommand extends Command
@@ -58,8 +59,10 @@ class ScrapeCommand extends Command
             return $node->children()->attr('href');
         });
             
+        print(count($title));
         for($i = 0; $i < count($title); $i++){
             $sql = "select count(*) from testsite where title = '$title[$i]'";
+            Log::channel('command')->emergency('test!');
             $cnt = DB::select($sql);
 
             

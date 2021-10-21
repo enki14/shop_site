@@ -219,6 +219,10 @@ header{
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
 
+#itiran-card{
+    display: inline-block !important;
+}
+
 #itiran-card:nth-child(odd){
     background-color: #EDFFBE;
 }
@@ -274,6 +278,7 @@ header{
 }
 
 footer{
+    bottom: 0;
     background-color: #7eb3d7;
 } 
 

@@ -1,18 +1,19 @@
-html{
+/* html{
     height: auto;
     width: auto;
-}
+} 
 
-
+ 
 body{
     height: auto;
     width: auto;
-}
+}  */
 
 
 .wrraper{
-    height: 100%;
-    width: 100%;
+    overflow: hidden;
+    /* height: 100%;
+    width: 100%; */
 }
 
 
@@ -25,7 +26,7 @@ nav{
 
 }
 
-header{
+#fixed_nav{
     background-color: #f2f28c;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -37,13 +38,12 @@ header{
 
 .header-eria{
     height: 300px;
-    top: 160px;
+    top: 100px; 
     font-family: 'Josefin Sans', sans-serif; 
     text-align: center;
-    flex-direction: column; 
-    justify-content: center;
-    position: absolute;
-    overflow: hidden;
+    /* flex-direction: column;    */
+    position: absolute;   
+    /* overflow: hidden; */
 }
 
 .header-eria.-visible:before {
@@ -52,7 +52,7 @@ header{
   
 .header-eria:before {
     display: block;
-    position: absolute;
+    position: absolute; 
     top: 0;
     left: 0;
     transform: translate(0, 100%);
@@ -99,10 +99,13 @@ header{
 
 
 #content-main{
-    top: 700px;
     background: #f9fdba;
-    width: 100%;
+    width: 100%;   
     z-index: 2;
+}
+
+#content_row{
+    margin: auto 0;
 }
 
 
@@ -112,9 +115,9 @@ header{
 }
 
 #content-container{
-    top: -200px;
-    z-index: 3;
-    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.6));
+    top: -200px;  
+    z-index: 3;  
+    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.6));  
 }
 
 .top-card{
@@ -143,6 +146,7 @@ header{
 .kensaku-btn{
     width: 120px;
     height: 37px;
+    vertical-align: top !important;
     background-color: #e5ed5a;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -185,20 +189,8 @@ header{
     margin: 15px;
 } 
 
-/* #map-input{
-    width: 950px;
-    text-align: center;
-    margin: 30px 0 20px 0;
-} */
-
-#map-select{
-    width: 140px;
-    height: 40px;
-    border-radius: 3px;
-}
-
-#map{
-    text-align: center;
+#map_search{
+    border-radius: 5px;
 }
 
 .top_down{
@@ -238,11 +230,17 @@ header{
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
 
+/* #itiran-card{
+    display: inline-block !important;
+} */
+
 #itiran-card:nth-child(odd){
+    display: block !important; 
     background-color: #EDFFBE;
 }
 
 #itiran-card:nth-child(even){
+    display: block !important; 
     background-color: #FFEEFF;
 }
 
@@ -356,6 +354,7 @@ thead{
 
 
 footer{
+    bottom: 0;
     background-color: #decc54;
 } 
 

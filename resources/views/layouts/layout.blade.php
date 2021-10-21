@@ -22,15 +22,10 @@
     {{-- オーバーレイの下に潜り込まないようにmodalをbodyタグの前に設置 --}}
     
     <body>
-        
         <div class="wrraper">
             @yield('layouts.header')
-            
             @yield('layouts.content')
-            
             @yield('layouts.footer')
-            
-            
         </div>
         <script src="{{ asset('js/header_animation.js') }}"></script>
         <script src="{{ asset('js/main_form_submit.js') }}"></script>

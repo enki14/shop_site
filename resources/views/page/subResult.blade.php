@@ -12,12 +12,14 @@
 
 @section('layouts.content')
 <div id="content-main" class="mx-auto">
-    <div id="content-container" class="card mt-3 align-items-center  bg-light mx-auto" 
-        style="height: auto; width: 65rem;">
-        <div class="card-body">
-            @include('layouts.keyS')
-            @include('layouts.itiran')
-        </div>        
+    <div id="content_row" class="row">
+        <div id="content-container" class="card mt-3 align-items-center 
+        bg-light mx-auto col-lg-8">
+            <div class="card-body">
+                @include('layouts.keyS')
+                @include('layouts.itiran')
+            </div>        
+        </div>
     </div>
     <a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-home fa-5x" data-toggle="backtip"></i></a>
 </div>
