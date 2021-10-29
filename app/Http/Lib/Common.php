@@ -4,6 +4,29 @@ namespace App\Http\Lib;
 
 class Common {
 
+
+    // 都道府県 | 市区町村 | 地区 毎に分割する関数
+    public static function separate_address_one(string $address)
+    {
+        if (preg_match('/(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $address, $matches) !== 1) {
+            return [
+                'city' => null,
+                'other' => null
+            ];
+        }
+        $pattern = '/([\w\-\.]+)([0-9０-９]+|[一二三四五六七八九十百千万]+)*(([0-9０-９]+|[一二三四五六七八九十百千万]+)|(丁目|丁|番地|番|号|-|‐|ー|−|の|東|西|南|北){1,2})*(([0-9０-９]+|[一二三四五六七八九十百千万]}+)|(丁目|丁|番地|番|号){1,2})(.*)/';
+        // dd($matches);
+        // 地区の番地以降を削除する処理
+        $matches[2] = preg_replace($pattern, '', $matches[2]);
+        return [
+            'city' => $matches[1],
+            'district' => $matches[2],
+        ];
+
+    }
+
+
+
     // 8桁数字からの年月日の変換
     public static function dateFormat($ymd) {
         if(!empty($ymd)){

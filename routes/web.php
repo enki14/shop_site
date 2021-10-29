@@ -24,6 +24,11 @@ Route::get('/map_itiran', 'ShopsiteController@mapItiran');
 Route::get('/eventCalendar_2', 'ShopsiteController@eventCalendar_2');
 
 
+
+// store登録
+Route::post('/daiei_store', 'StoreSetController@daiei_store');
+
+
 // 画像の文字認識
 Route::get('business_card', 'DetectDocumentController@detect_document_text');
 Route::get('business_card_2', 'DetectDocumentController@detect_document_text_2');

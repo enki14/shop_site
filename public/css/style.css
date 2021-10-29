@@ -1,19 +1,29 @@
-/* html{
-    height: auto;
-    width: auto;
-} 
+.fadeInDown {
+    -webkit-animation-fill-mode:both;
+    -ms-animation-fill-mode:both;
+    animation-fill-mode:both;
+    -webkit-animation-duration:1s;
+    -ms-animation-duration:1s;
+    animation-duration:1s;
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+    visibility: visible !important;
+}
+@-webkit-keyframes fadeInDown {
+    0% { opacity: 0; -webkit-transform: translateY(100px); }
+    100% { opacity: 1; -webkit-transform: translateY(0); }
+}
+@keyframes fadeInDown {
+    0% { opacity: 0; -webkit-transform: translateY(100px); -ms-transform: translateY(100px); transform: translateY(100px); }
+    100% { opacity: 1; -webkit-transform: translateY(0); -ms-transform: translateY(0); transform: translateY(0); }
+}
 
- 
-body{
-    height: auto;
-    width: auto;
-}  */
+
+
 
 
 .wrraper{
     overflow: hidden;
-    /* height: 100%;
-    width: 100%; */
 }
 
 
@@ -138,10 +148,29 @@ nav{
     padding: 12px;
 }
 
+.tooltip.arrow{
+    background-color: #fbd4cb;
+}
+
 .tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
     border-top-color: #fbd4cb;
     border-width: .6rem .6rem 0;
 }
+
+/* div.fc-event-title.tooltip-inner{
+    background-color: yellow;
+    color: #000;
+    padding: 12px;
+} */
+
+/* div.fc-event-title.tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
+    border-top-color: yellow;
+    border-width: .6rem .6rem 0;
+} */
+
+
+
+
 
 .kensaku-btn{
     width: 120px;
@@ -195,9 +224,9 @@ nav{
 
 .top_down{
     position: fixed;
-    left: 50px;
-    top: 200px;
-    color: #ffd700;
+    right: 50px;
+    top: 400px;
+    color: #FFFF99;
     font-size: 15px;
     font-weight: bold;
     text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -205,10 +234,10 @@ nav{
 }
 
 .top_down:hover{
-    color: #ff8c00;
+    color: #FFCC33;
 }
 
-.history_back{
+/* .history_back{
     position: fixed;
     right: 50px;
     bottom: 150px;
@@ -221,7 +250,7 @@ nav{
 
 .history_back:hover{
     color: #4c58eb;
-}
+} */
 
 .itiran{
     border-radius: 5px;

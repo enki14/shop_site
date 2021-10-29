@@ -26,36 +26,51 @@ $(function(){
         let backtip = $('[data-toggle="backtip"]');
         let Title_1 = "トップページへ戻れます";
 
-        let scroll_top =  $('[data-toggle="scroll_top"]');
-        let Title_2 = "ページ上部へ";
+        // let scroll_top =  $('[data-toggle="scroll_top"]');
+        // let Title_2 = "ページ上部へ";
 
         openTooltip(backtip, Title_1);
-        openTooltip(scroll_top, Title_2);
+        // openTooltip(scroll_top, Title_2);
     });
 
 
     /******************** 下降するボタンの仕様　↓↓↓ *********************/
     $('.top_down').on('click', function(){
-        let pos = $('#maps-container').offset().top;
-        if($(window).scrollTop() < pos){
+        let down = $('#maps-container').offset().top;
+        let up = $(window).offset().top;
+        if($(window).scrollTop() < down){
             $('html, body').animate({
-                scrollTop: pos
+                scrollTop: down
             }, 1000);
             return false;
-        }
+        }else{
+            $('html, body').animate({
+                scrollTop: up
+            }, 1000);
+            return false;
+        } 
     });
+    // $('.top_down').on('click', function(){
+    //     let pos = $('#maps-container').offset().top;
+    //     if($(window).scrollBottom() < pos){
+    //         $('body,html').animate({
+    //             scrollTop: 0
+    //         }, 1000);
+    //         return false;
+    //     }
+    // });
 
-    let scroll_down = $('[data-toggle="scroll_down"]');
-    $(scroll_down).on('mouseover', function(){
-        $(scroll_down).tooltip({
-            trigger: "manual",
-            title: "地図検索へ",
-            placement: "top"
-        });
-        $(scroll_down).tooltip("show");
-        $(scroll_down).on('animationend webkitTransitionEnd', function(){
-            $(this).tooltip("hide");
-        });
+    // let scroll_down = $('[data-toggle="scroll_down"]');
+    // $(scroll_down).on('mouseover', function(){
+    //     $(scroll_down).tooltip({
+    //         trigger: "manual",
+    //         title: "地図検索へ",
+    //         placement: "top"
+    //     });
+    //     $(scroll_down).tooltip("show");
+    //     $(scroll_down).on('animationend webkitTransitionEnd', function(){
+    //         $(this).tooltip("hide");
+    //     });
 
-    });
+    // });
 });

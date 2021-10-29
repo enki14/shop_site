@@ -1,5 +1,8 @@
 <div id="main-result" class="container py-4">
-    <h4 class="pl-5 my-lg-5">絞り込み条件 : 
+    <p class="pl-5">絞り込み結果：{{ $pagenate->total() }} 件　
+        {{-- LengthAwarePaginatorのtotalメソッド --}}
+    </p>
+    <p class="pb-4 pl-5">絞り込み条件 : 
         @if(isset($schedule) or isset($shop))
             @if(!empty($schedule) && !empty($shop))
                 {{ $schedule }} / {{ $shop }}
@@ -13,7 +16,7 @@
                 {{ $keyword }}
             @endif
         @endif
-    </h4>
+    </p>
 @if(isset($pagenate))
     @foreach($pagenate as $data)
     <div class="row justify-content-center">
@@ -23,19 +26,19 @@
                     @csrf
                     <div id="ribbon"><span id="new">new!!</span></div>
                     <div class="row">
-                        <h5 class="col-sm-12 text-center font-weight-bold mt-2">
+                        <h5 class="col-md-12 text-center font-weight-bold mt-2">
                             <a href="@if(!empty($data->shop_url)){{ $data->shop_url }}@endif" target="_blank">
                                 {{ $data->shop_name }}{{ $data->store_name }}
                             </a>
                         </h5>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-md-4">
                             <img src="#" alt="テスト画像">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12"> 
+                        <div class="col-md-8"> 
                             <p class="card-text">お支払方法：○○××▢▢</p>
                             <p class="card-text">
                                 @if(!empty($data->event_start) && !empty($data->event_end))
@@ -63,5 +66,9 @@
     </div>
     @endforeach
 @endif
-{{ $pagenate->appends($pagenate_params)->links() }} 
+    <div class="row">
+        <div class="col-md-10">
+            {{ $pagenate->appends($pagenate_params)->links() }} 
+        </div>
+    </div>
 </div>

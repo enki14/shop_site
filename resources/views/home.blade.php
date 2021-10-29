@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            {{--<div class="card">
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
@@ -16,14 +16,25 @@
 
                     You are logged in!
                 </div>
-            </div>
+            </div>--}}
             <div class="container">
-                <h2>shopテーブルの編集（マスタ）</h2> 
+                <h2>データベースの管理・編集</h2> 
                 
-                <form method="post" action="home_seiyu">
-                @csrf
-                    <button type="submit">マスタ登録</button>
-                </form>
+                
+                <div class="col text-left mt-5">
+                    <!-- 取得したい店舗によってaction先を変える -->    
+                    <form class="form-group" method="post" action="daiei_store">
+                    @csrf
+                        <button type="submit">ストア登録</button>
+                    </form>
+
+                    <!-- 取得したい店舗によってaction先を変える -->
+                    <form class="form-group" method="post" action="#">
+                    @csrf
+                        <button type="submit">イベント登録</button>
+                    </form>
+                </div>
+                
                 <div class="form-inline my-4">
                     @csrf
                     <div class="ins_eria">

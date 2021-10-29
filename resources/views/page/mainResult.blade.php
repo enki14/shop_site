@@ -14,7 +14,7 @@
 {{-- topページと違い、content-mainとcontent-containerには"height: auto;をブレード内で採用している --}}
 <div id="content-main" class="mx-auto">
     <div id="content_row" class="row">
-        <div id="content-container" class="card mt-3 align-items-center bg-light mx-auto col-lg-8">
+        <div id="content-container" class="card mt-3 bg-light mx-auto col-lg-8">
             <div class="card-body">
             @include('layouts.search_value')
             @include('layouts.itiran')

@@ -1,49 +1,110 @@
 function initMap(){
     let convas = document.getElementById('map_convas');
+    let center_lat = '';
+    let center_lng = '';
     let h_lat = parseFloat($('#h_lat').val());
     let h_lng = parseFloat($('#h_lng').val());
+
+    // if(h_lat == '' || h_lng == ''){
+        if (navigator.geolocation) {
+            // 現在地を取得
+                navigator.geolocation.getCurrentPosition(
+                    // 取得成功した場合
+        
+                    function(position) {
+                        // console.log(position);
+                        // let centerp = {'lat': h_lat, 'lng': h_lng};
+                        center_lat = position.coords.latitude;
+                        center_lng = position.coords.longitude;
+                        console.log(center_lat);
+                        console.log(center_lng);
+                        
+                    },
+                    // 取得失敗した場合
+                    function(error) {
+                    // エラーメッセージを表示
+                        switch(error.code) {
+                            case 1: // PERMISSION_DENIED
+                            alert("位置情報の利用が許可されていません");
+                            break;
+                            case 2: // POSITION_UNAVAILABLE
+                            alert("現在位置が取得できませんでした");
+                            break;
+                            case 3: // TIMEOUT
+                            alert("タイムアウトになりました");
+                            break;
+                            default:
+                            alert("その他のエラー(エラーコード:"+error.code+")");
+                            break;
+                        }
+                    }
+                );
+            // Geolocation APIに対応していない
+            } else {
+                alert("この端末では位置情報が取得できません");
+            }
+        
+    // }else{
+    //     center_lat = h_lat;
+    //     center_lng = h_lng;
+    // }
+    // setTimeout(() => {
+        console.log(h_lat);
+        console.log(h_lng);
+    if(isNaN(h_lat) == false && isNaN(h_lng) == false){
+        console.log('リクエストからの検索');
+        
+        center_lat = h_lat;
+        center_lng = h_lng;
+    }
     
-    // console.log(h_lat);
-    // console.log(h_lng);
-    let centerp = {'lat': h_lat, 'lng': h_lng};
-    map = new google.maps.Map(convas, {
-        center: centerp,
-        zoom: 16
-    });
-
-    // 店舗用と地域用の座標を取得できるようにセット
-    // 初期の座標でajaxに送信して、コントローラー側で改めて店舗用と地域用を取得している
-    let latlng = {'lat': h_lat, 'lng': h_lng, 'L_lat': h_lat, 'L_lng': h_lng };
-    // console.log(latlng);
     
-    const url = "map_data";
-    // 初期表示用のajax（常に店舗と地域を表示させるためのもの）
-    $.ajax({
-        type:"GET",
-        url: url,
-        data: latlng,
-        dataType: 'json',
-        success: function(data){
-            // console.log(data.location);
-            markerData = data.location;
-            setMarker(markerData);
+                
+        
+        // 緯度・経度を変数に格納
+        var mapLatLng = new google.maps.LatLng(center_lat, center_lng);
+        
+        // マップオブジェクト作成
+        map = new google.maps.Map(convas, {
+            center: mapLatLng,
+            zoom: 16
+        });
+
+        // 店舗用と地域用の座標を取得できるようにセット
+        // 初期の座標でajaxに送信して、コントローラー側で改めて店舗用と地域用を取得している
+        let latlng = {'lat': center_lat, 'lng': center_lng, 'L_lat': center_lat, 'L_lng': center_lng };
+        console.log(latlng);
+        const url = "map_data";
+        // 初期表示用のajax（常に店舗と地域を表示させるためのもの）
+        $.ajax({
+            type:"GET",
+            url: url,
+            data: latlng,
+            dataType: 'json',
+            success: function(data){
+                console.log(data.location);
+                markerData = data.location;
+                setMarker(markerData);
 
 
-        },
-        error: function(data){
-            alert("駄目です");
-            // console.log('Error:', data);
-        }
-    });
+            },
+            error: function(data){
+                alert("駄目です");
+                // console.log('Error:', data);
+            }
+        });
+    // }, 3000);
+
+
     
 };
+
+
 
 let map;
 let icon;
 let marker = [];
 let infoWindow = [];
-
-
 
 // マーカーや吹き出しの表示
 function setMarker(markerData){
@@ -51,6 +112,8 @@ function setMarker(markerData){
 
         let latS = parseFloat(markerData[i]['lat']);
         let lngS = parseFloat(markerData[i]['lng']);
+        let latL = parseFloat(markerData[i]['L_lat']);
+        let lngL = parseFloat(markerData[i]['L_lng']);
         // console.log(latS);
         // console.log(lngS);
         // コーテーションで囲わなくて良いのか
@@ -72,6 +135,7 @@ function setMarker(markerData){
 
 
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
+        // let markerLocation  = new google.maps.LatLng({ lat: latL, lng: lngL });
         
         icon = new google.maps.MarkerImage('./img/cart.png');
 
@@ -80,6 +144,11 @@ function setMarker(markerData){
             map: map,
             icon: icon
         });
+
+        // marker[i] = new google.maps.Marker({
+        //     position: markerLocation,
+        //     map: map,
+        // });
 
         infoWindow[i] = new google.maps.InfoWindow({
             content: markerData[i]['shop_name'] + store_name + '<br><br>'
@@ -146,7 +215,6 @@ $(function(){
     $("#kensaku-map").on('click', function(e){
         
         let namae = $("#map_search").val();
-        console.log(namae);
 
         if(namae == ''){
             $('[data-toggle="tooltip"]')
@@ -180,16 +248,17 @@ $(function(){
             data: formData,
             dataType: 'json',
             success: function(data){
-                // console.log(data);
+                console.log(data);
                 let modal_body = $("#modalHtml");
                 
                 for(let i = 0; i < data.list.length; i++){
                     let row = data.list[i];
                     let zahyo = row.L_lat + "," + row.L_lng;
+                    console.log(zahyo);
 
                     let tag = $('<div>').append($('<a></a>', {href: '#', css:{color: '#ff4500'} }).addClass("local_link")
                     .text(row.prefectures_name + row.town_name + row.ss_town_name).data('value', zahyo));
-
+                    // console.log(tag);
                     modal_body.append(tag);
                 }
                 

@@ -14,11 +14,13 @@ class ShopsiteController extends Controller
     public function index(Request $request){
         $lat = $request->input('lat');
         $lng = $request->input('lng');
-        
+
+        Log::debug($lat);
+        Log::debug($lng);
         if($lat == '' or $lng == ''){
             // ないときは初期表示用の座標
-            $search_lat = '35.73529673720239';
-            $search_lng = '139.6281261687641';
+            $search_lat = '';
+            $search_lng = '';
             $shop_list = [];
         }else{
             $search_lat = $lat;
@@ -42,8 +44,7 @@ class ShopsiteController extends Controller
             $shop_list = DB::select($sql);
 
         }
-
-        
+        // Log::debug($shop_list);
 
         $output = [];
         $output['shop'] = '';
@@ -65,8 +66,6 @@ class ShopsiteController extends Controller
         $schedule = $request->input('search-schedule');
         $shop = $request->input('search-shop');
 
-        // dd($schedule);
-        // dd($shop);
         $base_sql = "select s.shop_name, s2.store_name, s.shop_url, s2.store_url, 
         sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
         from shop s left join store s2 on s.shop_id = s2.shop_id
@@ -109,13 +108,13 @@ class ShopsiteController extends Controller
             ['path'=> $request->url()]
         );
 
-        
+        // dd($pagenate);
         $output = [];
         $output['pagenate'] = $pagenate;
         $output['schedule'] = $schedule;
         $output['shop'] = $shop;
         $output['pagenate_params'] = ['search-schedule'=> $schedule, 'search-shop'=> $shop];
-        // dd($output);
+    
         return view('page.mainResult', $output);
     }
 
@@ -124,8 +123,6 @@ class ShopsiteController extends Controller
     public function keyRes(Request $request){
         $keyword = $request->input('keyword');
 
-        // Log::debug($keyword);
-        // dd($key_1);
         $base_sql = "select s2.shop_name, s3.store_name, s2.shop_url, s3.store_url, 
         sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle, sp_url
         from shop s2 left join store s3 on s2.shop_id = s3.shop_id 
@@ -134,12 +131,9 @@ class ShopsiteController extends Controller
         $add_where = "event_start between curdate() and ( curdate( ) + INTERVAL 30 DAY )
         and (sp.sp_title like '%$keyword%' or sp.sp_subtitle like '%$keyword%') and 
         (event_start is not null and event_start != '') order by sp.event_start";
-        
-        
+                
         $sql = $base_sql . $add_where;
         $list = DB::select($sql);
-
-        
         $collect = collect($list); 
         
         $pagenate = new LengthAwarePaginator(
@@ -162,14 +156,16 @@ class ShopsiteController extends Controller
 
     // モーダル表示用メソッド
     public function mapModal(Request $request){
+        // MapS.bladeのmap_search, name属性
         $req = $request->input('namae');
-        // Log::debug($req);
-        
 
-        // dd($req);
+        // Log::debug($req);
+        // mysqlに無効な値が挿入されてもエラーを吐き出さないようにしている
         config(['database.connections.mysql.strict' => false]);
         DB::reconnect();
 
+        // GLengthで２地点距離の計算式をカラムにした。検索結果から近い順に店舗をselectしている。
+        // 他、同じsql文がindex(), mapData()にある。
         $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name,
         X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng, 
         GLength(GeomFromText(CONCAT('LineString(35.73529673720239 139.6281261687641, ', 
@@ -182,24 +178,21 @@ class ShopsiteController extends Controller
                GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
                ORDER BY greatest(distance, distance_2)";
         $list = DB::select($sql);
-    
 
-        // dd($list);
-        // Log::debug($list);
         $response = [];
         $response['list'] = $list; 
         return Response::json($response);
     
     }
 
-    // 店舗と地域の初期表示用
+    // map内での店舗と地域の初期表示用
     public function mapData(Request $request){
+        // MapS.bladeからのhiddenリクエスト( modal_open.jsからのajax )
         $S_lat = $request->input('lat');
         $S_lng = $request->input('lng');
         $L_lat = $request->input('L_lat');
         $L_lng = $request->input('L_lng');
         
-        // Log::debug($S_lng);
         config(['database.connections.mysql.strict' => false]);
         DB::reconnect();
 
@@ -233,15 +226,12 @@ class ShopsiteController extends Controller
         left join sale_point sp on s.shop_id = sp.shop_id";
         $list = DB::select($sql);
 
-        // dd($list);
         $response = [];
         $output = [];
         foreach($list as $data){
-            $output['id'] = $data->sp_code;
-            
+            $output['id'] = $data->sp_code; 
             $start = Common::hyphenFormat($data->event_start);
             $end = Common::hyphenFormat($data->event_end);
-            // Log::debug($start);
 
             if($start == ''){
                 $data;
@@ -265,11 +255,17 @@ class ShopsiteController extends Controller
                 }elseif($end == '' && $start != ''){
                     $output['start'] = $start;
                     $output['end'] = null;   
+                }elseif($end != '' && $start == ''){
+                    $output['start'] = null;
+                    $output['end'] = $end; 
+                }else{
+                    $output['start'] = null;
+                    $output['end'] = null;
                 }
                 
             }        
             
-            Log::debug($output);
+            // Log::debug($output);
             $response[] = $output;
             
 

@@ -33,12 +33,11 @@ role="dialog" aria-hidden="true">
             </div>
         </div>
     </div>
-    <a href="http://localhost/shop_site/public/" class="top_down"><i class="fas fa-cloud-download-alt fa-5x" data-toggle="scroll_down"></i></a>
-    <a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-chevron-circle-up fa-5x" data-toggle="scroll_top"></i></a>
+    <a href="#" class="top_down"><i class="fas fa-cloud fa-5x" data-toggle="scroll_down"></i></a>
+    {{--<a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-chevron-circle-up fa-5x" data-toggle="scroll_top"></i></a>--}}
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // let cal_tip = $('[data-toggle="cal_tip"]');
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -50,20 +49,22 @@ role="dialog" aria-hidden="true">
             // あとはShopsiteController@eventCalendar_2メソッドでDBをレスポンスすればうまくやってくれる
             // indexメソッドの方には特に初期値など要らない
             events: "http://localhost/shop_site/public/eventCalendar_2",
-            eventDidMount: function(eventObj, calendarEl) {
-                console.log(eventObj);
-                let elem = $(calendarEl).find('span.fc-event-title');
-                let popover = elem.attr("data-toggle", "popover");
-
-                console.log(popover);
-                $(popover).tooltip({
-                    title: eventObj.title,
-                    content: eventObj.description,
+            eventDidMount: function(eventObj) {
+                let cal_tip = $('div.fc-event-title').each(function(){
+                    $(this).attr('data-toggle', 'cal_tip');
+                    
+                });
+                // console.log(eventObj);
+                $(cal_tip).tooltip({
+                    title: eventObj.event._def.title,
+                    // start: eventObj[i].event._instance.start,
+                    // end: eventObj[i].event._instance.end,
+                    // content: eventObj.event._def.extendedProps.description,
                     trigger: 'hover',
                     placement: 'top',
-                    container: 'body',
+                    container: calendarEl,
                     html: true
-                });           
+                });       
             },
             dayMaxEventRows: true, 
             views: {

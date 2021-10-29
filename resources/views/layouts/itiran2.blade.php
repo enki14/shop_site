@@ -1,12 +1,21 @@
 @if(count($shop_list) > 0)
 <div id="map-data" class="map-data container py-4">
     {{-- $shop_list[0]は、モーダルをクリックしたときの店名そのもの --}}
-    <h4 class="py-3 pl-5">絞り込み条件：{{ $shop_list[0]->shop_name }}</h4>
+    <p class="pl-5">絞り込み結果：{{ count($shop_list) }} 件</p>
+    <p class="pb-4 pl-5">絞り込み条件：
+    @if(isset($local_list) || isset($shop_list))
+        @if(!empty($local_list))
+            {{ $local_list[0]->prefectures_name }}{{ $local_list[0]->town_name }}{{ $local_list[0]->ss_town_name }} 付近
+        @else(!empty($shop_list))
+            {{ $shop_list[0]->shop_name }}{{ $shop_list[0]->store_name }}
+        @endif
+    @endif
+    </p>
     @foreach($shop_list as $data)
 <div class="row justify-content-center">
     <div class="col-md-10">
         <div id="itiran-card" class="card mx-auto my-3">
-            <div id="card_body" class="card-body shadow">
+            <div id="card_body" class="card-body rounded shadow">
                 <div id="ribbon"><span id="new">new!!</span></div>
                 <div class="row">
                     <h5 class="col-md-12 text-center font-weight-bold mt-2">

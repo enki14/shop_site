@@ -61,18 +61,19 @@ class ScrapeCommand extends Command
             
         print(count($title));
         for($i = 0; $i < count($title); $i++){
-            $sql = "select count(*) from testsite where title = '$title[$i]'";
+            $sql = "select count(*) as cnt from testsite where title = '$title[$i]'";
             Log::channel('command')->emergency('test!');
             $cnt = DB::select($sql);
 
             
-            if (count($cnt) == 0) {
+            if ($cnt[0]->cnt == 0) {
                 $sql = 'select max(ts.shop_id) + 1 as max_id from testsite ts';
                 $max = DB::select($sql);
                 $max_id = $max[0]->max_id;
                 
                 $sqli = "insert into testsite(shop_id, title, link) 
                 values($max_id, '$title[$i]', '$link[$i]')";
+                Log::channel('command')->emergency($sqli);
                 DB::insert($sqli);
                 DB::commit();
             }

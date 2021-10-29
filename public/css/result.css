@@ -1,4 +1,4 @@
-html{
+/* html{
     height: auto;
     width: auto;
 }
@@ -7,12 +7,13 @@ html{
 body{
     height: auto;
     width: auto;
-}
+} */
 
 
 .wrraper{
-    height: 100%;
-    width: 100%;
+    overflow: hidden;
+    /* height: 100%;
+    width: 100%; */
 }
 
 
@@ -25,7 +26,7 @@ nav{
 
 }
 
-header{
+#fixed_nav{
     background-color: #ffd1e8;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -38,13 +39,12 @@ header{
 
 .header-eria{
     height: 300px;
-    top: 160px;
+    top: 100px;
     font-family: 'Josefin Sans', sans-serif;
     text-align: center;
-    flex-direction: column; 
-    justify-content: center;
+    /* flex-direction: column;  */
     position: absolute;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .header-eria.-visible:before {
@@ -100,6 +100,10 @@ header{
     background: #fde3e5;
     width: 100%;
     z-index: 2;
+}
+
+#content_row{
+    margin: auto 0;
 }
 
 
