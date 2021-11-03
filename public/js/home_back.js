@@ -37,40 +37,13 @@ $(function(){
     /******************** 下降するボタンの仕様　↓↓↓ *********************/
     $('.top_down').on('click', function(){
         let down = $('#maps-container').offset().top;
-        let up = $(window).offset().top;
+        // let up = $(window).offset().top;
         if($(window).scrollTop() < down){
             $('html, body').animate({
                 scrollTop: down
             }, 1000);
             return false;
-        }else{
-            $('html, body').animate({
-                scrollTop: up
-            }, 1000);
-            return false;
-        } 
+        }
     });
-    // $('.top_down').on('click', function(){
-    //     let pos = $('#maps-container').offset().top;
-    //     if($(window).scrollBottom() < pos){
-    //         $('body,html').animate({
-    //             scrollTop: 0
-    //         }, 1000);
-    //         return false;
-    //     }
-    // });
-
-    // let scroll_down = $('[data-toggle="scroll_down"]');
-    // $(scroll_down).on('mouseover', function(){
-    //     $(scroll_down).tooltip({
-    //         trigger: "manual",
-    //         title: "地図検索へ",
-    //         placement: "top"
-    //     });
-    //     $(scroll_down).tooltip("show");
-    //     $(scroll_down).on('animationend webkitTransitionEnd', function(){
-    //         $(this).tooltip("hide");
-    //     });
-
-    // });
+    
 });

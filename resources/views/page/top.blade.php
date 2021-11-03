@@ -56,7 +56,7 @@ role="dialog" aria-hidden="true">
                 });
                 // console.log(eventObj);
                 $(cal_tip).tooltip({
-                    title: eventObj.event._def.title,
+                    title: eventObj.event._def.extendedProps.description,
                     // start: eventObj[i].event._instance.start,
                     // end: eventObj[i].event._instance.end,
                     // content: eventObj.event._def.extendedProps.description,

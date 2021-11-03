@@ -17,23 +17,23 @@ class ShopsiteController extends Controller
 
         Log::debug($lat);
         Log::debug($lng);
-        if($lat == '' or $lng == ''){
-            // ないときは初期表示用の座標
-            $search_lat = '';
-            $search_lng = '';
-            $shop_list = [];
-        }else{
-            $search_lat = $lat;
-            $search_lng = $lng;
+        // if($lat == '' or $lng == ''){
+        //     // ないときは初期表示用の座標
+        //     $search_lat = '';
+        //     $search_lng = '';
+        //     $shop_list = [];
+        // }else{
+            // $search_lat = $lat;
+            // $search_lng = $lng;
 
             // $shop_listでmapの結果一覧を取得する
             $sql = "select s.shop_name, s.shop_url, s2.store_name, 
             l.prefectures_name, l.town_name, l.ss_town_name, 
             sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle, sp.sp_url,
             X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
-                    GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
+                    GLength(GeomFromText(CONCAT('LineString($lat $lng, ', 
                         X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-                    GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
+                    GLength(GeomFromText(CONCAT('LineString($lat $lng, ', 
                         X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
                         from shop s inner join store s2 on s.shop_id = s2.shop_id 
                         left join localdata l on s2.local_id = l.local_id 
@@ -43,7 +43,7 @@ class ShopsiteController extends Controller
 
             $shop_list = DB::select($sql);
 
-        }
+        // }
         // Log::debug($shop_list);
 
         $output = [];
@@ -51,8 +51,8 @@ class ShopsiteController extends Controller
         $output['schedule'] = '';
         $output['keyword'] = '';
         $output['shop_list'] = $shop_list;
-        $output['lat'] = $search_lat;
-        $output['lng'] = $search_lng;
+        $output['lat'] = $lat;
+        $output['lng'] = $lng;
         return view('page.top', $output);
         
     }
@@ -193,6 +193,8 @@ class ShopsiteController extends Controller
         $L_lat = $request->input('L_lat');
         $L_lng = $request->input('L_lng');
         
+        Log::debug($S_lat);
+        Log::debug($S_lng);
         config(['database.connections.mysql.strict' => false]);
         DB::reconnect();
 
@@ -211,7 +213,7 @@ class ShopsiteController extends Controller
 
         $location = DB::select($sql);
 
-
+        Log::debug($location);
         $response['location'] = $location;
         return Response::json($response);
     

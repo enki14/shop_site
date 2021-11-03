@@ -94,6 +94,260 @@ class StoreSetController extends Controller
     }
 
 
+    public function summit_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_30 = 'select url, element_path from scrape where id = 30';
+        $s_30 = DB::select($sql_30);
+        foreach($s_30 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store_1 = $crawler->filter($data->element_path)->filter('p.p-store-info__item--title')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $adr_time_1 = $crawler->filter($data->element_path)->filter('dl > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $link_1 = $crawler->filter($data->element_path)->filter('p.p-store-shop__item--btn > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+        }
+
+
+        $sql_31 = 'select url, element_path from scrape where id = 31';
+        $s_31 = DB::select($sql_31);
+        foreach($s_31 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store_2 = $crawler->filter($data->element_path)->filter('p.p-store-info__item--title')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $adr_time_2 = $crawler->filter($data->element_path)->filter('dl > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $link_2 = $crawler->filter($data->element_path)->filter('p.p-store-shop__item--btn > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+        }
+        
+
+        $sql_32 = 'select url, element_path from scrape where id = 32';
+        $s_32 = DB::select($sql_32);
+        foreach($s_32 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store_3 = $crawler->filter($data->element_path)->filter('p.p-store-info__item--title')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $adr_time_3 = $crawler->filter($data->element_path)->filter('dl > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $link_3 = $crawler->filter($data->element_path)->filter('p.p-store-shop__item--btn > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+        }
+
+        // それぞれの配列同士を結合（配列の中身は引数の並び順になる）
+        $store = array_merge($store_1, $store_2, $store_3);
+        $adr_time = array_merge($adr_time_1, $adr_time_2, $adr_time_3);
+        $link = array_merge($link_1, $link_2, $link_3);
+
+
+        // $retObj->adr_time の偶数を取得
+        $address = array_map('current', array_chunk($adr_time, 2));
+        // $retObj->adr_time の奇数を取得
+        $time = array_map('current', array_chunk(array_slice($adr_time, 1), 2));
+
+        
+        for($i = 0; $i < count($store); $i++){
+            $store_name = str_replace('サミットストア', '', $store[$i]);
+            
+            $sepa_addr = Common::separate_address($address[$i]);
+            $state = $sepa_addr['state'];
+            $city = $sepa_addr['city'];
+            $district = $sepa_addr['district'];
+
+            $store_url = 'https://www.summitstore.co.jp/store/' . $link[$i];
+
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, store_address, store_url, business_hours, prefectures, town, ss_town) 
+                values(8, $max_id, '$store_name', '$address[$i]', '$store_url', '$time[$i]', '$state', '$city', '$district')";
+                // dd($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+
+        }
+        
+    }
+
+
+    public function maruetu_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_33 = 'select url, element_path from scrape where id = 33';
+        $s_33 = DB::select($sql_33);
+        foreach($s_33 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+            
+            $store = $crawler->filter($data->element_path)->filter('div > dl > dt')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $zip_adr = $crawler->filter($data->element_path)->filter('div > ul > li:nth-child(1) > dl > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter($data->element_path)->filter('div > ul > li:nth-child(2) > dl > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $time = $crawler->filter($data->element_path)->filter('div > ul > li:nth-child(3) > dl > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+        }
+        
+        $store_url = array_map('current', array_chunk($link, 2));
+
+
+        for($i = 0; $i < count($store); $i++){
+            $store_name = str_replace('マルエツ', '', $store[$i]);
+            preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i], $zip);
+            preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $zip_adr[$i], $address);
+            $separate = Common::separate_address($address[0]);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+
+            $count = "select count(*) as cnt from store where store_name = '$store_name'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, zip, store_tel, store_address, store_url, business_hours, prefectures, town, ss_town) 
+                values(10, $max_id, '$store_name', '$zip[0]', '$tel[$i]','$address[0]', '$store_url[$i]', '$time[$i]', '$state', '$city', '$district')";
+                // dd($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+    
+    }
+
+
+    public function inageya_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_34 = 'select url, element_path from scrape where id = 34';
+        $s_34 = DB::select($sql_34);
+        foreach($s_34 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('td > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $store = $crawler->filter($data->element_path)->filter('td > a')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $zip_adr = $crawler->filter($data->element_path)->filter('td:nth-child(2)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $time = $crawler->filter($data->element_path)->filter('td:nth-child(3)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter($data->element_path)->filter('td:nth-child(4)')
+            ->each(function($node){
+                return $node->text();
+            });
+            // Log::debug($zip_adr);
+        }
+
+        for($i = 0; $i < count($store); $i++){
+            $store_link = str_replace('.', '', $link[$i]);
+            $store_url = 'https://stores.inageya.co.jp' . $store_link;
+            $store_name = str_replace('いなげや', '', $store[$i]);
+            preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i], $zip);
+            preg_match('/(.{2}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $zip_adr[$i], $address);
+            $separate = Common::separate_address($address[0]);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+
+            $count = "select count(*) as cnt from store where store_name = '$store_name'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                if(strpos($store_name, 'bloomingbloomy') === 0){
+                    $sql = "insert into store(shop_id, store_id, store_name, zip, store_tel, store_address, store_url, business_hours, prefectures, town, ss_town) 
+                    values(55, $max_id, '$store_name', '$zip[0]', '$tel[$i]','$address[0]', '$store_url', '$time[$i]', '$state', '$city', '$district')";
+                    // dd($sql);
+                    DB::insert($sql);
+                    DB::commit();
+                }else{
+                    $sql = "insert into store(shop_id, store_id, store_name, zip, store_tel, store_address, store_url, business_hours, prefectures, town, ss_town) 
+                    values(11, $max_id, '$store_name', '$zip[0]', '$tel[$i]','$address[0]', '$store_url', '$time[$i]', '$state', '$city', '$district')";
+                    // dd($sql);
+                    DB::insert($sql);
+                    DB::commit();
+                }
+
+                
+            }
+        }
+    }
+
+
 
     
 
