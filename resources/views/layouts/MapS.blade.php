@@ -4,7 +4,7 @@
         <div class="form-group">
             <input type="text" id="map_search" name="map_search" class="text-center border-warning mr-2" 
             placeholder="お住まいの地域・店名" aria-label="お住まいの地域・店名" aria-describedby="basic-addon1" 
-            style="width: 20rem; height: 3.3rem;" data-toggle="tooltip" />
+            style="width: 20rem; height: 3.3rem;" data-toggle="tooltip"/>
             <input type="hidden" id="h_lat" value="{{ $lat }}" />
             <input type="hidden" id="h_lng" value="{{ $lng }}" />
             <input id="kensaku-map" class="btn kensaku-btn" type="button" value="検索" 

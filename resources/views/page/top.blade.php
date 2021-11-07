@@ -49,20 +49,32 @@ role="dialog" aria-hidden="true">
             // あとはShopsiteController@eventCalendar_2メソッドでDBをレスポンスすればうまくやってくれる
             // indexメソッドの方には特に初期値など要らない
             events: "http://localhost/shop_site/public/eventCalendar_2",
+            // eventClickやeventDidMountなどの関数は、それぞれのfc-event-titleにすでに機能している
+            eventClick: function(info){
+                info.jsEvent.preventDefault();
+                if(info.event._def.url){
+                        window.open(info.event._def.url);
+                }
+                
+            },
             eventDidMount: function(eventObj) {
-                let cal_tip = $('div.fc-event-title').each(function(){
-                    $(this).attr('data-toggle', 'cal_tip');
-                    
-                });
-                // console.log(eventObj);
-                $(cal_tip).tooltip({
-                    title: eventObj.event._def.extendedProps.description,
-                    // start: eventObj[i].event._instance.start,
-                    // end: eventObj[i].event._instance.end,
-                    // content: eventObj.event._def.extendedProps.description,
+                // var tooltip = new Tooltip(eventObj.el, {
+                //     title: eventObj.event._def.title,
+                //     url: eventObj.event._def.url,
+                //     start: eventObj.event._instance.start,
+                //     end: eventObj.event._instance.end,
+                //     placement: 'top',
+                //     trigger: 'hover',
+                //     container: 'body'
+                // });
+                $('div.fc-event-title').tooltip({
+                    title: eventObj.event._def.title,
+                    url: eventObj.event._def.url,
+                    start: eventObj.event._instance.start,
+                    end: eventObj.event._instance.end,
                     trigger: 'hover',
                     placement: 'top',
-                    container: calendarEl,
+                    container: 'body',
                     html: true
                 });       
             },
