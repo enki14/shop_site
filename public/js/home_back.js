@@ -24,13 +24,9 @@ $(function(){
 
     $(window).on('scroll', function(){
         let backtip = $('[data-toggle="backtip"]');
-        let Title_1 = "トップページへ戻れます";
+        let Title = "トップページへ戻れます";
 
-        // let scroll_top =  $('[data-toggle="scroll_top"]');
-        // let Title_2 = "ページ上部へ";
-
-        openTooltip(backtip, Title_1);
-        // openTooltip(scroll_top, Title_2);
+        openTooltip(backtip, Title);
     });
 
 
@@ -42,7 +38,6 @@ $(function(){
             $('html, body').animate({
                 scrollTop: down
             }, 1000);
-            return false;
         }
     });
     

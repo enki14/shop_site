@@ -6,7 +6,24 @@
 
 @section('title', 'スーパーマーケットのお得情報')
 @section('description', 'スーパーマーケットのポイント情報や、セール情報が検索できるサイトです')
-
+{{-- カレンダー用モーダル --}}
+<div id="calendarModal" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span id="modal-date" class="text-muted mt-3 ml-3"></span>
+            <div class="modal-header">
+                <h4 id="modalTitle" class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>    
+                    <span class="sr-only">close</span>
+                </button>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+            <div id="modalFooter" class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+{{-- マップ検索用モーダル --}}
 <div class="modal fade" id="list_modal" tabindex="-1" style="display: none"
 role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">       
@@ -50,28 +67,21 @@ role="dialog" aria-hidden="true">
             // indexメソッドの方には特に初期値など要らない
             events: "http://localhost/shop_site/public/eventCalendar_2",
             // eventClickやeventDidMountなどの関数は、それぞれのfc-event-titleにすでに機能している
-            eventClick: function(info){
+            eventClick: function(info, jsEvent , view){
                 info.jsEvent.preventDefault();
-                if(info.event._def.url){
-                        window.open(info.event._def.url);
-                }
+                console.log(info);
+                $('#modal-date').html(info.event.startStr);
+                // モーダルのタイトルを追加
+                $('#modalTitle').html(info.event._def.title); 
+                // モーダルの本文をセット(append()ではなくhtml()で実行する)
+                $('#modalBody').html($('<a></a>', {href: info.event._def.url, css: {color: '#ff4500'}} ).text('詳しくはこちら'));
+                // モーダル着火
+                $('#calendarModal').modal(); 
                 
             },
             eventDidMount: function(eventObj) {
-                // var tooltip = new Tooltip(eventObj.el, {
-                //     title: eventObj.event._def.title,
-                //     url: eventObj.event._def.url,
-                //     start: eventObj.event._instance.start,
-                //     end: eventObj.event._instance.end,
-                //     placement: 'top',
-                //     trigger: 'hover',
-                //     container: 'body'
-                // });
                 $('div.fc-event-title').tooltip({
                     title: eventObj.event._def.title,
-                    url: eventObj.event._def.url,
-                    start: eventObj.event._instance.start,
-                    end: eventObj.event._instance.end,
                     trigger: 'hover',
                     placement: 'top',
                     container: 'body',

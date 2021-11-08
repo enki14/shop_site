@@ -148,19 +148,20 @@ nav{
     margin-top: 35px;
 }
 
+
 .tooltip-inner{
-    background-color: #fbd4cb;
+    background: #fbd4cb;
     color: #000;
     padding: 12px;
 }
 
 .tooltip.arrow{
-    background-color: #fbd4cb;
+    background: #fbd4cb;
 }
 
 .tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
     border-top-color: #fbd4cb;
-    border-width: .6rem .6rem 0;
+    border-width: .6rem .6rem 0; 
 }
 
 /* div.fc-event-title.tooltip-inner{

@@ -4,10 +4,11 @@ $(function(){
     // modalで地域クリック
     $(document).on('click', '.local_link', function(){
         $("#list_modal").modal("hide");
-        // console.log("modal link click!!");
+        console.log("modal link click!!");
         let latlng = $(this).data('value');
-        
-        if(latlng){
+
+        console.log(latlng);
+        if(latlng !== 'undefined'){
             console.log(latlng);
 
             // コントローラー側に送るリクエストパラメーター
@@ -15,14 +16,9 @@ $(function(){
             let lngL = latlng.split(',')[1]; 
 
             location.href = "?lat=" + latL + "&lng=" + lngL + '#maps-container';
-        }else if(navigator.geolocation){
-            let options = {
-                enableHighAccuracy: true,
-                timeout: 1000,
-                maximumAge: 0
-            }
-            // 現在地を取得
-            navigator.geolocation.getCurrentPosition(success, error, options);
+        }else{
+            alert('error: 検索結果が取得できませんでした');
+            console.log(error);
         }
         
 
@@ -34,7 +30,7 @@ $(function(){
         $("#list_modal").modal("hide");
         let latlng = $(this).data('value');
 
-        if(latlng){
+        if(latlng !== 'undefiend'){
             
             
             // コントローラー側に送るリクエストパラメーター
@@ -42,14 +38,9 @@ $(function(){
             let lng = latlng.split(',')[1]; 
 
             location.href = "?lat=" + lat + "&lng=" + lng + '#maps-container';
-        }else if(navigator.geolocation){
-            let options = {
-                enableHighAccuracy: true,
-                timeout: 1000,
-                maximumAge: 0
-            }
-            // 現在地を取得
-            navigator.geolocation.getCurrentPosition(success, error, options);
+        }else{
+            alert('error: 検索結果が取得できませんでした');
+            console.log(error);
 
         };
     
