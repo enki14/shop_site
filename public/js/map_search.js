@@ -8,19 +8,15 @@ $(function(){
         let latlng = $(this).data('value');
 
         console.log(latlng);
-        if(latlng !== 'undefined'){
-            console.log(latlng);
-
-            // コントローラー側に送るリクエストパラメーター
-            let latL = latlng.split(',')[0];
-            let lngL = latlng.split(',')[1]; 
-
-            location.href = "?lat=" + latL + "&lng=" + lngL + '#maps-container';
-        }else{
-            alert('error: 検索結果が取得できませんでした');
-            console.log(error);
-        }
         
+        console.log(latlng);
+
+        // コントローラー側に送るリクエストパラメーター
+        let latL = latlng.split(',')[0];
+        let lngL = latlng.split(',')[1]; 
+
+        location.href = "?lat=" + latL + "&lng=" + lngL + '&s_flag=local#maps-container';
+
 
     });
 
@@ -30,19 +26,13 @@ $(function(){
         $("#list_modal").modal("hide");
         let latlng = $(this).data('value');
 
-        if(latlng !== 'undefiend'){
-            
-            
-            // コントローラー側に送るリクエストパラメーター
-            let lat = latlng.split(',')[0];
-            let lng = latlng.split(',')[1]; 
+        // コントローラー側に送るリクエストパラメーター
+        let lat = latlng.split(',')[0];
+        let lng = latlng.split(',')[1]; 
 
-            location.href = "?lat=" + lat + "&lng=" + lng + '#maps-container';
-        }else{
-            alert('error: 検索結果が取得できませんでした');
-            console.log(error);
-
-        };
+        location.href = "?lat=" + lat + "&lng=" + lng + '&s_flag=store#maps-container';
+        
+            
     
     });
 

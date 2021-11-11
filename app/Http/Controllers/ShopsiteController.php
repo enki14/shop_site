@@ -6,14 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Http\Lib\common;
+use App\Http\Lib\Common;
 use Response;
 
 class ShopsiteController extends Controller
 {
+    // 初期表示　+　modalクリックしたときの処理
     public function index(Request $request){
+        // リクエストパラメータから受け取った情報
         $lat = $request->input('lat');
         $lng = $request->input('lng');
+        // 住所か店舗を判断するフラグ（map_search.jsのパラメータ）
+        $s_flag = $request->input('s_flag');
+
 
         Log::debug($lat);
         Log::debug($lng);
@@ -21,10 +26,13 @@ class ShopsiteController extends Controller
             // ないときは初期表示用の座標
             $search_lat = '35.704406';
             $search_lng = '139.610732';
+            $request_flag = false;
             $shop_list = [];
         }else{
             $search_lat = $lat;
             $search_lng = $lng;
+            // リクエストパラメータありのフラグ
+            $request_flag = true;
 
             // $shop_listでmapの結果一覧を取得する
             $sql = "select s.shop_name, s.shop_url, s2.store_name, 
@@ -53,6 +61,8 @@ class ShopsiteController extends Controller
         $output['shop_list'] = $shop_list;
         $output['lat'] = $search_lat;
         $output['lng'] = $search_lng;
+        $output['request_flag'] = $request_flag;
+        $output['s_flag'] = $s_flag;
         return view('page.top', $output);
         
     }
@@ -187,10 +197,10 @@ class ShopsiteController extends Controller
 
     // map内での店舗と地域の初期表示用
     public function mapData(Request $request){
-        $success_flg = $request->input('success_flg');
+        // $success_flg = $request->input('success_flg');
 
 
-        if($success_flg == "true"){
+        // if($success_flg == "true"){
             // MapS.bladeからのhiddenリクエスト( modal_open.jsからのajax )
             $S_lat = $request->input('lat');
             $S_lng = $request->input('lng');
@@ -215,32 +225,32 @@ class ShopsiteController extends Controller
             GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
             ORDER BY greatest(distance, distance_2)";
 
-        }else{
+        // }else{
             // MapS.bladeからのhiddenリクエスト( modal_open.jsからのajax )
-            $S_lat = '35.704406';
-            $S_lng = '139.610732';
-            $L_lat = '35.704406';
-            $L_lng = '139.610732';
+            // $S_lat = '35.704406';
+            // $S_lng = '139.610732';
+            // $L_lat = '35.704406';
+            // $L_lng = '139.610732';
             
-            Log::debug($S_lat);
-            Log::debug($S_lng);
-            config(['database.connections.mysql.strict' => false]);
-            DB::reconnect();
+            // Log::debug($S_lat);
+            // Log::debug($S_lng);
+            // config(['database.connections.mysql.strict' => false]);
+            // DB::reconnect();
 
-            $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
-            sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle,
-            X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
-            GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
-            X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-            GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
-            X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
-            from shop s inner join store s2 on s.shop_id = s2.shop_id 
-            left join localdata l on s2.local_id = l.local_id 
-            left join sale_point sp on s.shop_id = sp.shop_id
-            GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
-            ORDER BY greatest(distance, distance_2)";
+            // $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
+            // sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle,
+            // X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
+            // GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
+            // X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
+            // GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
+            // X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
+            // from shop s inner join store s2 on s.shop_id = s2.shop_id 
+            // left join localdata l on s2.local_id = l.local_id 
+            // left join sale_point sp on s.shop_id = sp.shop_id
+            // GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
+            // ORDER BY greatest(distance, distance_2)";
 
-        }
+        // }
 
         
 
@@ -275,7 +285,13 @@ class ShopsiteController extends Controller
 
         // 会社イベントとして回す
         foreach($shop as $data){
-            $output['id'] = $data->sp_code; 
+            $output['id'] = $data->sp_code;
+            $output['main_title'] = $data->sp_title;
+            $output['description'] = $data->sp_subtitle;
+            $output['url'] = $data->sp_url;
+            $output['title'] = $data->shop_name . 'からのお知らせ';
+            
+            // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
             $end = Common::hyphenFormat($data->event_end);
             // shop_event_id の是非判定で会社全体としてのイベントだけを取得する
@@ -288,20 +304,7 @@ class ShopsiteController extends Controller
                 if($start == ''){
                     $data;
                     continue;
-                }else{
-                    // sp_title, sp_subtitleがあるかないかの判定
-                    if($data->sp_title == '' && $data->sp_subtitle != ''){
-                        $output['title'] = $data->shop_name . 'からのお知らせ';
-                        $output['url'] = $data->sp_url;
-
-                    }elseif($data->sp_title != '' && $data->sp_subtitle == ''){
-                        $output['title'] = $data->sp_title;
-                        $output['url'] = $data->sp_url;
-                    }else{
-                        $output['title'] = '';
-                        $output['url'] = '';
-                    }
-                    
+                }else{        
                     // event_startとevent_endのセット
                     if($end != '' && $start != ''){
                         $output['start'] = $start;
@@ -325,6 +328,11 @@ class ShopsiteController extends Controller
         // 店舗イベントとして回す
         foreach($store as $data){
             $output['id'] = $data->sp_code;
+            // カレンダー上のイベントタイトルとは分けている
+            $output['main_title'] = $data->sp_title;
+            $output['description'] = $data->sp_subtitle;
+            $output['url'] = $data->sp_url;
+            $output['title'] = $data->shop_name . $data->store_name;
             
             // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
@@ -338,18 +346,6 @@ class ShopsiteController extends Controller
                     $data;
                     continue;
                 }else{
-                    // sp_title, sp_subtitleがあるかないかの判定
-                    if($data->sp_title == '' && $data->sp_subtitle != ''){
-                        $output['title'] = $data->shop_name . $data->store_name . 'からのお知らせ';
-                        $output['url'] = $data->sp_url;
-                    }elseif($data->sp_title != '' && $data->sp_subtitle == ''){
-                        $output['title'] = $data->sp_title;
-                        $output['url'] = $data->sp_url;
-                    }else{
-                        $output['title'] = '';
-                        $output['url'] = '';
-                    }
-                    
                     // event_startとevent_endのセット
                     if($end != '' && $start != ''){
                         $output['start'] = $start;

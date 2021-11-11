@@ -6,23 +6,6 @@
 
 @section('title', 'スーパーマーケットのお得情報')
 @section('description', 'スーパーマーケットのポイント情報や、セール情報が検索できるサイトです')
-{{-- カレンダー用モーダル --}}
-<div id="calendarModal" class="modal fade" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <span id="modal-date" class="text-muted mt-3 ml-3"></span>
-            <div class="modal-header">
-                <h4 id="modalTitle" class="modal-title"></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>    
-                    <span class="sr-only">close</span>
-                </button>
-            </div>
-            <div id="modalBody" class="modal-body"></div>
-            <div id="modalFooter" class="modal-footer"></div>
-        </div>
-    </div>
-</div>
 {{-- マップ検索用モーダル --}}
 <div class="modal fade" id="list_modal" tabindex="-1" style="display: none"
 role="dialog" aria-hidden="true">
@@ -37,10 +20,29 @@ role="dialog" aria-hidden="true">
         </div>
     </div>
 </div>
+{{-- カレンダー用モーダル --}}
+<div id="calendarModal" class="modal fade" aria-hidden="true" style="display: none">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span id="modal-date" class="text-muted mt-3 ml-3"></span>
+            <div class="modal-header py-sm-0">
+                <p id="modalShop"></p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>    
+                    <span class="sr-only">close</span>
+                </button>
+            </div>
+            <div class="modal-body mb-4">
+                <h4 id="modalTitle" class="modal-title pb-2"></h4>
+                <div id="modal_description"></div>
+            </div>
+        </div>
+    </div>
+</div>
 @section('layouts.content')
 <div id="content-main" class="mx-auto">
     <div id="content_row" class="row">
-        <div id="content-container" class="card mt-3 bg-light mx-auto col-lg-8">
+        <div id="content-container" class="card mt-3 py-xl-3 bg-light mx-auto col-lg-8">
             <div class="card-body">
                 @include('layouts.search_value')
                 @include('layouts.keyS')
@@ -69,19 +71,27 @@ role="dialog" aria-hidden="true">
             // eventClickやeventDidMountなどの関数は、それぞれのfc-event-titleにすでに機能している
             eventClick: function(info, jsEvent , view){
                 info.jsEvent.preventDefault();
-                console.log(info);
-                $('#modal-date').html(info.event.startStr);
+                // console.log(info);
+                let date = new Date();
+                let year = date.getFullYear(info.event.startStr);
+                let month = date.getMonth(info.event.startStr) + 1;
+                let day = date.getDate(info.event.startStr);
+                // モーダルの日付表示
+                $('#modal-date').html(year + '年' + month + '月' + day + '日');
                 // モーダルのタイトルを追加
-                $('#modalTitle').html(info.event._def.title); 
-                // モーダルの本文をセット(append()ではなくhtml()で実行する)
-                $('#modalBody').html($('<a></a>', {href: info.event._def.url, css: {color: '#ff4500'}} ).text('詳しくはこちら'));
+                $('#modalShop').html(info.event._def.title);
+                // タイトルのセット(append()ではなくhtml()を使う)
+                $('#modalTitle').html($('<a></a>', {href: info.event._def.url} ).text(info.event._def.extendedProps.main_title)); 
+                // モーダルの本文をセット
+                $('#modal_description').html(info.event._def.extendedProps.description);
                 // モーダル着火
                 $('#calendarModal').modal(); 
                 
             },
             eventDidMount: function(eventObj) {
+                console.log(eventObj.event._def.extendedProps.main_title);
                 $('div.fc-event-title').tooltip({
-                    title: eventObj.event._def.title,
+                    title: eventObj.event._def.extendedProps.main_title,
                     trigger: 'hover',
                     placement: 'top',
                     container: 'body',

@@ -29,22 +29,28 @@ function initMap(){
 
     
 $(function() {
-    if (navigator.geolocation) {
-        let options = {
-            // enableHighAccuracyは、GPSの精度でtrueかfalseをセットする
-            // trueだと精度が高くなる
-            enableHighAccuracy: true,
-            //timeoutは、タイムアウト時間でミリ秒単位
-            timeout: 1000,
-            // maximumAgeは、キャッシュ有効時間でミリ秒で表す
-            // 0の場合、常に最新の情報を取得する
-            maximumAge: 0
+    let request_flag = $('#h_request_flag').val();
+    if(request_flag == false){
+        if (navigator.geolocation) {
+            let options = {
+                // enableHighAccuracyは、GPSの精度でtrueかfalseをセットする
+                // trueだと精度が高くなる
+                enableHighAccuracy: true,
+                //timeoutは、タイムアウト時間でミリ秒単位
+                timeout: 1000,
+                // maximumAgeは、キャッシュ有効時間でミリ秒で表す
+                // 0の場合、常に最新の情報を取得する
+                maximumAge: 0
+            }
+        
+            // 現在地を取得
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        
         }
-    
-        // 現在地を取得
-        navigator.geolocation.getCurrentPosition(success, error, options);
-    
+    }else{
+        error();
     }
+    
 });
 // 取得成功した場合
 function success(position) {
@@ -299,6 +305,7 @@ $(function(){
                 for(let i = 0; i < data.list.length; i++){
                     let row = data.list[i];
                     let zahyo = row.lat + "," + row.lng;
+                    console.log(zahyo);
 
                     let tag = $('<div>').append($('<a></a>', {href: '#'}).addClass("store_link")
                     .text(row.shop_name + row.store_name).data('value', zahyo));

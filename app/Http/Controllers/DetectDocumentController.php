@@ -14,12 +14,11 @@ use Log;
 
 class DetectDocumentController extends Controller
 {
-
+    // url先のpngをocrで読み込ませる
     // つまり流れとしてはscrapingした上で、imgsrcのurlをocrの処理にセットさせればよい。そうすれば
     // 文字の読み込み要素とその他のスクレイピングの処理が一致する
     public function detect_document_text_2() {
         
-       
         $imageAnnotator = new ImageAnnotatorClient();
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
@@ -56,6 +55,7 @@ class DetectDocumentController extends Controller
     }
 
 
+    // 非公開ファイルの保管場所と、oldファイルの作成
     public function detect_document_text() {
         
         // 一般公開ではない画像ファイルはlaravel_project/storage配下に置く
@@ -77,6 +77,7 @@ class DetectDocumentController extends Controller
         return redirect('/');
     }
 
+    // 現在は使用していないメソッド。画像をPC内に落としてから光学認識を行っていた
     private function detect_document ($path, $file) {
         // 検出されたエンティティを画像から返すためのインスタンス
         $imageAnnotator = new ImageAnnotatorClient();
@@ -108,7 +109,6 @@ class DetectDocumentController extends Controller
                     
                 }
             }
-            // dd($allblockText);
 
             
             // ここにgoutteの記述でhref, imgsrc, altを取得
@@ -256,5 +256,7 @@ class DetectDocumentController extends Controller
         return redirect('/');
     }
 
+
+    
 
 }

@@ -3,13 +3,11 @@
     {{-- $shop_list[0]は、モーダルをクリックしたときの店名そのもの --}}
     <p class="pl-5">絞り込み結果：{{ count($shop_list) }} 件</p>
     <p class="pb-4 pl-5">絞り込み条件：
-    @if(isset($shop_list))
-        @if($shop_list[0]->prefectures_name)
+        @if($s_flag == 'local')
             {{ $shop_list[0]->prefectures_name }}{{ $shop_list[0]->town_name }}{{ $shop_list[0]->ss_town_name }} 付近
-        @else($shop_list[0]->shop_name)
+        @else
             {{ $shop_list[0]->shop_name }}{{ $shop_list[0]->store_name }}
         @endif
-    @endif
     </p>
     @foreach($shop_list as $data)
 <div class="row justify-content-center">

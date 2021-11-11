@@ -21,7 +21,24 @@
         {{--<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>--}}
     </head>
     {{-- オーバーレイの下に潜り込まないようにmodalをbodyタグの前に設置 --}}
-    
+    <style>
+        /* headerの画像表示 ( +zoomアニメーション ) */
+        /* style.css内では表示できないので仕方なく、ここに定義している */
+        .jumbotron{
+            background: url("{{ asset('/img/nrd-D6Tu_L3chLE-unsplash.jpg') }}") center no-repeat;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .jumbotron:hover{
+            transform:scale(1.1, 1.1);
+            transition:1s all;
+        }
+
+        .jumbotron{
+            transition:1s all;
+        }
+    </style>
     <body>
         <div class="wrraper">
             @yield('layouts.header')
