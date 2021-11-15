@@ -348,8 +348,200 @@ class StoreSetController extends Controller
     }
 
 
+    public function comodiIida_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
-    
+        $sql_35 = 'select url, element_path from scrape where id = 35';
+        $s_35 = DB::select($sql_35);
+        foreach($s_35 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('th > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
 
+            $store = $crawler->filter($data->element_path)->filter('th > a')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $address = $crawler->filter($data->element_path)->filter('td:nth-child(2)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter($data->element_path)->filter('td:nth-child(3)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $time = $crawler->filter($data->element_path)->filter('td:nth-child(4)')
+            ->each(function($node){
+                return $node->text();
+            });
+        }
+
+        // index28は住所とは関係ない
+        unset($address[28]);
+        // 順番がずれないようにarray_valuesで詰める
+        $st_addr = array_values($address);
+
+        for($i = 0; $i < count($store); $i++){
+            $store_link = str_replace('.', '', $link[$i]);
+            $store_url = 'https://www.comodi-iida.co.jp/store/tokyo' . $store_link;
+
+            $separate = Common::separate_address_one($st_addr[$i]);
+            $city = $separate['city'];
+            $district = $separate['district'];
+            preg_match('/0\d{1,4}-\d{1,4}-\d{3,4}/u', $tel[$i], $store_tel);
+
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town) 
+                values(12, $max_id, '$store[$i]', '$st_addr[$i]', '$store_tel[0]', '$store_url', '$time[$i]', '東京', '$city', '$district')";
+                Log::debug($sql);
+                DB::insert($sql);
+                DB::commit();                
+            }
+        
+        }
+
+    }
+
+
+    public function ozeki_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_36 = 'select url, element_path from scrape where id = 36';
+        $s_36 = DB::select($sql_36);
+        foreach($s_36 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('dl > dt > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $store = $crawler->filter($data->element_path)->filter('dl > dt > a > span')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $zip_adr = $crawler->filter($data->element_path)->filter('dl > dd > div > p')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter($data->element_path)->filter('ul > li.shopDetailBtn01 > a > span')
+            ->each(function($node){
+                return $node->text();
+            });
+        // dd($tel);
+        }
+
+        for($i = 0; $i < count($store); $i++){
+            $url = 'http://www.ozeki-net.co.jp' . $link[$i];
+            preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i], $zip);
+            preg_match('/(.{2}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $zip_adr[$i], $address);
+            $search = array('※混雑状況は「google mapsで見る」でご覧ください (外部サイト)', '※混雑状況は「Google Mapsで見る」でご覧ください (外部サイト)');
+            $replace = array('', '');
+            $st_adr = str_replace($search, $replace, $address[0]);
+            $separate = Common::separate_address($st_adr);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, zip, store_address, store_tel, store_url, prefectures, town, ss_town) 
+                values(13, $max_id, '$store[$i]', '$zip[0]', '$st_adr', '$tel[$i]', '$url', '$state', '$city', '$district')";
+                Log::debug($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+
+    }
+
+
+    public function tokyu_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_37 = 'select url, element_path from scrape where id = 37';
+        $s_37 = DB::select($sql_37);
+        foreach($s_37 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('tr:nth-child(1) > th > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $store = $crawler->filter($data->element_path)->filter('tr:nth-child(1) > th > a')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $address = $crawler->filter($data->element_path)->filter(' tr:nth-child(2) > td > div.left > p:nth-child(1)  > span:nth-child(2)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter($data->element_path)->filter(' tr:nth-child(2) > td > div.left > p:nth-child(2) > span:nth-child(2)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $time = $crawler->filter($data->element_path)->filter('tr:nth-child(2) > td > div.right > p > span:nth-child(2)')
+            ->each(function($node){
+                return $node->text();
+            });
+            Log::debug($time);
+        }
+
+        for($i = 0; $i < count($store); $i++){
+            $url = 'https://www.tokyu-store.co.jp' . $link[$i];
+            $search = array('：', ' 地図はこちら', 'お客様には多大なるご不便・ご迷惑をおかけいたしますが、何卒ご了承頂きますようお願い致します。');
+            $replace = array('', '', '');
+            $st_adr = str_replace($search, $replace, $address[$i]);
+            $st_tel = str_replace($search, $replace, $tel[$i]);
+            $st_time = str_replace($search, $replace, $time[$i]);
+            $separate = Common::separate_address($st_adr);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town) 
+                values(14, $max_id, '$store[$i]', '$st_adr', '$st_tel', '$url', '$st_time', '$state', '$city', '$district')";
+                Log::debug($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+
+    }
 
 }

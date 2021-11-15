@@ -30,6 +30,7 @@ function initMap(){
     
 $(function() {
     let request_flag = $('#h_request_flag').val();
+    // リクエストパラメータに座標が渡されていなかったら
     if(request_flag == false){
         if (navigator.geolocation) {
             let options = {
@@ -47,6 +48,7 @@ $(function() {
             navigator.geolocation.getCurrentPosition(success, error, options);
         
         }
+        // 現在位置を取得できなかった場合の値はShopsiteController@indexに記載あり
     }else{
         error();
     }

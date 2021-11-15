@@ -197,62 +197,28 @@ class ShopsiteController extends Controller
 
     // map内での店舗と地域の初期表示用
     public function mapData(Request $request){
-        // $success_flg = $request->input('success_flg');
-
-
-        // if($success_flg == "true"){
-            // MapS.bladeからのhiddenリクエスト( modal_open.jsからのajax )
-            $S_lat = $request->input('lat');
-            $S_lng = $request->input('lng');
-            $L_lat = $request->input('L_lat');
-            $L_lng = $request->input('L_lng');
-            
-            Log::debug($S_lat);
-            Log::debug($S_lng);
-            config(['database.connections.mysql.strict' => false]);
-            DB::reconnect();
-
-            $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
-            sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle,
-            X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
-            GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
-            X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-            GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
-            X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
-            from shop s inner join store s2 on s.shop_id = s2.shop_id 
-            left join localdata l on s2.local_id = l.local_id 
-            left join sale_point sp on s.shop_id = sp.shop_id
-            GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
-            ORDER BY greatest(distance, distance_2)";
-
-        // }else{
-            // MapS.bladeからのhiddenリクエスト( modal_open.jsからのajax )
-            // $S_lat = '35.704406';
-            // $S_lng = '139.610732';
-            // $L_lat = '35.704406';
-            // $L_lng = '139.610732';
-            
-            // Log::debug($S_lat);
-            // Log::debug($S_lng);
-            // config(['database.connections.mysql.strict' => false]);
-            // DB::reconnect();
-
-            // $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
-            // sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle,
-            // X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
-            // GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
-            // X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-            // GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
-            // X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
-            // from shop s inner join store s2 on s.shop_id = s2.shop_id 
-            // left join localdata l on s2.local_id = l.local_id 
-            // left join sale_point sp on s.shop_id = sp.shop_id
-            // GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
-            // ORDER BY greatest(distance, distance_2)";
-
-        // }
-
+        $S_lat = $request->input('lat');
+        $S_lng = $request->input('lng');
+        $L_lat = $request->input('L_lat');
+        $L_lng = $request->input('L_lng');
         
+        Log::debug($S_lat);
+        Log::debug($S_lng);
+        config(['database.connections.mysql.strict' => false]);
+        DB::reconnect();
+
+        $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
+        sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle,
+        X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
+        GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
+        X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
+        GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
+        X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
+        from shop s inner join store s2 on s.shop_id = s2.shop_id 
+        left join localdata l on s2.local_id = l.local_id 
+        left join sale_point sp on s.shop_id = sp.shop_id
+        GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
+        ORDER BY greatest(distance, distance_2)";
 
         $location = DB::select($sql);
 
@@ -276,7 +242,7 @@ class ShopsiteController extends Controller
         sp.sp_title, sp.sp_subtitle, sp.event_start, sp.event_end, 
         sp.sp_url, sp.shop_event_id, sp.store_id
         from shop s left join store s2 on s.shop_id = s2.shop_id
-        left join sale_point sp on s.shop_id = sp.shop_id";
+        left join sale_point sp on s2.store_id = sp.store_id";
         $store = DB::select($sql_2);
 
 

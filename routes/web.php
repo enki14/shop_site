@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::any('/', 'ShopsiteController@index');
 // Route::get('/result', 'ShopsiteController@pagination');
-Route::any('/result', 'ShopsiteController@result');
-Route::any('/result-2', 'ShopsiteController@keyRes');
+Route::any('/result', 'ShopsiteController@result')->name('result');
+Route::any('/result-2', 'ShopsiteController@keyRes')->name('result-2');
 // Route::any('/result-2', 'ShopsiteController@index');
 Route::get('/map_modal', 'ShopsiteController@mapModal');
 Route::post('/map_data', 'ShopsiteController@mapData');
@@ -29,7 +29,9 @@ Route::post('/daiei_store', 'StoreSetController@daiei_store');
 Route::post('/summit_store', 'StoreSetController@summit_store');
 Route::post('/maruetu_store', 'StoreSetController@maruetu_store');
 Route::post('/inageya_store', 'StoreSetController@inageya_store');
-
+Route::post('/comodiIida_store', 'StoreSetController@comodiIida_store');
+Route::post('/ozeki_store', 'StoreSetController@ozeki_store');
+Route::post('/tokyu_store', 'StoreSetController@tokyu_store');
 
 // 画像の文字認識
 Route::get('business_card', 'DetectDocumentController@detect_document_text');
