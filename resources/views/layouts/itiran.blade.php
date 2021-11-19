@@ -27,9 +27,19 @@
                     <div id="ribbon"><span id="new">new!!</span></div>
                     <div class="row">
                         <h5 class="col-md-12 text-center font-weight-bold mt-2">
-                            <a href="@if(!empty($data->shop_url)){{ $data->shop_url }}@endif" target="_blank">
+                            @if(!empty($data->store_url))
+                                <a href="{{ $data->store_url }}" target="_blank">
+                                    {{ $data->shop_name }}{{ $data->store_name }}
+                                </a>
+                            @elseif(!empty($data->shop_url))
+                                <a href="{{ $data->shop_url }}" target="_blank">
+                                    {{ $data->shop_name }}
+                                </a>
+                            @elseif(empty($data->store_url) && empty($data->shop_url) && !empty($data->store_name))
                                 {{ $data->shop_name }}{{ $data->store_name }}
-                            </a>
+                            @else
+                                {{ $data->shop_name }}
+                            @endif
                         </h5>
                     </div>
                     <div class="row">

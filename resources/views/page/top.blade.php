@@ -55,6 +55,8 @@ role="dialog" aria-hidden="true">
     <a href="#" class="top_down"><i class="fas fa-cloud fa-5x" data-toggle="scroll_down"></i></a>
     {{--<a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-chevron-circle-up fa-5x" data-toggle="scroll_top"></i></a>--}}
 </div>
+@endsection
+@section('resultScript')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -81,7 +83,7 @@ role="dialog" aria-hidden="true">
                 // モーダルのタイトルを追加
                 $('#modalShop').html(info.event._def.title);
                 // タイトルのセット(append()ではなくhtml()を使う)
-                $('#modalTitle').html($('<a></a>', {href: info.event._def.url} ).text(info.event._def.extendedProps.main_title)); 
+                $('#modalTitle').html($('<a></a>', {href: info.event._def.url, target: "_blank"} ).text(info.event._def.extendedProps.main_title)); 
                 // モーダルの本文をセット
                 $('#modal_description').html(info.event._def.extendedProps.description);
                 // モーダル着火
@@ -109,5 +111,7 @@ role="dialog" aria-hidden="true">
     });
  
 </script>
+<script src="{{ asset('/js/modal_open.js') }}"></script> 
+<script src="{{ asset('/js/map_search.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places" async defer></script>
 @endsection

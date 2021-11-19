@@ -383,26 +383,37 @@ class HomeController extends Controller
         // sslチェック無効の設定
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
-        $sql = 'select target_name, url, element_path from scrape where id in (5,6,7)';
+        // 38 は別ページでも使える
+        $sql = 'select target_name, url, element_path from scrape where id = 38';
         $select = DB::select($sql);
         
 
         foreach($select as $data){
-            $local_name = $data->target_name;
             $prefecture  = '東京都';
 
-            $url = $data->url;
+            $base_url = $data->url;
+            // パラメータの後半部分を抽出したいページに合わせる
+            $url = $base_url . '&city=1132250&cmp=1';
             $crawler = $client->request('GET', $url);
-            $text = $crawler->filter($data->element_path)
+
+            // 地区名抽出
+            $district = $crawler->filter($data->element_path)
+            ->filter('div > table > tbody > tr > td > div > p > a')
             ->each(function($node){
                 return $node->text();
             });
-            // dd($text);
-            Log::debug($text);
+
+            // 市区町村抽出（ループでは回さない）
+            $city = $crawler->filter($data->element_path)
+            ->filter('div > div > div.clm.flexbasis70 > div > div:nth-child(3) > h1')
+            ->text();
+
+            // 一件目が必要なかった時の削除処理
+            array_splice($district, 0, 1);
 
 
-            for($i = 0; $i < count($text); $i++){
-                $sql = "select count(*) as cnt from localdata where ss_town_name = '$text[$i]'";
+            for($i = 0; $i < count($district); $i++){
+                $sql = "select count(*) as cnt from localdata where ss_town_name = '$district[$i]'";
                 $exist = DB::select($sql);
 
                 if($exist[0]->cnt == 0){
@@ -411,7 +422,8 @@ class HomeController extends Controller
                         $max_id = $max[0]->max_id;
 
                         $sql_i = "insert into localdata(local_id, prefectures_name, town_name, ss_town_name) 
-                        values($max_id, '$prefecture', '$local_name', '$text[$i]')";
+                        values($max_id, '$prefecture', '$city', '$district[$i]')";
+                        Log::debug($sql_i);
                         DB::insert($sql_i);
                         DB::commit();
                     

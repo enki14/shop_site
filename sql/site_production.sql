@@ -5,7 +5,8 @@ create table shop
 create table sale_point
 (sp_code int(10), shop_id int(4), store_id int(5), sp_kubun int(1), sp_title varchar(255),
  sp_subtitle varchar(255), sp_url varchar(255), event_start char(8), event_end char(8), 
- strength int(1), cash_kubun int(1), event_name_kubun int(1), shop_event_id int(4), primary key(sp_code, shop_id));
+ cash_kubun int(1), event_name_kubun int(1), keyword varchar(50), register_day char(8), 
+ primary key(sp_code));
 
 create table store
 (shop_id int(4), store_id int(5), store_name varchar(90), zip varchar(8), store_address varchar(120),
@@ -18,13 +19,15 @@ create table store
 
 -- ※sale_pointの説明
 -- sp_code  ・・・・・・sale_pointそのものの主キー
--- store_id  ・・・・・・ここに番号が振られているものは店舗ごとにイベントがあるということ
+-- shop_id  ・・・・・・会社のイベントとして振られるid。それ以外の時は値を入れない
+-- store_id  ・・・・・・店舗のイベントとして振られるid。それ以外の時は値を入れない
 -- sp_kubun  ・・・・・・セールかポイントか、その両方かを0,1,2として判定する（使い道要検討）
 -- sp_subtitle  ・・・・・・タイトルの説明
--- strength  ・・・・・・セールやポイントの度合いの強弱を表す（要らないかも）
 -- cash_kubun  ・・・・・・現金、クレジット、電子マネー、QRコード、商品券などを番号で区分する
 -- event_name_kubun  ・・・・・・使いみち失念。。。
--- shop_event_id  ・・・・・・会社のイベントととして+1振られるid
+-- keyword  ・・・・・キーワード検索に使えそうなキーワードを文字列として入れていく。イベントに適当な値が無ければ何も入れない
+-- register_day  ・・・・・・イベントをインサートした登録日
+
 
 -- ※storeテーブルの説明
 -- local_id  ・・・・・・localdataテーブルのlocal_idと紐づけている

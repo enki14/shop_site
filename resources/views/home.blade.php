@@ -23,13 +23,13 @@
                 
                 <div class="col text-left mt-5">
                     <!-- 取得したい店舗によってaction先を変える -->    
-                    <form class="form-group" method="post" action="tokyu_store">
+                    <form class="form-group" method="post" action="home_local">
                     @csrf
                         <button type="submit">ストア登録</button>
                     </form>
 
                     <!-- 取得したい店舗によってaction先を変える -->
-                    <form class="form-group" method="post" action="#">
+                    <form class="form-group" method="post" action="seiyu_5pctOff">
                     @csrf
                         <button type="submit">イベント登録</button>
                     </form>

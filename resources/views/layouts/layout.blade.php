@@ -46,8 +46,7 @@
         </div>
         <script src="{{ asset('js/header_animation.js') }}"></script>
         <script src="{{ asset('js/main_form_submit.js') }}"></script>
-        <script src="{{ asset('/js/modal_open.js') }}"></script> 
-        <script src="{{ asset('/js/map_search.js') }}"></script>
         <script src="{{ asset('js/home_back.js')}}"></script>
+        @yield('resultScript')
     </body>
 </html> 

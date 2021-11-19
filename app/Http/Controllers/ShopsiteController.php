@@ -13,6 +13,7 @@ class ShopsiteController extends Controller
 {
     // 初期表示　+　modalクリックしたときの処理
     public function index(Request $request){
+        // Log::debug('index start!!');
         // リクエストパラメータから受け取った情報
         $lat = $request->input('lat');
         $lng = $request->input('lng');
@@ -31,7 +32,7 @@ class ShopsiteController extends Controller
         }else{
             $search_lat = $lat;
             $search_lng = $lng;
-            // リクエストパラメータありのフラグ
+            // リクエストパラメータありのフラグ(検索リクエストだったらtrue)
             $request_flag = true;
 
             // $shop_listでmapの結果一覧を取得する
@@ -71,15 +72,15 @@ class ShopsiteController extends Controller
     
 
     public function result(Request $request){
-
+        Log::debug('result start!!');
         // requestインスタンスはname値を呼び出す
         $schedule = $request->input('search-schedule');
         $shop = $request->input('search-shop');
 
-        $base_sql = "select s.shop_name, s2.store_name, s.shop_url, s2.store_url, 
-        sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
-        from shop s left join store s2 on s.shop_id = s2.shop_id
-        left join sale_point sp on s.shop_id = sp.shop_id where ";
+        Log::debug($shop);
+        
+    
+        
         // 「今日・明日」の場合
         if ($schedule == '今日・明日') {
             $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 1 DAY ) 
@@ -92,22 +93,40 @@ class ShopsiteController extends Controller
             $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 29 DAY ) 
             or event_start between curdate() and ( curdate( ) + INTERVAL 29 DAY ))";
         }else{
-            $add_where = "event_end >= curdate() ";
+            $add_where = "event_start >= curdate() ";
         }
 
         if($shop !== ''){
-            $add_where = $add_where . "and (s.shop_name LIKE '%$shop%' or s2.store_name like '%$shop%'
-            or s2.town LIKE '%$shop%' or s2.ss_town like '%$shop%') and (event_start is not null and event_start != '') 
-            order by '%$shop%', event_start";
+            $add_shop_where = "and s.shop_name LIKE '%$shop%' ";
+            $add_store_where = "and (s2.store_name like '%$shop%'
+            or s2.town LIKE '%$shop%' or s2.ss_town like '%$shop%') ";
+            $add_order = "order by '%$shop%', event_start";
         }else{
-            $add_where = $add_where . "and (event_start is not null and event_start != '')
-            order by event_start";
+            $add_order = "order by event_start";
         }
 
-        // where構文はそれぞれ別だが$add_whereに統一することでif文にも対応できている
-        $sql = $base_sql . $add_where;
-        $s = DB::select($sql);
+        $sql = "select sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
+            from shop s
+            inner join sale_point sp on s.shop_id = sp.shop_id
+            left join store s2 on sp.store_id = s2.store_id
+            where "
+            . $add_where . $add_shop_where 
+            ."union all 
+            select sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
+            from store s2
+            inner join sale_point sp on s2.store_id = sp.store_id
+            left join shop s on s2.shop_id = s.shop_id
+            where "
+            . $add_where . $add_store_where
+            . $add_order;
 
+        // where構文はそれぞれ別だが$add_whereに統一することでif文にも対応できている
+        $s = DB::select($sql);
+        // Log::debug('sql:' .$sql);
         $collect = collect($s); 
         
         $pagenate = new LengthAwarePaginator(
@@ -124,7 +143,7 @@ class ShopsiteController extends Controller
         $output['schedule'] = $schedule;
         $output['shop'] = $shop;
         $output['pagenate_params'] = ['search-schedule'=> $schedule, 'search-shop'=> $shop];
-    
+        Log::debug('result end');
         return view('page.mainResult', $output);
     }
 
@@ -133,16 +152,30 @@ class ShopsiteController extends Controller
     public function keyRes(Request $request){
         $keyword = $request->input('keyword');
 
-        $base_sql = "select s2.shop_name, s3.store_name, s2.shop_url, s3.store_url, 
-        sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle, sp_url
-        from shop s2 left join store s3 on s2.shop_id = s3.shop_id 
-        left join sale_point sp on s2.shop_id = sp.shop_id where ";
-
         $add_where = "event_start between curdate() and ( curdate( ) + INTERVAL 30 DAY )
-        and (sp.sp_title like '%$keyword%' or sp.sp_subtitle like '%$keyword%') and 
-        (event_start is not null and event_start != '') order by sp.event_start";
-                
-        $sql = $base_sql . $add_where;
+        and (sp.sp_title like '%$keyword%' or sp.sp_subtitle like '
+        %$keyword%' or sp.keyword like '%$keyword%') ";
+
+        $add_order = "order by event_start";
+
+        $sql = "select sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url,  
+            sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
+            from shop s
+            inner join sale_point sp on s.shop_id = sp.shop_id
+            left join store s2 on sp.store_id = s2.store_id 
+            where "
+            . $add_where .
+            "union all 
+            select sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
+            from store s2
+            inner join sale_point sp on s2.store_id = sp.store_id
+            left join shop s on s2.shop_id = s.shop_id
+            where "
+            .$add_where . $add_order;
+
         $list = DB::select($sql);
         $collect = collect($list); 
         
@@ -232,17 +265,18 @@ class ShopsiteController extends Controller
     
     public function eventCalendar_2(Request $request){
         // 会社全体のイベントを取得するためのsql
-        $sql = "select sp.sp_code, s.shop_name, s.shop_url, sp.sp_title, sp.sp_subtitle, 
-        sp.event_start, sp.event_end, sp.sp_url, sp.shop_event_id
-        from shop s left join sale_point sp on s.shop_id = sp.shop_id";
+        $sql = "select sp.sp_code, s.shop_name, s.shop_url, sp.sp_title, 
+        sp.sp_subtitle, sp.event_start, sp.event_end, sp.sp_url
+        from shop s left join sale_point sp on s.shop_id = sp.shop_id
+        where sp_code is not null";
         $shop = DB::select($sql);
 
         // 店舗ごとのイベントを取得するためのsql
         $sql_2 = "select sp.sp_code, s.shop_name, s2.store_name, s.shop_url, s2.store_url, 
-        sp.sp_title, sp.sp_subtitle, sp.event_start, sp.event_end, 
-        sp.sp_url, sp.shop_event_id, sp.store_id
+        sp.sp_title, sp.sp_subtitle, sp.event_start, sp.event_end, sp.sp_url 
         from shop s left join store s2 on s.shop_id = s2.shop_id
-        left join sale_point sp on s2.store_id = sp.store_id";
+        left join sale_point sp on s2.store_id = sp.store_id
+        where sp_code is not null";
         $store = DB::select($sql_2);
 
 
@@ -260,31 +294,27 @@ class ShopsiteController extends Controller
             // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
             $end = Common::hyphenFormat($data->event_end);
-            // shop_event_id の是非判定で会社全体としてのイベントだけを取得する
-            // 会社イベントをインサートする際に shop_event_id に+1の番号が振られる
-            if(empty($data->shop_event_id)){
+            // shop_id の是非判定で会社全体としてのイベントだけを取得する
+            // 会社イベントをインサートする際に sp.shop_id に+1の番号が振られる
+            
+            // event_startが無ければ、そのイベントは無視される（要検討
+            if($start == ''){
                 $data;
                 continue;
-            }else{
-                // event_startが無ければ、そのイベントは無視される（要検討
-                if($start == ''){
-                    $data;
-                    continue;
-                }else{        
-                    // event_startとevent_endのセット
-                    if($end != '' && $start != ''){
-                        $output['start'] = $start;
-                        $output['end'] = $end;
-                    }elseif($end == '' && $start != ''){
-                        $output['start'] = $start;
-                        $output['end'] = null;   
-                    }elseif($end != '' && $start == ''){
-                        $output['start'] = null;
-                        $output['end'] = $end; 
-                    }else{
-                        $output['start'] = null;
-                        $output['end'] = null;
-                    }
+            }else{        
+                // event_startとevent_endのセット
+                if($end != '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = $end;
+                }elseif($end == '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = null;   
+                }elseif($end != '' && $start == ''){
+                    $output['start'] = null;
+                    $output['end'] = $end; 
+                }else{
+                    $output['start'] = null;
+                    $output['end'] = null;
                 }
             }
             // $outputに諸々をセットしてから、$responseとして入れなおす？
@@ -305,34 +335,32 @@ class ShopsiteController extends Controller
             $end = Common::hyphenFormat($data->event_end);
             // sale_pointテーブルのstore_idカラムと、storeテーブルのstore_idカラムを紐づけることで会社イベントを含めないようにしている
             // 店舗ごとのイベントをインサートする場合に限り、sale_pointのstore_idに該当店舗の番号が振られる
-            if(!empty($data->store_id)){
+            
 
-                // event_startが無ければ、そのイベントは無視される（要検討）
-                if($start == ''){
-                    $data;
-                    continue;
+            // event_startが無ければ、そのイベントは無視される（要検討）
+            if($start == ''){
+                $data;
+                continue;
+            }else{
+                // event_startとevent_endのセット
+                if($end != '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = $end;
+                }elseif($end == '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = null;   
+                }elseif($end != '' && $start == ''){
+                    $output['start'] = null;
+                    $output['end'] = $end; 
                 }else{
-                    // event_startとevent_endのセット
-                    if($end != '' && $start != ''){
-                        $output['start'] = $start;
-                        $output['end'] = $end;
-                    }elseif($end == '' && $start != ''){
-                        $output['start'] = $start;
-                        $output['end'] = null;   
-                    }elseif($end != '' && $start == ''){
-                        $output['start'] = null;
-                        $output['end'] = $end; 
-                    }else{
-                        $output['start'] = null;
-                        $output['end'] = null;
-                    }
-                }   
-        }else{
-            $data;
-            continue; 
-        }
+                    $output['start'] = null;
+                    $output['end'] = null;
+                }
+
+            }   
             // $outputに諸々をセットしてから、$responseとして入れなおす？           
-            $response[] = $output;        
+            $response[] = $output;
+                    
         }   
         Log::debug($response);
         return Response::json($response);

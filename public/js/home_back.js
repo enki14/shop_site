@@ -41,17 +41,17 @@ $(function(){
     let position_t = $(".header-eria").offset().top;
         
 
-    if(scrollTop(position_b)){
+    // if(position_b > 0){
         $('.top_down').on('click', function(){ 
             console.log(position_b);
             $("html, body").animate({scrollTop: position_b}, speed_b, 'swing');
             return false;
         });
-    }else{
+    // }else if(position_t > 0){
         $('.top_down').on('click', function(){
             console.log(position_t);
             $("html, body").animate({scrollTop: position_t}, speed_t, 'swing');
             return false;
         });
-    }
+    // }
 });
