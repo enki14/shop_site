@@ -17,17 +17,6 @@ $(window).on('load', function(){
             $target_2.addClass(CLASSNAME_2);
         }, TIMEOUT);
     });
-
-
-    // var windowHeight = $(window).height(),
-    //     topWindow = $(window).scrollTop();
-    // $('body').each(function(){
-    //     var targetPosition = $(this).offset().top;
-    //     if(topWindow > targetPosition - windowHeight + 100){
-    //         $(this).addClass("fadeInDown");
-    //     }
-    // });
-
     
 });
 

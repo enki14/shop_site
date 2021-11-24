@@ -27,6 +27,4 @@
     @endif  
   </nav>
 </header>
-
-
 @endsection

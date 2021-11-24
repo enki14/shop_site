@@ -36,8 +36,8 @@ class ShopsiteController extends Controller
             $request_flag = true;
 
             // $shop_listでmapの結果一覧を取得する
-            $sql = "select s.shop_name, s.shop_url, s2.store_name, 
-            l.prefectures_name, l.town_name, l.ss_town_name, 
+            $sql = "select s.shop_name, s2.store_name, s2.store_url, s.img_src,
+            l.prefectures_name, l.town_name, l.ss_town_name, sp.shop_id, sp.store_id,
             sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle, sp.sp_url,
             X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
                     GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
@@ -77,7 +77,6 @@ class ShopsiteController extends Controller
         $schedule = $request->input('search-schedule');
         $shop = $request->input('search-shop');
 
-        Log::debug($shop);
         
     
         
@@ -106,7 +105,7 @@ class ShopsiteController extends Controller
         }
 
         $sql = "select sp.shop_id, sp.store_id, s.shop_name, 
-            s2.store_name, s.shop_url, s2.store_url, 
+            s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
             sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
             from shop s
             inner join sale_point sp on s.shop_id = sp.shop_id
@@ -115,7 +114,7 @@ class ShopsiteController extends Controller
             . $add_where . $add_shop_where 
             ."union all 
             select sp.shop_id, sp.store_id, s.shop_name, 
-            s2.store_name, s.shop_url, s2.store_url, 
+            s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
             sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
             from store s2
             inner join sale_point sp on s2.store_id = sp.store_id
@@ -150,6 +149,7 @@ class ShopsiteController extends Controller
 
 
     public function keyRes(Request $request){
+        Log::debug('keyRes start!!');
         $keyword = $request->input('keyword');
 
         $add_where = "event_start between curdate() and ( curdate( ) + INTERVAL 30 DAY )
@@ -159,7 +159,7 @@ class ShopsiteController extends Controller
         $add_order = "order by event_start";
 
         $sql = "select sp.shop_id, sp.store_id, s.shop_name, 
-            s2.store_name, s.shop_url, s2.store_url,  
+            s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
             sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
             from shop s
             inner join sale_point sp on s.shop_id = sp.shop_id
@@ -168,7 +168,7 @@ class ShopsiteController extends Controller
             . $add_where .
             "union all 
             select sp.shop_id, sp.store_id, s.shop_name, 
-            s2.store_name, s.shop_url, s2.store_url, 
+            s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
             sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end
             from store s2
             inner join sale_point sp on s2.store_id = sp.store_id
@@ -192,7 +192,7 @@ class ShopsiteController extends Controller
         // リクエストパラメータのキーは上のキーと合わせるようにする
         $output['pagenate_params'] = [ 'keyword'=> $keyword ];
         $output['pagenate'] = $pagenate;
-       
+        Log::debug('keyRes end!!');
         return view('page.subResult', $output);
     }
 
@@ -241,7 +241,7 @@ class ShopsiteController extends Controller
         DB::reconnect();
 
         $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
-        sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle,
+        sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle, sp.sp_url,
         X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
         GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
         X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
@@ -362,7 +362,7 @@ class ShopsiteController extends Controller
             $response[] = $output;
                     
         }   
-        Log::debug($response);
+        // Log::debug($response);
         return Response::json($response);
     }
 

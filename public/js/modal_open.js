@@ -163,8 +163,6 @@ function setMarker(markerData){
         let store_name = markerData[i]['store_name'] || '';
         let sp_title = markerData[i]['sp_title'] || '';
         let sp_subtitle = markerData[i]['sp_subtilte'] || '';
-        
-        
 
 
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
@@ -183,10 +181,26 @@ function setMarker(markerData){
         //     map: map,
         // });
 
+        var contentString = 
+        '<div id="content">'+
+        '<h5 id="firstHeading" class="firstHeading">' + markerData[i]['shop_name'] + store_name + '</h5>'+
+            '<div id="bodyContent">'+
+                '<p>'+ event_start + wave + event_end + '</p>'+
+                '<p>' + sp_title + '</p>'+
+                '<smal><a href="" id="external">詳しくはこちら</a></smal>' +
+            '</div>' +
+        '</div>';
+
+        // let external = document.getElementById("external");
+        // if(!markerData[i]['sp_url']){
+        //     external.href = markerData[i]['sp_url'];
+        // }
+
         infoWindow[i] = new google.maps.InfoWindow({
-            content: markerData[i]['shop_name'] + store_name + '<br><br>'
-            + event_start + wave + event_end + '<br><br>'
-            + sp_title + col + sp_subtitle
+            content: contentString
+            // content: markerData[i]['shop_name'] + store_name + '<br><br>'
+            // + event_start + wave + event_end + '<br><br>'
+            // + sp_title + col + sp_subtitle
         });
         console.log(infoWindow);
     
@@ -230,6 +244,30 @@ let openWindow;
 function markerEvent(i){
     // マーカーをクリックしたときのイベント
     google.maps.event.addDomListener(marker[i], 'click', function(){
+        // ここでinfoWindowのスタイリング
+        var iwOuter = $('.gm-style-iw');
+        let custumIw = iwOuter.parent().addClass('custom-iw');
+        let iwCloseBtn = custumIw.next();
+
+        // prevで直前の兄弟要素を取得
+        var iwBackground = iwOuter.prev();
+        // nextで直後の兄弟要素を取得
+        // var iwCloseBtn = iwOuter.next();
+        // 背景のshadowを消す
+        iwBackground.children(':nth-child(2)').css("display", "none");
+        // 白い背景を消す
+        iwBackground.children(':nth-child(4)').css("display", "none");
+        // 下のとんがりコーンの影を消す
+        iwBackground.children(':nth-child(1)').css("display", "none");
+        // なんかまだとんがりコーンの影がしつこく出てくるからここで消す(左の影)
+        iwBackground.children(':nth-child(3)').children(':nth-child(1)').children(':nth-child(1)').css("box-shadow", "none");
+        // なんかまだとんがりコーンの影がしつこく出てくるからここで消す(右の影)
+        iwBackground.children(':nth-child(3)').children(':nth-child(2)').children(':nth-child(1)').css("box-shadow", "none");
+        // ここでcssいじるのめんどいからクラスをつける
+        iwCloseBtn.addClass("closebtn");
+        // fontawesomeのcloseボタンを追加
+        iwCloseBtn.prepend('<i class="fa fa-times-circle" aria-hidden="true"></i>');
+
         // 開けたままにしておかない
         if(openWindow){
             openWindow.close();
@@ -239,7 +277,8 @@ function markerEvent(i){
         openWindow = infoWindow[i];
     
     })
-}
+
+};
 
 
 

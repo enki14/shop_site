@@ -379,6 +379,7 @@ class HomeController extends Controller
 
     // localdataテーブルの23区とその地区一覧の投入
     // 郵便番号別なので千代田区や中央区など一部取得に向かない区がある
+    // 他、取得しなかった島や町がある
     public function localData(Request $request){
         // sslチェック無効の設定
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
@@ -393,7 +394,7 @@ class HomeController extends Controller
 
             $base_url = $data->url;
             // パラメータの後半部分を抽出したいページに合わせる
-            $url = $base_url . '&city=1132250&cmp=1';
+            $url = $base_url . '&city=1132140&cmp=1';
             $crawler = $client->request('GET', $url);
 
             // 地区名抽出

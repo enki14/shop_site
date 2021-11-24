@@ -20,30 +20,81 @@ class EventSetController extends Controller
     public function seiyu_5pctOff(){
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
-        $sql = "select s.shop_name, s2.store_name from shop s inner join store s2 on s.shop_id = s2.shop_id where s.shop_id = 1";
-        $getUrl = DB::select($sql);
-        // dd($getUrl);
-        foreach($getUrl as $dataUrl){
-            $sql_9 = 'select url, element_path from scrape where id = 9';
-            $s_9 = DB::select($sql_9);
-            foreach($s_9 as $data){
-                $url = $data->url . $dataUrl->shop_name . $dataUrl->store_name;
-                // dd($url);
-                $crawler = $client->request('GET', $url);
-                $text = $crawler->filter($data->element_path)
-                ->each(function($node){
-                    return $node->text();
-                });
-            }
-            Log::debug($text);
-
-            // if($text[2] == '11/20(土)、11/27(土)'){
-
-            // }else{
-
-            // }
+        $sql_9 = 'select url, element_path from scrape where id = 9';
+        $s_9 = DB::select($sql_9);
+        foreach($s_9 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store = $crawler->filter($data->element_path)
+            // ->filter('.shop_search_individual_inner > a')
+            ->each(function($node){
+                return $node->text();
+            });
             
+            $event_day = $crawler->filter($data->element_path)
+            ->filter('div.shop_search_individual_5off.typesquare_tags > ul > li.shop_search_individual_5off_item')
+            ->each(function($node){
+                return $node->text();
+            });
+
         }
+        Log::debug($store);
+        
+        
+        
+        // $sql = "select s.shop_name, s2.store_name from shop s inner join store s2 on s.shop_id = s2.shop_id where s.shop_id = 1";
+        // $getUrl = DB::select($sql);
+        // // dd($getUrl);
+        // foreach($getUrl as $dataUrl){
+        //     $sql_9 = 'select url, element_path from scrape where id = 9';
+        //     $s_9 = DB::select($sql_9);
+        //     foreach($s_9 as $data){
+        //         $url = $data->url . $dataUrl->shop_name . $dataUrl->store_name;
+        //         // dd($url);
+        //         $crawler = $client->request('GET', $url);
+        //         $store = $crawler->filter($data->element_path)
+        //         ->filter('div > div > div > h1')
+        //         ->each(function($node){
+        //             return $node->text();
+        //         });
+        //         $text = $crawler->filter($data->element_path)->filter('div:nth-child(4) > div > div > p:nth-child(3)')
+        //         ->each(function($node){
+        //             return $node->text();
+        //         });
+        //     }
+            
+        //     // Log::debug($text);
+        //     for($i = 0; $i < count($store); $i++){
+        //         $subtitle = '';
+        //         $subtitle_2 = '';
+               
+
+        //         // Log::debug($text[0][$i]);
+        //         if(preg_match('/^11(\/|-|月)27日/', $text[0])){
+        //             // Log::debug($text);
+                        
+        //             $subtitle .= $store[$i] . '、';
+        //             $sp_sub = '当日対象店舗：' . $subtitle;
+        //             // Log::debug($sp_sub);
+
+        //             $sql = "insert into sale_point(sp_code, shop_id, sp_title, sp_subtitle) 
+        //             values(14, 1, 'すべてのセゾンカードで5%off', $sp_sub)";
+        //             // DB::insert($sql);
+        //         }else{
+        //             $subtitle_2 .= $store[$i] . '、';
+        //             $sp_sub_2 = '当日対象店舗：' . $subtitle;
+        //             Log::debug($sp_sub_2);
+
+        //             $sql = "insert into sale_point(sp_code, shop_id, sp_title, sp_subtitle) 
+        //             values(15, 1, 'すべてのセゾンカードで5%off', $sp_sub_2)";
+        //             // DB::insert($sql);
+        //         }                
+        //     }
+        // }
+
+        
+
+
     }
 
 }

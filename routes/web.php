@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,13 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::any('/', 'ShopsiteController@index');
-// Route::get('/result', 'ShopsiteController@pagination');
 Route::any('/result', 'ShopsiteController@result');
 Route::any('/result-2', 'ShopsiteController@keyRes');
-// Route::any('/result-2', 'ShopsiteController@index');
 Route::get('/map_modal', 'ShopsiteController@mapModal');
 Route::post('/map_data', 'ShopsiteController@mapData');
-Route::get('/map_itiran', 'ShopsiteController@mapItiran');
 Route::get('/eventCalendar_2', 'ShopsiteController@eventCalendar_2');
 
 
@@ -35,6 +32,21 @@ Route::post('/tokyu_store', 'StoreSetController@tokyu_store');
 
 // event登録
 Route::post('/seiyu_5pctOff', 'EventSetController@seiyu_5pctOff');
+
+
+// サムネイル作成（ url先で更新すると一枚作成される ）
+// storage_path のファイル名と $file のファイル名を、作成したいファイル名に差し替える
+Route::get('thumbnail', function(){
+	$image = Image::make(storage_path('app') . '/public/image/summit_test.png');
+	$file = 'summit_test.png';
+	$path = public_path(). '/img/';
+	$image->resize(150, 100, function($constraint){
+		$constraint->aspectRatio();
+	// crop()で黒い土台座標の高さと幅を調整することができる
+	// crop()は基本、resize()に合わせておく
+	})->crop(150, 100)->save($path . 'thumbnail-' . $file);
+	return $image->response('png');
+});
 
 
 // 画像の文字認識

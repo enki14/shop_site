@@ -71,13 +71,13 @@ role="dialog" aria-hidden="true">
             // indexメソッドの方には特に初期値など要らない
             events: "eventCalendar_2",
             // eventClickやeventDidMountなどの関数は、それぞれのfc-event-titleにすでに機能している
-            eventClick: function(info, jsEvent , view){
+            eventClick: function(info){
                 info.jsEvent.preventDefault();
-                // console.log(info);
-                let date = new Date();
-                let year = date.getFullYear(info.event.startStr);
-                let month = date.getMonth(info.event.startStr) + 1;
-                let day = date.getDate(info.event.startStr);
+                console.log(info);
+                let date = new Date(info.el.fcSeg.eventRange.range.start);
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
                 // モーダルの日付表示
                 $('#modal-date').html(year + '年' + month + '月' + day + '日');
                 // モーダルのタイトルを追加

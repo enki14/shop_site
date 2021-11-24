@@ -18,11 +18,11 @@
         @endif
     </p>
 @if(isset($pagenate))
-    @foreach($pagenate as $data)
+    @foreach($pagenate as $data) 
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div id="itiran-card" class="card mx-auto my-3">
-                <div class="card-body rounded shadow">
+                <div class="card-body rounded shadow"> 
                     @csrf
                     <div id="ribbon"><span id="new">new!!</span></div>
                     <div class="row">
@@ -44,12 +44,20 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="#" alt="テスト画像">
+                        @if(!empty($data->img_src))
+                            <img src="{{ asset($data->img_src) }}" alt="テスト画像">
+                        @else
+                            <img src="{{ asset('/img/thumbnail-20200501_noimage.png') }}" alt="no_image">
+                        @endif
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8"> 
-                            <p class="card-text">お支払方法：○○××▢▢</p>
+                        @if(!empty($data->cash_kubun))
+                            <p class="card-text">お支払方法：
+                                {{ $data->cash_kubun }}
+                            </p>
+                        @endif
                             <p class="card-text">
                                 @if(!empty($data->event_start) && !empty($data->event_end))
                                     期間：{{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat($data->event_end) }}

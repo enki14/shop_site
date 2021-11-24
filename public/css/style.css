@@ -244,6 +244,8 @@ nav{
 }
 
 
+/******************* maps **********************/
+
 #maps-container{
     padding: 2rem;
     margin: 1rem;
@@ -258,6 +260,72 @@ nav{
 #map_search{
     border-radius: 5px;
 }
+
+/* 　　　infowindowのCSS　　　 */
+.gm-style-iw {
+    width: 250px !important;
+    top: 15px !important;
+    left: 0 !important;
+    background-color: #fff;
+    border-radius: 2px 2px 0 0;
+ }
+ 
+ #content {
+     width: 250px;
+ }
+ 
+ .firstHeading {
+     background-color: #4285F4;
+ }
+ 
+ .firstHeading {
+     color: #fff;
+     margin: 0;
+     padding: 10px;
+ }
+ 
+ #bodyContent {
+     padding: 10px;
+     font-size: 16px;
+ }
+ 
+ /* 閉じるボタンのCSS */
+ .closebtn {
+     width: 30px!important;
+     height: 30px!important;
+     opacity: 1!important;
+     right: 35px!important;
+     top: 0!important;
+ }
+ 
+ /* 閉じるボタンを消す */
+.custum-iw{
+    width: 230px !important;
+}
+
+ .closebtn img {
+     display: none;
+ }
+ /* fontawesomeで消すボタンを作る */
+ .fa-times-circle {
+     padding: 0;
+     font-size: 28px!important;
+     color: #000099;
+ }
+ 
+ /* PC対応 */
+ @media only screen and (min-width: 1200px) {
+    .gm-style-iw {
+        width: 300px !important;
+    }
+    #content {
+        width: 300px;
+    }
+ }
+
+/******************* ↑↑↑↑↑↑ **********************/
+
+
 
 .top_down{
     position: fixed;
@@ -309,6 +377,46 @@ nav{
     display: block !important; 
     background-color: #FFEEFF;
 }
+
+
+/* 「 イベントあり 」のチカチカ */
+#impact{
+    display: inline-block;
+    color: #FFFFFF;
+    background-color: #CC0000;
+    font-size: 11px;
+    font-weight: bold;
+    -webkit-animation-name: bg-change;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    animation-name: bg-change;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+/* ↑ のbg-changeの前半と後半の色の間隔 */
+@-webkit-keyframes bg-change {
+    from {
+      background-color: #CC0000;
+  }
+    to {
+      background-color: #FF2222;
+  }
+}
+@keyframes bg-change {
+    0% {
+      background-color: #CC0000;
+  }
+    100% {
+      background-color: #FF2222;
+  }
+}
+
 
 #ribbon{
     position: absolute;
