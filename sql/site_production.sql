@@ -5,7 +5,7 @@ create table shop
 create table sale_point
 (sp_code int(10), shop_id int(4), store_id int(5), sp_kubun int(1), sp_title varchar(255),
  sp_subtitle varchar(255), sp_url varchar(255), event_start char(8), event_end char(8), 
- cash_kubun int(1), event_name_kubun int(1), keyword varchar(50), register_day char(8), 
+ cash_kubun varchar(250), event_name_kubun int(1), keyword varchar(50), register_day char(8), 
  primary key(sp_code));
 
 create table store
