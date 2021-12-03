@@ -36,24 +36,65 @@ class ShopsiteController extends Controller
             $request_flag = true;
 
             // $shop_listでmapの結果一覧を取得する
-            $sql = "select s.shop_name, s2.store_name, s2.store_url, s.img_src,
-            l.prefectures_name, l.town_name, l.ss_town_name, sp.shop_id, sp.store_id,
-            sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle, sp.sp_url,
-            X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
-                    GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
-                        X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-                    GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
-                        X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
-                        from shop s inner join store s2 on s.shop_id = s2.shop_id 
-                        left join localdata l on s2.local_id = l.local_id 
-                        left join sale_point sp on s.shop_id = sp.shop_id
-                        GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
-                        ORDER BY greatest(distance, distance_2)";
+            $sql = "select
+            sht.shop_id,
+            sht.store_id,
+            sht.distance,
+            si.shop_name,
+            st.store_name,
+            si.img_src,
+            sp_sh.sp_title as shop_sale_title,
+            sp_st.sp_title as store_sale_title,
+            sp_sh.sp_subtitle as shop_sale_subtitle,
+            sp_st.sp_subtitle as store_sale_subtitle,
+            sp_sh.sp_url as shop_sale_spUrl,
+            sp_st.sp_url as store_sale_spUrl,
+            sp_sh.event_start as shop_sale_eventStart,
+            sp_st.event_start as store_sale_eventStart,
+            sp_sh.event_end as shop_sale_eventEnd,
+            sp_st.event_end as store_sale_eventEnd,
+            sp_sh.cash_kubun as shop_sale_cashKubn,
+            sp_st.cash_kubun as store_sale_cashKubun
+        from (
+            select 
+                s2.shop_id,
+                s2.store_id,
+                GLength(GeomFromText(CONCAT('LineString(35.73529673720239 139.6281261687641, ', 
+                X(s2.location), ' ', Y(s2.location), ')'))) as distance 
+            from shop s 
+            inner join store s2 
+            on s.shop_id = s2.shop_id
+            having distance <= 0.898316016
+            order by distance
+            limit 10
+        ) sht
+        left outer join (
+            select * from sale_point
+            where (shop_id, event_start) in (
+                select shop_id, max(event_start) as event_start
+                from sale_point
+                where shop_id is not null
+                group by shop_id
+            )) sp_sh
+        on sht.shop_id = sp_sh.shop_id
+        left outer join
+            (
+            select * from sale_point
+            where (store_id, event_start) in (
+                select store_id, max(event_start) as event_start
+                from sale_point
+                where store_id is not null
+                group by store_id
+            )) sp_st 
+        on sht.store_id = sp_st.store_id
+        inner join shop si on sht.shop_id = si.shop_id
+        inner join store st on sht.shop_id = st.shop_id and sht.store_id = st.store_id
+        order by sht.distance";
 
             $shop_list = DB::select($sql);
 
         }
-        Log::debug($shop_list);
+        // Log::debug($shop_list);
 
         $output = [];
         $output['shop'] = '';
@@ -72,7 +113,7 @@ class ShopsiteController extends Controller
     
 
     public function result(Request $request){
-        Log::debug('result start!!');
+        // Log::debug('result start!!');
         // requestインスタンスはname値を呼び出す
         $schedule = $request->input('search-schedule');
         $shop = $request->input('search-shop');
@@ -90,16 +131,28 @@ class ShopsiteController extends Controller
             or event_start between curdate() and ( curdate( ) + INTERVAL 6 DAY )) ";
         }elseif($schedule == '１ヵ月'){
             $add_where = "(event_end between curdate() and ( curdate( ) + INTERVAL 29 DAY ) 
-            or event_start between curdate() and ( curdate( ) + INTERVAL 29 DAY ))";
+            or event_start between curdate() and ( curdate( ) + INTERVAL 29 DAY )) ";
         }else{
             $add_where = "event_start >= curdate() ";
         }
 
         if($shop !== ''){
-            $add_shop_where = "and s.shop_name LIKE '%$shop%' ";
-            $add_store_where = "and (s2.store_name like '%$shop%'
-            or s2.town LIKE '%$shop%' or s2.ss_town like '%$shop%') ";
-            $add_order = "order by '%$shop%', event_start";
+            // スペースあるなしで対応する曖昧検索
+	        $words = str_replace("　", " ", $shop);
+	        $words = trim($words);
+	        $word_array = preg_split("/[ ]+/", $words);
+
+	        $add_shop_where = "";
+	        $add_store_where = "";
+	        for($i =0; $i < count($word_array); $i++){
+                
+                $add_shop_where .= "and s.shop_name LIKE '%$word_array[$i]%' ";
+                $add_store_where .= "and (s2.store_name like '%$word_array[$i]%'
+                or s2.town LIKE '%$word_array[$i]%' or s2.ss_town like '%$word_array[$i]%') ";
+
+	        }
+
+            $add_order = "order by shop_name, store_name, event_start";
         }else{
             $add_order = "order by event_start";
         }
@@ -142,14 +195,14 @@ class ShopsiteController extends Controller
         $output['schedule'] = $schedule;
         $output['shop'] = $shop;
         $output['pagenate_params'] = ['search-schedule'=> $schedule, 'search-shop'=> $shop];
-        Log::debug('result end');
+        // Log::debug('result end');
         return view('page.mainResult', $output);
     }
 
 
 
     public function keyRes(Request $request){
-        Log::debug('keyRes start!!');
+        // Log::debug('keyRes start!!');
         $keyword = $request->input('keyword');
 
         $add_where = "event_start between curdate() and ( curdate( ) + INTERVAL 30 DAY )
@@ -192,36 +245,71 @@ class ShopsiteController extends Controller
         // リクエストパラメータのキーは上のキーと合わせるようにする
         $output['pagenate_params'] = [ 'keyword'=> $keyword ];
         $output['pagenate'] = $pagenate;
-        Log::debug('keyRes end!!');
+        // Log::debug('keyRes end!!');
         return view('page.subResult', $output);
     }
 
 
     // モーダル表示用メソッド
     public function mapModal(Request $request){
+        $lat = $request->input('lat');
+        $lng = $request->input('lng');
         // MapS.bladeのmap_search, name属性
         $req = $request->input('namae');
 
-        // Log::debug($req);
-        // mysqlに無効な値が挿入されてもエラーを吐き出さないようにしている
-        config(['database.connections.mysql.strict' => false]);
-        DB::reconnect();
+        // スペースあるなしで対応する曖昧検索
+        $words = str_replace("　", " ", $req);
+        $words = trim($words);
+        $word_array = preg_split("/[ ]+/", $words);
 
-        // GLengthで２地点距離の計算式をカラムにした。検索結果から近い順に店舗をselectしている。
-        // 他、同じsql文がindex(), mapData()にある。
-        $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name,
-        X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng, 
-        GLength(GeomFromText(CONCAT('LineString(35.73529673720239 139.6281261687641, ', 
-               X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-        GLength(GeomFromText(CONCAT('LineString(35.73529673720239 139.6281261687641, ', 
-               X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
-               from shop s inner join store s2 on s.shop_id = s2.shop_id 
-               left join localdata l on s2.local_id = l.local_id 
-               where s.shop_name LIKE '%$req%' or s2.store_name like '%$req%' 
-               GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
-               ORDER BY greatest(distance, distance_2)";
-        $list = DB::select($sql);
+        $add_where = "";
+        for($i =0; $i < count($word_array); $i++){
+            if(count($word_array) > 1){
+                if($i == 0){
+                    $add_where .= "(s.shop_name LIKE '%$word_array[$i]%' or s2.store_name like '%$word_array[$i]%' 
+                    or s2.town like '%$word_array[$i]%' or s2.ss_town like '%$word_array[$i]%') ";
+                }else{
+                    $add_where .= "and (s.shop_name LIKE '%$word_array[$i]%' or s2.store_name like '%$word_array[$i]%' 
+                    or s2.town like '%$word_array[$i]%' or s2.ss_town like '%$word_array[$i]%') ";
+                }
+            }else{
+                $add_where .= "s.shop_name LIKE '%$word_array[$i]%' or s2.store_name like '%$word_array[$i]%' 
+                or s2.town like '%$word_array[$i]%' or s2.ss_town like '%$word_array[$i]%' ";
+            }
+            
+        }
 
+        $add_order = "HAVING distance <= 0.898316016 ORDER BY distance limit 10";
+
+        if($lat == '' or $lng == ''){
+            // 現在位置がないときは初期表示用の座標
+            $search_lat = '35.704406';
+            $search_lng = '139.610732';
+
+            $sql = "select s.shop_name, s2.store_name, s2.store_address, 
+            X(s2.location) as lat, Y(s2.location) as lng,  
+            GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
+                X(s2.location), ' ', Y(s2.location), ')'))) as distance 
+                from shop s inner join store s2 on s.shop_id = s2.shop_id  
+                where " . $add_where . $add_order;
+            Log::debug($sql);
+            $list = DB::select($sql);
+        }else{
+            // 現在位置の座標$lat, $lng
+            $search_lat = $lat;
+            $search_lng = $lng;
+            // GLengthで２地点距離の計算式をカラムにした。検索結果から近い順に店舗をselectしている。
+            // 他、同じsql文がindex(), mapData()にある。
+            $sql = "select s.shop_name, s2.store_name, s2.store_address, 
+            X(s2.location) as lat, Y(s2.location) as lng,  
+            GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
+                X(s2.location), ' ', Y(s2.location), ')'))) as distance 
+                from shop s inner join store s2 on s.shop_id = s2.shop_id  
+                where " . $add_where . $add_order;
+            $list = DB::select($sql);
+
+        }
+        
         $response = [];
         $response['list'] = $list; 
         return Response::json($response);
@@ -230,32 +318,20 @@ class ShopsiteController extends Controller
 
     // map内での店舗と地域の初期表示用
     public function mapData(Request $request){
-        $S_lat = $request->input('lat');
-        $S_lng = $request->input('lng');
-        $L_lat = $request->input('L_lat');
-        $L_lng = $request->input('L_lng');
-        
-        Log::debug($S_lat);
-        Log::debug($S_lng);
-        config(['database.connections.mysql.strict' => false]);
-        DB::reconnect();
+        // $S_lat = $request->input('lat');
+        // $S_lng = $request->input('lng');
 
-        $sql = "select s.shop_name, s2.store_name, l.prefectures_name, l.town_name, l.ss_town_name, 
-        sp.event_start, sp.event_end, sp.sp_title, sp.sp_subtitle, sp.sp_url,
-        X(s2.location) as lat, Y(s2.location) as lng, X(l.L_location) as L_lat, Y(l.L_location) as L_lng,
-        GLength(GeomFromText(CONCAT('LineString($L_lat $L_lng, ', 
-        X(l.L_location), ' ', Y(l.L_location), ')'))) as distance, 
-        GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
-        X(s2.location), ' ', Y(s2.location), ')'))) as distance_2 
-        from shop s inner join store s2 on s.shop_id = s2.shop_id 
-        left join localdata l on s2.local_id = l.local_id 
+        $sql = "select 
+        s.shop_id, s2.store_id, s.shop_name, s2.store_name, sp.sp_title, sp.sp_subtitle, sp.sp_url, 
+        sp.event_start, sp.event_end, sp.sp_title, X(location) as lat, Y(location) as lng  
+        from shop s left join store s2 on s.shop_id = s2.shop_id 
         left join sale_point sp on s.shop_id = sp.shop_id
-        GROUP BY s2.local_id, l.local_id HAVING greatest(distance, distance_2) <= 0.02694948 
-        ORDER BY greatest(distance, distance_2)";
+        where X(location) is not null 
+        and Y(location) is not null";
 
         $location = DB::select($sql);
 
-        Log::debug($location);
+        // Log::debug($location);
         $response['location'] = $location;
         return Response::json($response);
     

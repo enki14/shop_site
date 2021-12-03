@@ -536,12 +536,160 @@ class StoreSetController extends Controller
 
                 $sql = "insert into store(shop_id, store_id, store_name, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town) 
                 values(14, $max_id, '$store[$i]', '$st_adr', '$st_tel', '$url', '$st_time', '$state', '$city', '$district')";
-                Log::debug($sql);
+                // Log::debug($sql);
                 DB::insert($sql);
                 DB::commit();
             }
         }
 
+    }
+
+
+
+    public function peacock_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_39 = 'select url, element_path from scrape where id = 39';
+        $s_39 = DB::select($sql_39);
+        foreach($s_39 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store = $crawler->filter($data->element_path)->filter('a.storeName')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $address = $crawler->filter($data->element_path)->filter('div.adds > span.address')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $zip = $crawler->filter($data->element_path)->filter('div.adds > span.zip')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter($data->element_path)->filter('div.tel')
+            ->each(function($node){
+                return $node->text();
+            });
+
+        }
+        
+        for($i = 0; $i < count($store); $i++){
+            $st_name = str_replace('PEACOCK STORE', '', $store[$i]);
+            $separate = Common::separate_address($address[$i]);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+            
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store
+                (shop_id, store_id, store_name, zip, store_address, store_tel, prefectures, town, ss_town) 
+                values(15, $max_id, '$st_name', '$zip[$i]', '$address[$i]', '$tel[$i]', '$state', '$city', '$district')";
+                // dd($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+
+        foreach($s_39 as $data){
+
+            $url_2 = $data->url . 'p_2/';
+            $crawler_2 = $client->request('GET', $url_2);
+            $store2 = $crawler_2->filter($data->element_path)->filter('a.storeName')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $address2 = $crawler_2->filter($data->element_path)->filter('div.adds > span.address')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $zip2 = $crawler_2->filter($data->element_path)->filter('div.adds > span.zip')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel2 = $crawler_2->filter($data->element_path)->filter('div.tel')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            Log::debug($tel2);
+        }
+
+
+        for($i = 0; $i < count($store2); $i++){
+            $st_name2 = str_replace('PEACOCK STORE', '', $store2[$i]);
+            $separate2 = Common::separate_address($address2[$i]);
+            $state2 = $separate2['state'];
+            $city2 = $separate2['city'];
+            $district2 = $separate2['district'];
+            
+            $count = "select count(*) as cnt from store where store_name = '$store2[$i]'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store
+                (shop_id, store_id, store_name, zip, store_address, store_tel, prefectures, town, ss_town) 
+                values(15, $max_id, '$st_name2', '$zip2[$i]', '$address2[$i]', '$tel2[$i]', '$state2', '$city2', '$district2')";
+                // dd($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+        
+    }
+
+
+    public function sanwa_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_40 = 'select url, element_path from scrape where id = 40';
+        $s_40 = DB::select($sql_40);
+        foreach($s_40 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store = $crawler
+            ->filter($data->element_path)->filter('section.sanwa > div.acd-content > table:nth-child(2)')
+            ->filter('tbody > tr > td')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $address = $crawler->filter($data->element_path)
+            ->filter('section.sanwa > div.acd-content > table:nth-child(2) > tbody > tr > td:nth-child(3)')
+            ->each(function($node){
+                return $node->text();
+            });
+            Log::debug($address);
+            $zip = $crawler->filter($data->element_path)->filter('div.adds > span.zip')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter($data->element_path)->filter('div.tel')
+            ->each(function($node){
+                return $node->text();
+            });
+
+        }
+    
     }
 
 }

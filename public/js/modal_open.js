@@ -72,8 +72,6 @@ function success(position) {
         "success_flg": true,
         "lat": now_lat,
         "lng": now_lng,
-        "L_lat": now_lat,
-        "L_lng": now_lng
     };
     
      // ajaxセットアップ
@@ -112,8 +110,6 @@ function error(error) {
         "success_flg": true,
         "lat": now_lat,
         "lng": now_lng,
-        "L_lat": now_lat,
-        "L_lng": now_lng
     };
 
      // ajaxセットアップ
@@ -147,9 +143,6 @@ function setMarker(markerData){
 
         let latS = parseFloat(markerData[i]['lat']);
         let lngS = parseFloat(markerData[i]['lng']);
-        let latL = parseFloat(markerData[i]['L_lat']);
-        let lngL = parseFloat(markerData[i]['L_lng']);
-
 
         let start = DateFormat(markerData[i]['event_start']);
         let end = DateFormat(markerData[i]['event_end']);
@@ -159,14 +152,14 @@ function setMarker(markerData){
         // nullやundefiendが表示されないようにパイプで空も設定している
         // 空値も変数にして含めないと、逆にほとんど表示されなくなる
         let event_start = start || '';
-        let event_end = end || '';
-        let store_name = markerData[i]['store_name'] || '';
+        let event_end = end || ''; 
+        let shop = markerData[i]['shop_name'] || '';
+        let store = markerData[i]['store_name'] || '';
         let sp_title = markerData[i]['sp_title'] || '';
-        let sp_subtitle = markerData[i]['sp_subtilte'] || '';
+        let shop_id = markerData[i]['shop_id'];
 
 
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
-        // let markerLocation  = new google.maps.LatLng({ lat: latL, lng: lngL });
         
         icon = new google.maps.MarkerImage('./img/cart.png');
 
@@ -176,42 +169,30 @@ function setMarker(markerData){
             icon: icon
         });
 
-        // marker[i] = new google.maps.Marker({
-        //     position: markerLocation,
-        //     map: map,
-        // });
-
         var contentString = 
-        '<div id="content">'+
-        '<h5 id="firstHeading" class="firstHeading">' + markerData[i]['shop_name'] + store_name + '</h5>'+
-            '<div id="bodyContent">'+
-                '<p>'+ event_start + wave + event_end + '</p>'+
-                '<p>' + sp_title + '</p>'+
-                '<smal><a href="" id="external">詳しくはこちら</a></smal>' +
-            '</div>' +
-        '</div>';
+        "<div class='info_win'>" +
+            "<h5 class='firstHeading'>" + shop + store + "</h5>"+
+            "<div class='info_Content'>" +
+                "<p>"+ event_start + wave + event_end + "</p>" +
+                "<p>" + sp_title + "</p>" +
+                eventExist(markerData[i]['sp_url']) + 
+            "</div>" +
+        "</div>";
 
-        // let external = document.getElementById("external");
-        // if(!markerData[i]['sp_url']){
-        //     external.href = markerData[i]['sp_url'];
-        // }
+        
+        
 
         infoWindow[i] = new google.maps.InfoWindow({
             content: contentString
-            // content: markerData[i]['shop_name'] + store_name + '<br><br>'
-            // + event_start + wave + event_end + '<br><br>'
-            // + sp_title + col + sp_subtitle
         });
-        console.log(infoWindow);
-    
+
         markerEvent(i);
-        
     }
 }  
 
 // event_startやevent_endの日付フォーマット
 function DateFormat(date){
-    if(date != null){
+    if(date){
         let yyyy = date.slice(0, 4);
         let mm = date.slice(4, 6);
         let dd = date.slice(6, 8);
@@ -222,7 +203,7 @@ function DateFormat(date){
 
 // infoWindowの波ダッシュ
 function waveDash(start, end){
-    if(start || end){
+    if(start & end){
         return ' ~ ';
     }else{
         return '';
@@ -238,15 +219,30 @@ function colon(title){
     }
 }
 
+// functionの中にfunctionを書かないように注意！
+// sp_urlの値があるかどうかの判定
+function eventExist(sp_url){
+    console.log(sp_url);
+    if(sp_url){
+        // ダブルコーテーションで文字列を囲い、シングルで属性値を囲う
+        // この場合、sp_urlが文字列とつながるようにダブルをシングルで覆う
+        // returnも忘れずに
+        return "<small><a href='"+ sp_url +"' target='_blank'>詳しくはこちら</a></small>";
+    }else{
+        return '';
+    }
+}
+
+
 
 let openWindow;
 
 function markerEvent(i){
     // マーカーをクリックしたときのイベント
-    google.maps.event.addDomListener(marker[i], 'click', function(){
+    google.maps.event.addListener(marker[i], 'click', function(){
         // ここでinfoWindowのスタイリング
         var iwOuter = $('.gm-style-iw');
-        let custumIw = iwOuter.parent().addClass('custom-iw');
+        let custumIw = iwOuter.parent().addClass('custum-iw');
         let iwCloseBtn = custumIw.next();
 
         // prevで直前の兄弟要素を取得
@@ -263,10 +259,10 @@ function markerEvent(i){
         iwBackground.children(':nth-child(3)').children(':nth-child(1)').children(':nth-child(1)').css("box-shadow", "none");
         // なんかまだとんがりコーンの影がしつこく出てくるからここで消す(右の影)
         iwBackground.children(':nth-child(3)').children(':nth-child(2)').children(':nth-child(1)').css("box-shadow", "none");
-        // ここでcssいじるのめんどいからクラスをつける
+        // // ここでcssいじるのめんどいからクラスをつける
         iwCloseBtn.addClass("closebtn");
-        // fontawesomeのcloseボタンを追加
-        iwCloseBtn.prepend('<i class="fa fa-times-circle" aria-hidden="true"></i>');
+        // // fontawesomeのcloseボタンを追加
+        iwCloseBtn.prepend('<i class="fas fa-times-circle"></i>');
 
         // 開けたままにしておかない
         if(openWindow){
@@ -281,8 +277,7 @@ function markerEvent(i){
 };
 
 
-
-
+// 検索クリックからのmodal表示
 $(function(){
     
 
@@ -301,7 +296,7 @@ $(function(){
             $('[data-toggle="tooltip"]')
             .tooltip({
                 trigger: "manual",
-                title: "待ってくださーい‼　店名・または地域名を入力してくださいね～",
+                title: "店名・または地域名を入力してください m(__)m",
                 placement: "top"
             });
             $('[data-toggle="tooltip"]').tooltip("show");
@@ -332,27 +327,28 @@ $(function(){
                 console.log(data);
                 let modal_body = $("#modalHtml");
                 
-                for(let i = 0; i < data.list.length; i++){
-                    let row = data.list[i];
-                    let zahyo = row.L_lat + "," + row.L_lng;
-                    console.log(zahyo);
+                // listのlength分として計算する必要がある
+                if(data.list.length == 0){
+                    console.log(data.list);
+                    let comment = $('<p></p>').text('該当する店舗はありませんでした...');
+                    modal_body.append(comment);
+                }else{
+                    for(let i = 0; i < data.list.length; i++){
+                        
+                        let row = data.list[i];
+                        let zahyo = row.lat + "," + row.lng;
+                        console.log(zahyo);
 
-                    let tag = $('<div>').append($('<a></a>', {href: '#', css:{color: '#ff4500'} }).addClass("local_link")
-                    .text(row.prefectures_name + row.town_name + row.ss_town_name).data('value', zahyo));
-                    // console.log(tag);
-                    modal_body.append(tag);
+                        let parent = $('<div>');
+                        parent.append($('<a></a>', {href: '#'}).addClass("store_link")
+                        .text(row.shop_name + row.store_name).data('value', zahyo));
+                        parent.append($('<p></p>').text(row.store_address)); 
+                        modal_body.append(parent);
+            
+                    }
                 }
                 
-                for(let i = 0; i < data.list.length; i++){
-                    let row = data.list[i];
-                    let zahyo = row.lat + "," + row.lng;
-                    console.log(zahyo);
-
-                    let tag = $('<div>').append($('<a></a>', {href: '#'}).addClass("store_link")
-                    .text(row.shop_name + row.store_name).data('value', zahyo));
-
-                    modal_body.append(tag);
-                }
+                
                 $("#list_modal").modal('show');
 
             },
@@ -363,6 +359,24 @@ $(function(){
         });
         
     });    
+
+});
+
+
+// modalクリックした直後にリクエストパラメータを渡す
+$(function(){ 
+
+    // modalクリック
+    $(document).on('click', '.store_link', function(){
+        $("#list_modal").modal("hide");
+        let latlng = $(this).data('value');
+
+        // コントローラー側に送るリクエストパラメーター
+        let lat = latlng.split(',')[0];
+        let lng = latlng.split(',')[1]; 
+
+        location.href = "?lat=" + lat + "&lng=" + lng + '&s_flag=store#maps-container';
+    });
 
 });
  
