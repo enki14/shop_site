@@ -21,10 +21,10 @@
     @foreach($pagenate as $data) 
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div id="itiran-card" class="card mx-auto my-3">
+            <div class="itiran-card card mx-auto my-3">
                 <div class="card-body rounded shadow"> 
                     @csrf
-                    <div id="ribbon"><span id="new">new!!</span></div>
+                    <div class="ribbon"><span class="new">new!!</span></div>
                     <div class="row">
                         <h5 class="col-md-12 text-center font-weight-bold mt-2">
                             @if(!empty($data->store_url))

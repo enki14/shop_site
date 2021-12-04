@@ -354,7 +354,7 @@ nav{
 
 
 /* 「 イベントあり 」のチカチカ */
-#impact{
+.impact{
     display: inline-block;
     color: #FFFFFF;
     background-color: #CC0000;
@@ -392,7 +392,7 @@ nav{
 }
 
 
-#ribbon{
+/* #ribbon{
     position: absolute;
     top: -10px;
     left: 20px;
@@ -422,7 +422,7 @@ nav{
     position: absolute;
     top: 10px;
     left: 5px;
-}
+} */
 
 /* #ribbon:after{
     top: 50%;

@@ -59,7 +59,7 @@ class ShopsiteController extends Controller
             select 
                 s2.shop_id,
                 s2.store_id,
-                GLength(GeomFromText(CONCAT('LineString(35.73529673720239 139.6281261687641, ', 
+                GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
                 X(s2.location), ' ', Y(s2.location), ')'))) as distance 
             from shop s 
             inner join store s2 

@@ -665,29 +665,65 @@ class StoreSetController extends Controller
         foreach($s_40 as $data){
             $url = $data->url;
             $crawler = $client->request('GET', $url);
-            $store = $crawler
-            ->filter($data->element_path)->filter('section.sanwa > div.acd-content > table:nth-child(2)')
-            ->filter('tbody > tr > td')
+            $store = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            ->filter('td:nth-child(1)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $link = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            ->filter('td:nth-child(1) > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+            Log::debug($link);
+            $time = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            ->filter('td:nth-child(2)')
             ->each(function($node){
                 return $node->text();
             });
             
-            $address = $crawler->filter($data->element_path)
-            ->filter('section.sanwa > div.acd-content > table:nth-child(2) > tbody > tr > td:nth-child(3)')
+            $zip_adr = $crawler->filter($data->element_path)
+            ->filter('section.sanwa > div.acd-content > table')->first()->filter('td:nth-child(3)')
             ->each(function($node){
                 return $node->text();
             });
-            Log::debug($address);
-            $zip = $crawler->filter($data->element_path)->filter('div.adds > span.zip')
+            
+            $tel = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            ->filter('td:nth-child(4)')
             ->each(function($node){
                 return $node->text();
             });
+            
 
-            $tel = $crawler->filter($data->element_path)->filter('div.tel')
-            ->each(function($node){
-                return $node->text();
-            });
+        }
 
+
+        for($i = 0; $i < count($store); $i++){
+            preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i], $zip);
+            preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $zip_adr[$i], $address);
+            // 余分なスペースを削除
+            $address = trim($address[0]);
+            $separate = Common::separate_address($address);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+            
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, zip, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town) 
+                values(16, $max_id, '$store[$i]', '$zip[0]', '$address', '$tel[$i]', '$link[$i]', '$time[$i]', '$state', '$city', '$district')";
+                // dd($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
         }
     
     }

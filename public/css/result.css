@@ -223,19 +223,19 @@ nav{
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 } */
 
-#itiran-card{
+/* .itiran-card{
     display: inline-block !important;
-}
+} */
 
-#itiran-card:nth-child(odd){
+.itiran-card:nth-child(odd){
     background-color: #EDFFBE;
 }
 
-#itiran-card:nth-child(even){
-    background-color: #FFEEFF;
+.itiran-card:nth-child(even){
+    background-color: skyblue;
 }
 
-#ribbon{
+.ribbon{
     position: absolute;
     top: -10px;
     left: 20px;
@@ -247,13 +247,13 @@ nav{
     box-shadow: 1px 1px 5px;
 }
 
-#ribbon:before,
-#ribbon:after{
+.ribbon:before,
+.ribbon:after{
     position: absolute;
     content: '';
 }
 
-#ribbon:before{
+.ribbon:before{
     right: -10px;
     width: 0;
     height: 0;
@@ -261,7 +261,7 @@ nav{
     border-bottom: 10px solid #d90606;
 }
 
-#new{
+.new{
     position: absolute;
     top: 10px;
     left: 5px;

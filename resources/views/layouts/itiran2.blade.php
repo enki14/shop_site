@@ -17,8 +17,8 @@
                         data-target="#collapseOne{{ $data->shop_id }}_{{ $data->store_id }}" 
                         aria-expanded="true" aria-controls="collapseOne{{ $data->shop_id }}_{{ $data->store_id }}">
                             {{ $data->shop_name }}{{ $data->store_name }}
-                            <span id="impact" class="py-sm-1 px-sm-1 ml-3">イベントあり</span>
                         </button>
+                        <span class="impact py-sm-1 px-sm-1 ml-3">イベントあり</span>
                     </h5>
                 </div>
                 <div id="collapseOne{{ $data->shop_id }}_{{ $data->store_id }}" class="collapse" 
@@ -75,7 +75,7 @@
             </div>
         @else
             <div class="card">
-                <div class="card-header d-flex align-items-center" id="headingTwo" style="height: 64.83px">
+                <div class="headingTwo card-header d-flex align-items-center" style="height: 64.83px">
                     <h5 class="mb-0 pl-sm-3">
                         <small>
                             {{ $data->shop_name }}{{ $data->store_name }}
