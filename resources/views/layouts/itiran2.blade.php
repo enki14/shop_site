@@ -6,7 +6,6 @@
             {{ $shop_list[0]->shop_name }}{{ $shop_list[0]->store_name }}
     </p>
     @foreach($shop_list as $data)
-    {{--<?php dd($shop_list) ?>--}}
     <div class="accordion" id="accordionExample{{ $data->shop_id }}_{{ $data->store_id }}">
         @if(!empty($data->shop_sale_title) or !empty($data->store_sale_title))
             <div class="card">
@@ -26,7 +25,7 @@
                 data-parent="#accordionExample{{ $data->shop_id }}_{{ $data->store_id }}">
                     <div class="card-body">
                         <p>
-                        @if($data->shop_id)
+                        @if($data->shop_sale_title)
                             @if(!empty($data->shop_sale_eventStart) && !empty($data->shop_sale_eventEnd)) 
                                 開催日：{{ Common::dateFormat($data->shop_sale_eventStart) }} ～ 
                                 {{ Common::dateFormat($data->shop_sale_eventEnd) }}  
@@ -47,7 +46,7 @@
                         @endif
                         </p>
                         <h4>
-                            @if($data->shop_id)
+                            @if($data->shop_sale_title)
                                 @if(!empty($data->shop_sale_spUrl))
                                     <a href="{{ $data->shop_sale_spUrl }}">{{ $data->shop_sale_title }}</a>
                                 @else
@@ -61,7 +60,7 @@
                                 @endif
                             @endif
                         </h4>
-                        @if($data->shop_id)
+                        @if($data->shop_sale_title)
                             @if(!empty($data->shop_sale_subtitle))
                                 <p>{{ $data->shop_sale_subtitle }}</p>
                             @endif

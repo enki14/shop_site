@@ -31,6 +31,7 @@ Route::post('/ozeki_store', 'StoreSetController@ozeki_store');
 Route::post('/tokyu_store', 'StoreSetController@tokyu_store');
 Route::post('/peacock_store', 'StoreSetController@peacock_store');
 Route::post('/sanwa_store', 'StoreSetController@sanwa_store');
+Route::post('/keio_store', 'StoreSetController@keio_store');
 
 // event登録
 Route::post('/seiyu_5pctOff', 'EventSetController@seiyu_5pctOff');

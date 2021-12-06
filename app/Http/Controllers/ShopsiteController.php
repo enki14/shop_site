@@ -252,10 +252,13 @@ class ShopsiteController extends Controller
 
     // モーダル表示用メソッド
     public function mapModal(Request $request){
+        // 現在表示している地図の中心点（ hiddenで渡されている ）
         $lat = $request->input('lat');
         $lng = $request->input('lng');
         // MapS.bladeのmap_search, name属性
         $req = $request->input('namae');
+
+        Log::debug($lat);
 
         // スペースあるなしで対応する曖昧検索
         $words = str_replace("　", " ", $req);
@@ -281,34 +284,14 @@ class ShopsiteController extends Controller
 
         $add_order = "HAVING distance <= 0.898316016 ORDER BY distance limit 10";
 
-        if($lat == '' or $lng == ''){
-            // 現在位置がないときは初期表示用の座標
-            $search_lat = '35.704406';
-            $search_lng = '139.610732';
-
-            $sql = "select s.shop_name, s2.store_name, s2.store_address, 
-            X(s2.location) as lat, Y(s2.location) as lng,  
-            GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
-                X(s2.location), ' ', Y(s2.location), ')'))) as distance 
-                from shop s inner join store s2 on s.shop_id = s2.shop_id  
-                where " . $add_where . $add_order;
-            Log::debug($sql);
-            $list = DB::select($sql);
-        }else{
-            // 現在位置の座標$lat, $lng
-            $search_lat = $lat;
-            $search_lng = $lng;
-            // GLengthで２地点距離の計算式をカラムにした。検索結果から近い順に店舗をselectしている。
-            // 他、同じsql文がindex(), mapData()にある。
-            $sql = "select s.shop_name, s2.store_name, s2.store_address, 
-            X(s2.location) as lat, Y(s2.location) as lng,  
-            GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
-                X(s2.location), ' ', Y(s2.location), ')'))) as distance 
-                from shop s inner join store s2 on s.shop_id = s2.shop_id  
-                where " . $add_where . $add_order;
-            $list = DB::select($sql);
-
-        }
+        // GLengthで２地点距離の計算式をカラムにした。検索結果から近い順に店舗をselectしている。
+        $sql = "select s.shop_name, s2.store_name, s2.store_address, 
+        X(s2.location) as lat, Y(s2.location) as lng,  
+        GLength(GeomFromText(CONCAT('LineString($lat $lng, ', 
+            X(s2.location), ' ', Y(s2.location), ')'))) as distance 
+            from shop s inner join store s2 on s.shop_id = s2.shop_id  
+            where " . $add_where . $add_order;
+        $list = DB::select($sql);
         
         $response = [];
         $response['list'] = $list; 
@@ -316,6 +299,7 @@ class ShopsiteController extends Controller
     
     }
 
+    
     // map内での店舗と地域の初期表示用
     public function mapData(Request $request){
         // $S_lat = $request->input('lat');

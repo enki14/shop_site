@@ -6,7 +6,6 @@ let infoWindow = [];
 
 
 function initMap(){
-    console.log("initMap");
 
     // 初期値座標(文字列→浮動小数点)
     let init_lat = parseFloat($('#h_lat').val());
@@ -64,7 +63,6 @@ function success(position) {
     /************ ★ 現在位置で地図の中心位置を再設定 ★ ************/
 
     let latlng = new google.maps.LatLng(now_lat, now_lng);
-    console.log(latlng);
     // 緯度・経度を変数に格納
     map.setCenter(latlng);
     
@@ -87,7 +85,6 @@ function success(position) {
             data: sendData,
             dataType: 'json',
             success: function(data){
-                console.log(data);
                 markerData = data.location;
                 setMarker(markerData);
             },
@@ -124,7 +121,6 @@ function error(error) {
             data: sendData,
             dataType: 'json',
             success: function(data){
-                console.log(data.location);
                 markerData = data.location;
                 setMarker(markerData);
             },
@@ -137,7 +133,6 @@ function error(error) {
 
 // マーカーや吹き出しの表示
 function setMarker(markerData){
-    console.log(markerData);
 
     for(let i = 0; i < markerData.length; i++){
 
@@ -168,6 +163,7 @@ function setMarker(markerData){
             map: map,
             icon: icon
         });
+        
 
         var contentString = 
         "<div class='info_win'>" +
@@ -177,10 +173,7 @@ function setMarker(markerData){
                 "<p>" + sp_title + "</p>" +
                 eventExist(markerData[i]['sp_url']) + 
             "</div>" +
-        "</div>";
-
-        
-        
+        "</div>";     
 
         infoWindow[i] = new google.maps.InfoWindow({
             content: contentString
@@ -222,7 +215,6 @@ function colon(title){
 // functionの中にfunctionを書かないように注意！
 // sp_urlの値があるかどうかの判定
 function eventExist(sp_url){
-    console.log(sp_url);
     if(sp_url){
         // ダブルコーテーションで文字列を囲い、シングルで属性値を囲う
         // この場合、sp_urlが文字列とつながるようにダブルをシングルで覆う
@@ -232,7 +224,6 @@ function eventExist(sp_url){
         return '';
     }
 }
-
 
 
 let openWindow;
@@ -245,23 +236,9 @@ function markerEvent(i){
         let custumIw = iwOuter.parent().addClass('custum-iw');
         let iwCloseBtn = custumIw.next();
 
-        // prevで直前の兄弟要素を取得
-        var iwBackground = iwOuter.prev();
-        // nextで直後の兄弟要素を取得
-        // var iwCloseBtn = iwOuter.next();
-        // 背景のshadowを消す
-        iwBackground.children(':nth-child(2)').css("display", "none");
-        // 白い背景を消す
-        iwBackground.children(':nth-child(4)').css("display", "none");
-        // 下のとんがりコーンの影を消す
-        iwBackground.children(':nth-child(1)').css("display", "none");
-        // なんかまだとんがりコーンの影がしつこく出てくるからここで消す(左の影)
-        iwBackground.children(':nth-child(3)').children(':nth-child(1)').children(':nth-child(1)').css("box-shadow", "none");
-        // なんかまだとんがりコーンの影がしつこく出てくるからここで消す(右の影)
-        iwBackground.children(':nth-child(3)').children(':nth-child(2)').children(':nth-child(1)').css("box-shadow", "none");
-        // // ここでcssいじるのめんどいからクラスをつける
+        // 閉じるボタンにcss付与
         iwCloseBtn.addClass("closebtn");
-        // // fontawesomeのcloseボタンを追加
+        // fontawesomeのcloseボタン追加
         iwCloseBtn.prepend('<i class="fas fa-times-circle"></i>');
 
         // 開けたままにしておかない
@@ -306,7 +283,13 @@ $(function(){
             return false;
         }
 
-        let formData = {'namae': namae}
+        let now_lat = parseFloat($('#h_lat').val());
+        let now_lng = parseFloat($('#h_lng').val());
+        let formData = {
+            'namae': namae,
+            'lat': now_lat,
+            'lng': now_lng
+        }
         const url = "map_modal";
         $.ajaxSetup({
             headers: {
@@ -324,12 +307,10 @@ $(function(){
             data: formData,
             dataType: 'json',
             success: function(data){
-                console.log(data);
                 let modal_body = $("#modalHtml");
                 
                 // listのlength分として計算する必要がある
                 if(data.list.length == 0){
-                    console.log(data.list);
                     let comment = $('<p></p>').text('該当する店舗はありませんでした...');
                     modal_body.append(comment);
                 }else{
@@ -337,7 +318,6 @@ $(function(){
                         
                         let row = data.list[i];
                         let zahyo = row.lat + "," + row.lng;
-                        console.log(zahyo);
 
                         let parent = $('<div>');
                         parent.append($('<a></a>', {href: '#'}).addClass("store_link")

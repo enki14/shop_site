@@ -4,7 +4,7 @@
         <form method="post" action="result" id="search-form">
             @csrf
             <div class="form-content form-group form-inline">
-                <select id="search-schedule" name="search-schedule" class="search-select form-select border-success mr-2" 
+                <select id="search-schedule" name="search-schedule" class="search-schedule form-select border-success mr-2" 
                 style="width: 160px; height: 45px;" aria-label="Default select example">
                     <option value="">-- 日程 --</option>
                     <option value="今日・明日" @if($schedule == '今日・明日') selected @endif>今日・明日</option>

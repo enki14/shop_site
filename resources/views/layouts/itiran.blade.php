@@ -26,21 +26,21 @@
                     @csrf
                     <div class="ribbon"><span class="new">new!!</span></div>
                     <div class="row">
-                        <h5 class="col-md-12 text-center font-weight-bold mt-2">
+                        <h2 class="col-md-12 text-center font-weight-bold mt-2">
                             @if(!empty($data->store_url))
                                 <a href="{{ $data->store_url }}" target="_blank">
                                     {{ $data->shop_name }}{{ $data->store_name }}
                                 </a>
                             @elseif(!empty($data->shop_url))
                                 <a href="{{ $data->shop_url }}" target="_blank">
-                                    {{ $data->shop_name }}
+                                    {{ $data->shop_name }}<small>各店</small>
                                 </a>
                             @elseif(empty($data->store_url) && empty($data->shop_url) && !empty($data->store_name))
                                 {{ $data->shop_name }}{{ $data->store_name }}
                             @else
-                                {{ $data->shop_name }}
+                                {{ $data->shop_name }}<small>各店</small>
                             @endif
-                        </h5>
+                        </h2>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
