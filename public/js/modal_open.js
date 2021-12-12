@@ -50,6 +50,10 @@ $(function() {
         // 現在位置を取得できなかった場合の値はShopsiteController@indexに記載あり
     }else{
         error();
+        window.addEventListener('load', function(){
+            $("#fixed_nav").children("p").show();
+           
+        });
     }
     
 });
@@ -133,9 +137,10 @@ function error(error) {
 
 // マーカーや吹き出しの表示
 function setMarker(markerData){
+    // console.log(markerData);
 
     for(let i = 0; i < markerData.length; i++){
-
+        console.log(markerData[i]['sp_title']);
         let latS = parseFloat(markerData[i]['lat']);
         let lngS = parseFloat(markerData[i]['lng']);
 
@@ -164,6 +169,15 @@ function setMarker(markerData){
             icon: icon
         });
         
+        let request_flag = $('#h_request_flag').val();
+        // リクエストパラメータに座標が渡されていなかったら
+        if(request_flag == false){
+            marker[i].setMap(null);
+ 
+        }else{
+            marker[i].setMap(map);
+            markerEvent(i)
+        }
 
         var contentString = 
         "<div class='info_win'>" +
@@ -359,6 +373,3 @@ $(function(){
     });
 
 });
- 
-
-    

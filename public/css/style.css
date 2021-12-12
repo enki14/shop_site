@@ -19,6 +19,21 @@ nav{
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
 
+/****** 右から左に文字が流れる ******/
+#fixed_nav p{
+    display: none;
+    margin-top: 5px; 
+    font-size:1.5em;         /*文字サイズ*/
+    color: #006400;              /*文字の色*/
+    animation: flowing 12s linear infinite;    /*アニメーション*/
+    transform:translateX(100%);     /*最初の位置*/
+}
+
+@keyframes flowing {
+    100% {
+      transform:translateX(-100%);    /*終了の位置*/
+    }
+}
 /********************* header タイトル部分 ↓↓↓ *********************/
 
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
@@ -218,6 +233,8 @@ nav{
 
 /******************* maps **********************/
 
+
+
 #maps-container{
     padding: 2rem;
     margin: 1rem;
@@ -225,7 +242,7 @@ nav{
     border-top: 1px solid #392605;
 }
 
-.maps-h3{
+#maps-h3{
     margin: 15px;
 } 
 

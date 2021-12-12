@@ -21,8 +21,8 @@ class ShopsiteController extends Controller
         $s_flag = $request->input('s_flag');
 
 
-        Log::debug($lat);
-        Log::debug($lng);
+        // Log::debug($lat);
+        // Log::debug($lng);
         if($lat == '' or $lng == ''){
             // ないときは初期表示用の座標
             $search_lat = '35.704406';
@@ -74,6 +74,7 @@ class ShopsiteController extends Controller
                 select shop_id, max(event_start) as event_start
                 from sale_point
                 where shop_id is not null
+                and event_start >= curdate() or event_end >= curdate()
                 group by shop_id
             )) sp_sh
         on sht.shop_id = sp_sh.shop_id
@@ -84,6 +85,7 @@ class ShopsiteController extends Controller
                 select store_id, max(event_start) as event_start
                 from sale_point
                 where store_id is not null
+                and event_start >= curdate() or event_end >= curdate()
                 group by store_id
             )) sp_st 
         on sht.store_id = sp_st.store_id
@@ -302,16 +304,68 @@ class ShopsiteController extends Controller
     
     // map内での店舗と地域の初期表示用
     public function mapData(Request $request){
-        // $S_lat = $request->input('lat');
-        // $S_lng = $request->input('lng');
+        $S_lat = $request->input('lat');
+        $S_lng = $request->input('lng');
 
-        $sql = "select 
-        s.shop_id, s2.store_id, s.shop_name, s2.store_name, sp.sp_title, sp.sp_subtitle, sp.sp_url, 
-        sp.event_start, sp.event_end, sp.sp_title, X(location) as lat, Y(location) as lng  
-        from shop s left join store s2 on s.shop_id = s2.shop_id 
-        left join sale_point sp on s.shop_id = sp.shop_id
-        where X(location) is not null 
-        and Y(location) is not null";
+        // indexメソッドの方と同じsql文だが、こちらはasを使用していない
+        $sql = "select
+            sht.shop_id,
+            sht.store_id,
+            sht.distance,
+            X(location) as lat,
+            Y(location) as lng,
+            si.shop_name,
+            st.store_name,
+            si.img_src, 
+            sp_sh.sp_title, 
+            sp_st.sp_title, 
+            sp_sh.sp_subtitle,
+            sp_st.sp_subtitle,
+            sp_sh.sp_url,
+            sp_st.sp_url,
+            sp_sh.event_start,
+            sp_st.event_start,
+            sp_sh.event_end,
+            sp_st.event_end,
+            sp_sh.cash_kubun,
+            sp_st.cash_kubun
+        from (
+            select 
+                s2.shop_id,
+                s2.store_id,
+                GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
+                X(s2.location), ' ', Y(s2.location), ')'))) as distance 
+            from shop s 
+            inner join store s2 
+            on s.shop_id = s2.shop_id
+            having distance <= 0.898316016
+            order by distance
+            limit 10
+        ) sht
+        left outer join (
+            select * from sale_point
+            where (shop_id, event_start) in (
+                select shop_id, max(event_start) as event_start
+                from sale_point
+                where shop_id is not null
+                and event_start >= curdate() or event_end >= curdate()
+                group by shop_id
+            )) sp_sh
+        on sht.shop_id = sp_sh.shop_id
+        left outer join
+            (
+            select * from sale_point
+            where (store_id, event_start) in (
+                select store_id, max(event_start) as event_start
+                from sale_point
+                where store_id is not null
+                and event_start >= curdate() or event_end >= curdate()
+                group by store_id
+            )) sp_st 
+        on sht.store_id = sp_st.store_id
+        inner join shop si on sht.shop_id = si.shop_id
+        inner join store st on sht.shop_id = st.shop_id and sht.store_id = st.store_id
+        order by sht.distance";
 
         $location = DB::select($sql);
 

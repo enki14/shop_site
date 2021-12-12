@@ -12,12 +12,11 @@
 <body>
     <div class="m-5">
         <input tyep="text" size="55" id="search" value="店名で検索" />
-        <input type="button" size="55" value="検索" onClick="SearchGo()" />
+        <input type="button" id="map_btn" size="55" value="検索" onClick="SearchGo()" />
         <div id="map_convas" style="width:750px; height:562px;"></div>
     </div>
     <div class="m-5">
         <div id="target" style="width:750px; height:562px;"></div>
-        <div id="sidebar"></div>
         <div class="container py-4">
             <h4 class="py-3 pl-5">絞り込み条件</h4>
             <p class="py-3 pl-5">○○駅付近</p>

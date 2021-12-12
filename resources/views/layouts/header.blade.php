@@ -1,6 +1,6 @@
 @section('layouts.header')
 <header>
-  <div id="fixed_nav" class="fixed-top" style="height:50px;"></div>
+  <div id="fixed_nav" class="fixed-top" style="height:50px;"><p>地図下に近隣の店舗情報がございます</p></div>
   <nav class="navbar navbar-expand-lg navbar-light jumbotron p-0 mb-0">
     {{-- web.phpのname()でページを指定している --}}
     @if(Request::routeIs('result-2'))

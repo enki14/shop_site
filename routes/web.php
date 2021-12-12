@@ -35,6 +35,7 @@ Route::post('/keio_store', 'StoreSetController@keio_store');
 
 // event登録
 Route::post('/seiyu_5pctOff', 'EventSetController@seiyu_5pctOff');
+Route::get('/event_list', 'EventSetController@event_list');
 
 
 // サムネイル作成（ url先で更新すると一枚作成される ）
@@ -78,10 +79,6 @@ Route::get('/scrape','TestController@scrape');
 
 // twitter api
 Route::get('twitter', 'TwitterController@index');
-// Route::get('twitter', 'TwitterController@s_Tweet');
-// Route::get('twitter', 'TwitterController@uSearch');
-// Route::get('twitter', 'TwitterController@imageText');
-
 
 // google maps api（仮）　※とりあえず表示だけの仕様
 Route::get('maps', function () {
@@ -91,6 +88,7 @@ Route::get('maps', function () {
 // google maps api　(遊び)
 Route::get('google', 'GMapController@index');
 Route::get('google_shop', 'GMapController@shopInfo');
+Route::get('goo_result', 'GMapController@gooResult');
 
 Route::get('calendar', 'CalendarController@index');
 Route::any('calendar_event', 'CalendarController@eventCalendar');
@@ -130,5 +128,3 @@ Route::post('/home_local', 'HomeController@localData')->name('home_local');
 Route::post('/home_dataplus', 'HomeController@dataplus')->name('home_dataplus');
 Route::post('/home_seiyu', 'HomeController@seiyuData');
 Route::post('/home_life', 'HomeController@lifeinfo');
-// Route::post('/home_update', 'HomeController@update')->name('home_update');
-// Route::post('/home_delete', 'HomeController@delete')->name('home_delete');

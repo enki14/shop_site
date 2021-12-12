@@ -22,7 +22,7 @@ $(function(){
         dataType: "json",
         success: function(data){
                 markerD = data.list;
-                setMarker(markerD);
+                // setMarker(markerD);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown){
             alert('Error : '+ errorThrown);
@@ -39,7 +39,6 @@ function setMarker(markerData){
     console.log(markerData);
     console.log(markerData.length);
 
-    let sidebar_html = "";
     let icon;
 
     for(let i = 0; i < markerData.length; i++){
@@ -63,13 +62,10 @@ function setMarker(markerData){
                 + markerData[i]['sp_title']
         });
 
-        sidebar_html += '<a href="javascript:myclick('+ i +')">' 
-        + markerData[i]['shop_name'] + markerData[i]['store_name'] + '<\/a><br />';
 
         markerEvent(i);
     }
-    // sidebarのhtml要素を、sidebar_htmlに変更するというもの。
-    document.getElementById("sidebar").innerHTML = sidebar_html;
+    
 }
 
 let openWindow;
@@ -90,3 +86,48 @@ function myclick(i){
     openWindow = infoWindow[i];
     
 }
+
+function SearchGo(){
+    let search = $("search").val();
+
+    let formData = {
+        'namae': search,
+    }
+    const url = "goo_result";
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // inputテキストからのリクエスト
+    $.ajax({
+        type:"GET",
+        url: url,
+        data: formData,
+        dataType: 'json',
+        success: function(data){
+            
+            // listのlength分として計算する必要がある
+            if(data.list.length == 0){
+                alert('該当する店舗はありませんでした...');
+                
+            }else{
+                for(let i = 0; i < data.list.length; i++){
+                    
+                    let row = data.list[i];
+                    markerData = row;
+                    setMarker(markerData);
+        
+                }
+            }
+
+        },
+        error: function(data){
+            alert("例外が発生しました");
+            console.log('Error:', data);
+        }
+    });
+}
+
+

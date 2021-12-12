@@ -1,5 +1,5 @@
 <div id="maps-container" class="container mx-auto mt-5">
-    <h3 class="maps-h3 text-center">ご近所検索</h3>
+    <h3 id="maps-h3" class="text-center">ご近所検索</h3>
     <div class="row justify-content-center m-5">
         <div class="form-group">
             <input type="text" id="map_search" name="map_search" class="text-center border-warning mr-2" 
