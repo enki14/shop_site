@@ -52,6 +52,25 @@ role="dialog" aria-hidden="true">
             </div>
         </div>
     </div>
+    <div class="d-flex">
+        {{-- SNS関係のシェアボタン --}}
+        <div class="mx-auto">
+            <a href="http://www.facebook.com/share.php?u=https://point-everyday.com/" 
+            class="facebook mr-3" rel="nofollow" target="_blank">
+                <i class="fab fa-facebook-square fa-5x"></i>
+            </a>
+            <a href="https://twitter.com/share?url=https://point-everyday.com/
+            &text=スーパーマーケットのポイントカード情報を提供します【 東京版 】
+            &hashtags=スーパー,ポイントカード,クレジット,お得情報,東京"
+            class="twitter mr-3" rel="nofollow" target="_blank">
+                <i class="fab fa-twitter-square fa-5x"></i>
+            </a>
+            <a href="https://social-plugins.line.me/lineit/share?url=https://point-everyday.com/" 
+            class="line_button">
+                <i class="fab fa-line fa-5x"></i>
+            </a>
+        </div>
+    </div>
     <a href="#" class="top_down"><i class="fas fa-cloud fa-5x" data-toggle="scroll_down"></i></a>
     {{--<a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-chevron-circle-up fa-5x" data-toggle="scroll_top"></i></a>--}}
 </div>

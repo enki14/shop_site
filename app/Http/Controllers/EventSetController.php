@@ -104,8 +104,7 @@ class EventSetController extends Controller
         // 必要な素材：　img(src, alt), a(href), 添え付けられたテキスト
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
-        $seiyu = [];
-        $shop_count = 0;
+        
 
         $obj = new \stdClass();
 
@@ -141,7 +140,8 @@ class EventSetController extends Controller
 
         for($i = 0; $i < count($src); $i++){
 
-
+            $seiyu = [];
+            $shop_count = 0;
             
             $path = 'https://www.seiyu.co.jp' . $src[$i];  
             
@@ -187,7 +187,7 @@ class EventSetController extends Controller
             $obj->img_text = $allblockText;
             $seiyu[$shop_count] = $obj;
             $shop_count++;
-            Log::debug($seiyu);
+            Log::debug($obj->img_text);
             
         }
 
