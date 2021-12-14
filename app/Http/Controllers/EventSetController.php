@@ -138,10 +138,9 @@ class EventSetController extends Controller
 
         $imageAnnotator = new ImageAnnotatorClient();
 
+        $seiyu = [];
+        $shop_count = 0;
         for($i = 0; $i < count($src); $i++){
-
-            $seiyu = [];
-            $shop_count = 0;
             
             $path = 'https://www.seiyu.co.jp' . $src[$i];  
             
@@ -187,7 +186,7 @@ class EventSetController extends Controller
             $obj->img_text = $allblockText;
             $seiyu[$shop_count] = $obj;
             $shop_count++;
-            Log::debug($obj->img_text);
+            Log::debug($seiyu[0]);
             
         }
 

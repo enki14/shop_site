@@ -161,13 +161,17 @@ function setMarker(markerData){
 
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
         
-        icon = new google.maps.MarkerImage('./img/cart.png');
+        // icon = new google.maps.MarkerImage('http://maps.google.co.jp/mapfiles/ms/icons/ltblue-dot.png');
 
         marker[i] = new google.maps.Marker({
             position: markerStore,
             map: map,
-            icon: icon
+            path: google.maps.SymbolPath.CIRCLE,
+            animation: google.maps.Animation.DROP
+            // icon: icon
         });
+
+        console.log(marker[i])
         
         let request_flag = $('#h_request_flag').val();
         // リクエストパラメータに座標が渡されていなかったら
@@ -176,7 +180,8 @@ function setMarker(markerData){
  
         }else{
             marker[i].setMap(map);
-            markerEvent(i)
+            seachMarker(i);
+            clickMarker(i);
         }
 
         var contentString = 
@@ -193,7 +198,6 @@ function setMarker(markerData){
             content: contentString
         });
 
-        markerEvent(i);
     }
 }  
 
@@ -242,9 +246,9 @@ function eventExist(sp_url){
 
 let openWindow;
 
-function markerEvent(i){
-    // マーカーをクリックしたときのイベント
-    google.maps.event.addListener(marker[i], 'click', function(){
+function seachMarker(i){
+    // マップ検索直後のイベント
+    google.maps.event.addListener(marker[i],  "animation_changed", function(){
         // ここでinfoWindowのスタイリング
         var iwOuter = $('.gm-style-iw');
         let custumIw = iwOuter.parent().addClass('custum-iw');
@@ -267,6 +271,30 @@ function markerEvent(i){
 
 };
 
+function clickMarker(i){
+    // マーカーをクリックしたときのイベント
+    google.maps.event.addListener(marker[i], "click", function(){
+        // ここでinfoWindowのスタイリング
+        var iwOuter = $('.gm-style-iw');
+        let custumIw = iwOuter.parent().addClass('custum-iw');
+        let iwCloseBtn = custumIw.next();
+
+        // 閉じるボタンにcss付与
+        iwCloseBtn.addClass("closebtn");
+        // fontawesomeのcloseボタン追加
+        iwCloseBtn.prepend('<i class="fas fa-times-circle"></i>');
+
+        // 開けたままにしておかない
+        if(openWindow){
+            openWindow.close();
+        }
+        // クリックすると吹き出しが開いて中身のデータが入っている
+        infoWindow[i].open(map, marker[i]);
+        openWindow = infoWindow[i];
+    
+    })
+
+};
 
 // 検索クリックからのmodal表示
 $(function(){

@@ -197,8 +197,7 @@ nav{
 
 
 .kensaku-btn{
-    width: 120px;
-    height: 37px;
+    margin-right: 1rem;
     vertical-align: top !important;
     background-color: #e5ed5a;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -207,6 +206,20 @@ nav{
 
 .kensaku-btn:hover{
     background: #dcf66a;
+}
+
+#reset-btn{
+    width: 100px;
+    height: 42px;
+    margin-top: 5px;
+    vertical-align: top !important;
+    background: #f9fdba;
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+#reset-btn:hover{
+    background: #fafad2;
 }
 
 .keys-container{

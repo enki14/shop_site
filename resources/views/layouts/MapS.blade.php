@@ -1,6 +1,6 @@
 <div id="maps-container" class="container mx-auto mt-5">
     <h3 id="maps-h3" class="text-center">ご近所検索</h3>
-    <div class="row justify-content-center m-5">
+    <div class="row justify-content-center">
         <div class="form-group">
             <input type="text" id="map_search" name="map_search" class="text-center border-warning mr-2" 
             placeholder="お住まいの地域・店名" aria-label="お住まいの地域・店名" aria-describedby="basic-addon1" 
@@ -14,8 +14,10 @@
             data-toggle="modal" data-target="#list_modal" data-backdrop="true" 
             style="width: 130px; height: 48px;" />
         </div>
+        <a href="http://localhost/shop_site/public/" id="reset-btn" class="btn btn-lg" 
+        role="button"><small>RESET</small></a>
     </div>
-    <div id="map">
+    <div id="map" class="mt-3">
         <div class="row justify-content-center">
             <div id="map_convas" class="col-md-10" style="width:600px; height:550px;"></div>
         </div>

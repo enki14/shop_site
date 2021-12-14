@@ -791,4 +791,117 @@ class StoreSetController extends Controller
     
     }
 
+
+    public function santoku_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_43 = 'select url, element_path from scrape where id = 43';
+        $s_43 = DB::select($sql_43);
+        foreach($s_43 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store = $crawler->filter($data->element_path)->filter('td.shoplist_title')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $link = $crawler->filter($data->element_path)->filter('td.shoplist_title > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+            
+            $time = $crawler->filter($data->element_path)->filter('td.shoplist_hours')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $tel = $crawler->filter($data->element_path)->filter('td > p.shoplist_tel')
+            ->each(function($node){
+                return $node->text();
+            });
+            // Log::debug($tel);
+
+        }
+
+        $zip_adr = [];
+        $z_a = [];
+        // $zip = [];
+        // $address = [];
+        $count = 0;
+        for($i = 0; $i < count($link); $i++){
+            $crawler_2 = $client->request('GET', $link[$i]);
+            $zip_adr[$count] = $crawler_2->filter('#shopinfo > ul > li:nth-child(1) > dl > dd > p')
+            ->each(function($node){
+                return $node->text();
+            });
+            $count++;
+        // }
+            // $z_a[$count] = $zip_adr[$i][0];
+            // $count++;
+            // Log::debug($z_a);
+            // $z_cnt = 0;
+            if(preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i][0])){
+                preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i][0], $zip);
+                preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $zip_adr[$i][0], $address);
+            }else{
+                $zip[0] = '';
+            }
+            // $z_cnt++;
+            // Log::debug($zip[0]);
+
+            // $address = [];
+            // $a_cnt = 0;
+            
+            // Log::debug($address[0]);
+            $address = str_replace('　', '', $address[0]);
+            // Log::debug($address);
+            
+            // 余分なスペースを削除
+            // $a_cnt++;
+            // Log::debug($address[0]);
+        // }
+
+        // Log::debug($zip_adr[$i][0]);
+        // for($i = 0; $i < count($store); $i++){
+        //     if(preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i][0])){
+        //         preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i][0], $zip);
+        //     }else{
+        //         $zip = '';
+        //     }
+
+            // Log::debug($zip);
+            // preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $zip_adr[$i][0], $address);
+            // // 余分なスペースを削除
+            // Log::debug($address);
+            $separate = Common::separate_address($address);
+            // Log::debug($separate);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+
+            // $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            // $exist = DB::select($count);
+
+            // // Log::debug($district);
+            // if($exist[0]->cnt == 0){
+            //     $id = "select max(store_id) + 1 as max_id from store";
+            //     $max = DB::select($id);
+            //     $max_id = $max[0]->max_id;
+
+            //     $sql = "insert into store(shop_id, store_id, store_name, zip, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town) 
+            //     values(18, $max_id, '$store[$i]', '$zip[0]', '$address', '$tel[$i]', '$link[$i]', '$time[$i]', '$state', '$city', '$district')";
+            //     dd($sql);
+            //     DB::insert($sql);
+            //     DB::commit();
+            // }
+
+        }
+
+        Log::debug($address);
+        Log::debug($zip);
+        Log::debug($separate);
+        
+    }
+
+
 }
