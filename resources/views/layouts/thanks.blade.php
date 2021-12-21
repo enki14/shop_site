@@ -1,0 +1,1 @@
+<h2 class="contact-h2 text-center">{{ __('送信完了') }}</h2>

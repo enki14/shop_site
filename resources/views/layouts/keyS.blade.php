@@ -1,6 +1,6 @@
-<div class="container keys-container align-items-center">
-    <h3 class="pt-2 pb-3">話題・キーワード</h3>
-    <form method="get" action="result-2">
+<div class="container keys-container py-2">
+    <h2 id="keys-h2" class="my-xl-5 text-center">話題・キーワード</h2>
+    <form method="get" action="result-2" id="keys-form">
         @csrf
         {{-- ボタンにもそれぞれのvalue値が必要、かつ１つのformに統一された一意のname値 --}}
         <button type="submit" id="key_1" name="keyword" value="味覚" class="btn b-style m-3">秋の味覚</button>
@@ -14,3 +14,4 @@
         <button type="submit" id="key_9" name="keyword" value="月末" class="btn b-style m-3">月末</button>
     </form>
 </div>
+<hr class="horizon">

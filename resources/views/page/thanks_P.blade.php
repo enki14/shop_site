@@ -3,12 +3,8 @@
 @extends('layouts.footer')
 
 
+@section('title', 'お問い合わせフォーム')
 
-@section('title', 'メイン検索の結果')
-@section('description', 'スーパーマーケットのポイント情報や、セール情報が検索できるサイトです')
-@section('resultCss')
-<link href="css/result.css" rel="stylesheet" type="text/css">
-@endsection
 
 @section('layouts.content')
 {{-- topページと違い、content-mainとcontent-containerには"height: auto;をブレード内で採用している --}}
@@ -16,15 +12,10 @@
     <div id="content_row" class="row">
         <div id="content-container" class="card mt-3 py-5 bg-light mx-auto col-lg-8">
             <div class="card-body">
-            @include('layouts.search_value')
-            @include('layouts.itiran')
+                @include('layouts.thanks')
             </div>
         </div>
     </div>
     <a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-home fa-5x" data-toggle="backtip"></i></a>
 </div>  
 @endsection
-
-
-
-

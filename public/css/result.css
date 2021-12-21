@@ -1,19 +1,6 @@
-/* html{
-    height: auto;
-    width: auto;
-}
-
-
-body{
-    height: auto;
-    width: auto;
-} */
-
 
 .wrraper{
     overflow: hidden;
-    /* height: 100%;
-    width: 100%; */
 }
 
 
@@ -23,7 +10,12 @@ nav{
     width: 100%;
     height: 700px;
     z-index: 1;
+}
 
+#black_out{
+    height: 700px;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #fixed_nav{
@@ -39,7 +31,7 @@ nav{
 
 .header-eria{
     height: 300px;
-    top: 100px;
+    top: 150px;
     font-family: 'Josefin Sans', sans-serif;
     text-align: center;
     /* flex-direction: column;  */
@@ -119,16 +111,18 @@ nav{
     filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.6));
 }
 
-.top-card{
-    border-bottom: 1px solid #392605;
-}
-
-#content-h3{
-    margin: 20px 0;
+#content-h2{
+    margin-bottom: 20px;
 }
 
 .form-content{
     margin-top: 35px;
+}
+
+#search-form,
+#keys-form,
+#maps-form{
+    margin-top:1.5rem;
 }
 
 .tooltip-inner{
@@ -158,7 +152,6 @@ nav{
     padding: 2rem 0;
     text-align: center;
     z-index: 4;
-    border-bottom: 1px solid #392605;
 }
 
 .b-style{
@@ -181,7 +174,7 @@ nav{
     z-index: 4;
 }
 
-.maps-h3{
+.maps-h2{
     margin: 15px;
 } 
 

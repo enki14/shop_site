@@ -50,6 +50,7 @@ $(function() {
         // 現在位置を取得できなかった場合の値はShopsiteController@indexに記載あり
     }else{
         error();
+        // リクエストがあったときに右から左に流れるやつ
         window.addEventListener('load', function(){
             $("#fixed_nav").children("p").show();
            

@@ -15,7 +15,8 @@ class Common {
     {
         if (preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $address, $matches) !== 1) {
             return [
-                // 'address' => null,  ・必要があるときにどうぞ
+                // 「 address 」は必要があるときにどうぞ
+                'address' => null,
                 'state' => null,
                 'city' => null,
                 'other' => null
@@ -26,7 +27,8 @@ class Common {
         // 地区の番地以降を削除する処理
         $matches[3] = preg_replace($pattern, '', $matches[3]);
         return [
-            // 'address' => $matches[0],　・必要があるときにどうぞ
+            // 「 address 」は必要があるときにどうぞ
+            'address' => $matches[0],
             'state' => $matches[1],
             'city' => $matches[2],
             'district' => $matches[3],

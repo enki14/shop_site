@@ -14,11 +14,23 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Route::any('/', 'ShopsiteController@index');
-Route::any('/result', 'ShopsiteController@result');
-Route::any('/result-2', 'ShopsiteController@keyRes');
+Route::any('/result', 'ShopsiteController@result')->name('result');
+Route::any('/result-2', 'ShopsiteController@keyRes')->name('result-2');
 Route::get('/map_modal', 'ShopsiteController@mapModal');
 Route::post('/map_data', 'ShopsiteController@mapData');
 Route::get('/eventCalendar_2', 'ShopsiteController@eventCalendar_2');
+Route::get('/policy', function () {
+	return view('page.policyPage');
+ })->name('policy');
+
+
+/********* 問い合わせフォーム **********/
+//入力ページ
+Route::get('/contact', 'ContactController@index')->name('page.contact_P');
+//確認ページ
+Route::post('/contact/confirm', 'ContactController@confirm')->name('page.confirm_P');
+//送信完了ページ
+Route::post('/contact/thanks', 'ContactController@send')->name('page.thanks_P');
 
 
 // store登録
@@ -33,6 +45,7 @@ Route::post('/peacock_store', 'StoreSetController@peacock_store');
 Route::post('/sanwa_store', 'StoreSetController@sanwa_store');
 Route::post('/keio_store', 'StoreSetController@keio_store');
 Route::post('/santoku_store', 'StoreSetController@santoku_store');
+Route::post('/tobu_store', 'StoreSetController@tobu_store');
 
 
 // event登録

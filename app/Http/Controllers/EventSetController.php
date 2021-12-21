@@ -104,9 +104,6 @@ class EventSetController extends Controller
         // 必要な素材：　img(src, alt), a(href), 添え付けられたテキスト
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
-        
-
-        $obj = new \stdClass();
 
         $sql_42 = 'select url, element_path from scrape where id = 42';
         $s_42 = DB::select($sql_42);
@@ -114,7 +111,7 @@ class EventSetController extends Controller
            
             $url = $data->url;
             $crawler = $client->request('GET', $url);
-            $link = $crawler->filter($data->element_path)
+            $link = $crawler->filter($data->element_path)->filter('a')
             ->each(function($node){
                 return $node->attr('href');
             });
@@ -133,21 +130,15 @@ class EventSetController extends Controller
             ->each(function($node){
                 return $node->text();
             });
-
         }
+        
 
         $imageAnnotator = new ImageAnnotatorClient();
 
-        $seiyu = [];
-        $shop_count = 0;
         for($i = 0; $i < count($src); $i++){
             
             $path = 'https://www.seiyu.co.jp' . $src[$i];  
             
-
-            // Log::debug($eventLink);
-
-            // Log::debug(print_r($obj, true));
             $image = file_get_contents($path);
             $response = $imageAnnotator->documentTextDetection($image);
             $annotation = $response->getFullTextAnnotation();
@@ -168,31 +159,38 @@ class EventSetController extends Controller
                                 // $block_text .= ' ';
                             }
                             $block_text .= " ";
-                            // Log::debug($block_text);
+
                         }
                         $allblockText .= $block_text;
-                        
-                        
-                        
                     }
                 }
+                
+                
+
             }
             $imageAnnotator->close();
-
-            $eventLink = 'https://www.seiyu.co.jp' . $link[$i]; 
-            $obj->eventLink = $eventLink;
-            $obj->text = $text[$i];
-            $obj->alt = $alt[$i];  
-            $obj->img_text = $allblockText;
-            $seiyu[$shop_count] = $obj;
-            $shop_count++;
-            Log::debug($seiyu[0]);
+            
+            
             
         }
 
-        $output = [];
-        $output['seiyu'] = $seiyu;
-        return view('eventList', $output);
+
+        for($i = 0; $i < count($text); $i++){
+            $eventLink = 'https://www.seiyu.co.jp' . $link[$i]; 
+            $seiyu = array(
+                'link' => $eventLink,
+                'ocr_text' => $allblockText,
+                'alt' => $alt[$i],
+                'text' => $text[$i]
+            );
+            Log::debug($seiyu);
+    
+            $output = [];
+            $output['seiyu'] = $seiyu;
+            Log::debug($output);
+            return view('eventList', $output);
+        }
+        // return View::make('eventList')->with($seiyu);
             
             
     }

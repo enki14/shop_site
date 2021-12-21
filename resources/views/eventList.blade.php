@@ -17,7 +17,7 @@
                 @foreach($seiyu as $data)
                     @if(!empty($data->img_text) or !empty($data->text))
                         <li>
-                            <a href="{{ $data->eventLink }}">{{ $data->img_text }}</a>
+                            <a href="{{ $data->link }}" target="_blank">{{ $data->ocr_text }}</a>
                             <small>{{ $data->text }}</small>
                         </li>
                     @endif

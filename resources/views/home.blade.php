@@ -23,7 +23,7 @@
                 
                 <div class="col text-left mt-5">
                     <!-- 取得したい店舗によってaction先を変える -->    
-                    <form class="form-group" method="post" action="santoku_store">
+                    <form class="form-group" method="post" action="tobu_store">
                     @csrf
                         <button type="submit">ストア登録</button>
                     </form>

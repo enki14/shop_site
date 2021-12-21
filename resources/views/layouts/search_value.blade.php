@@ -1,5 +1,5 @@
 <div class="top-card card-img-top p-2">
-    <h3 id="content-h3" class="text-center">お得を探す</h3>
+    <h2 id="content-h2" class="text-center">お得を探す</h2>
     <div class="row justify-content-center">
         <form method="post" action="result" id="search-form">
             @csrf
@@ -26,4 +26,5 @@
         </form>
     </div>
 </div>
+<hr class="horizon">
 

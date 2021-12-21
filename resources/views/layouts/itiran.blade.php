@@ -1,5 +1,5 @@
 <div id="main-result" class="container py-4">
-    <p class="pl-5">絞り込み結果：{{ $pagenate->total() }} 件　
+    <p class="pl-5">絞り込み結果：{{ $pagenate->total() }} 件
         {{-- LengthAwarePaginatorのtotalメソッド --}}
     </p>
     <p class="pb-4 pl-5">絞り込み条件 : 

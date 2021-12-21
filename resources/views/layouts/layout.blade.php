@@ -31,7 +31,7 @@
         <meta name="twitter:player" content="@RBtIpvNr6OkIKiX" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.css" rel="stylesheet" />
         @yield('resultCss')
         @yield('subResultCss')
@@ -52,10 +52,10 @@
             overflow: hidden;
         }
 
-        .jumbotron:hover{
+        /* .jumbotron:hover{
             transform:scale(1.1, 1.1);
             transition:1s all;
-        }
+        } */
 
         .jumbotron{
             transition:1s all;

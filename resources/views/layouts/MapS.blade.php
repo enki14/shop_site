@@ -1,7 +1,7 @@
 <div id="maps-container" class="container mx-auto mt-5">
-    <h3 id="maps-h3" class="text-center">ご近所検索</h3>
+    <h2 id="maps-h2" class="text-center mb-5">ご近所検索</h2>
     <div class="row justify-content-center">
-        <div class="form-group">
+        <div class="form-group" id="maps-form">
             <input type="text" id="map_search" name="map_search" class="text-center border-warning mr-2" 
             placeholder="お住まいの地域・店名" aria-label="お住まいの地域・店名" aria-describedby="basic-addon1" 
             style="width: 20rem; height: 3.3rem;" data-toggle="tooltip"/>
@@ -13,9 +13,10 @@
             <input id="kensaku-map" class="btn kensaku-btn" type="button" value="検索" 
             data-toggle="modal" data-target="#list_modal" data-backdrop="true" 
             style="width: 130px; height: 48px;" />
+            <a href="http://localhost/shop_site/public/" id="reset-btn" class="btn btn-lg" 
+            role="button"><small>RESET</small></a>
         </div>
-        <a href="http://localhost/shop_site/public/" id="reset-btn" class="btn btn-lg" 
-        role="button"><small>RESET</small></a>
+        
     </div>
     <div id="map" class="mt-3">
         <div class="row justify-content-center">
