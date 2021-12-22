@@ -18,7 +18,7 @@
         @endif
 
         <label class="mt-3">お問い合わせ内容</label>
-        <textarea name="body" class="form-control border-success" rows="10">
+        <textarea name="body" class="form-control border-success" cols="20" rows="10">
             {{ old('body') }}
         </textarea>
         @if ($errors->has('body'))

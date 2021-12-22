@@ -41,10 +41,10 @@
               <h1 class="midashi-top col-md-8 m-5">Privacy Policy</h1>
             </div>
           </div>
-          @elseif(Request::routeIs('page.contact_P'))
+          @elseif(Request::routeIs('page.contact_P') || Request::routeIs('page.confirm_P') || Request::routeIs('page.thanks_P'))
           <div class="header-eria brand w-100 d-block">
             <div class="row justify-content-center">
-              <h1 class="midashi-top col-md-8 m-5">Privacy Policy</h1>
+              <h1 class="midashi-top col-md-8 m-5">お問い合わせ</h1>
             </div>
           </div>
         @else
