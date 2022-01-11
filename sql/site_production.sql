@@ -1,6 +1,6 @@
 create table shop
 (shop_id int(4), shop_name varchar(60), shop_url varchar(255), twitter_user_id varchar(30),
- api_scrape_kubun int(1), img_src varchar(255), primary key(shop_id));
+ api_scrape_kubun int(1), img_src varchar(255), series varchar(80), primary key(shop_id));
 
 create table sale_point
 (sp_code int(10), shop_id int(4), store_id int(5), sp_kubun int(1), sp_title varchar(255),
@@ -16,6 +16,7 @@ create table store
 
 -- ※shopテーブルの説明
 -- api_scrape_kubun  ・・・・・・外部取得がapiかscrapeかの区分（使いみち要検討）
+-- series  ・・・・・・・・・・店の系列
 
 -- ※sale_pointの説明
 -- sp_code  ・・・・・・sale_pointそのものの主キー

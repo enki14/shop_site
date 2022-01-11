@@ -24,7 +24,16 @@
             <div class="itiran-card card mx-auto my-3">
                 <div class="card-body rounded shadow"> 
                     @csrf
-                    <div class="ribbon"><span class="new">new!!</span></div>
+                    {{-- イベントの登録日が１週間以内だったら「new!!」を表示 --}}
+                    @if(!empty($data->register_day))
+                        <?php 
+                            $r_day = Common::hyphenFormat($data->register_day);  
+                            $l_week = date("Y-m-d",strtotime("-1 week"));
+                        ?>
+                        @if($l_week <= $r_day)
+                            <div class="ribbon"><span class="new">new!!</span></div>
+                        @endif
+                    @endif
                     <div class="row">
                         <h2 class="col-md-12 text-center font-weight-bold mt-2">
                             @if(!empty($data->store_url))
@@ -33,12 +42,12 @@
                                 </a>
                             @elseif(!empty($data->shop_url))
                                 <a href="{{ $data->shop_url }}" target="_blank">
-                                    {{ $data->shop_name }}<small>各店</small>
+                                    {{ $data->shop_name }}<small class="kakuten"> 各店</small>
                                 </a>
                             @elseif(empty($data->store_url) && empty($data->shop_url) && !empty($data->store_name))
                                 {{ $data->shop_name }}{{ $data->store_name }}
                             @else
-                                {{ $data->shop_name }}<small>各店</small>
+                                {{ $data->shop_name }}<small class="kakuten"> 各店</small>
                             @endif
                         </h2>
                     </div>
@@ -50,15 +59,15 @@
                             <img src="{{ asset('/img/thumbnail-20200501_noimage.png') }}" alt="no_image">
                         @endif
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8"> 
+                        <div class="col-md-8 pt-5"> 
                         @if(!empty($data->cash_kubun))
                             <p class="card-text">お支払方法：
                                 {{ $data->cash_kubun }}
                             </p>
                         @endif
-                            <p class="card-text">
+                            <h4 class="card-title font-weight-bold">{{ $data->sp_title }}</h4>
+                            <p class="card-text pt-2">{{ $data->sp_subtitle }}</p>
+                            <p class="card-text pt-4">
                                 @if(!empty($data->event_start) && !empty($data->event_end))
                                     期間：{{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat($data->event_end) }}
                                 @elseif(!empty($data->event_start) && empty($data->event_end))
@@ -67,8 +76,6 @@
                                     期間：～ {{ Common::dateFormat($data->event_end) }}
                                 @endif
                             </p>
-                            <h5 class="card-title">{{ $data->sp_title }}</h5>
-                            <p class="card-text">{{ $data->sp_subtitle }}</p>
                             <p class="card-text">
                             @if(!empty($data->sp_url))
                                 <a href="{{ $data->sp_url }}" target="_blank">
@@ -76,6 +83,53 @@
                                 </a>
                             @endif
                             </p>
+                        </div>
+                    </div>
+                    <div class="container mt-5">
+                        <span class="slash d-flex align-items-center position-relative font-weight-bold ml-5">
+                            ココで使える
+                        </span>
+                        <div class="row mt-2 card_link">
+                            <div class="col-12">
+                                <div class="card-text ml-3">
+                                    @if(!empty($data->card_name))
+                                        @if(preg_match('/,/', $data->card_name) == 1)
+                                            <?php $c_name = explode(',', $data->card_name); ?>
+                                            <?php $c_link = explode(',', $data->link); ?>
+                                            <span>
+                                            @for($i = 0; $i < count($c_name); $i++)
+                                                <a href="{{ $c_link[$i] }}" class="cLink ml-4" target="_blank">{{ $c_name[$i] }}</a>
+                                                <br class="visible-xs-block">
+                                            @endfor
+                                            </span>
+                                        @else
+                                            <span><a href="{{ $data->link }}" class="cLink ml-5" target="_blank">{{ $data->card_name }}</a></span>
+                                        @endif
+                                        
+                                    @endif
+                                </div>
+                                <br class="visible-xs-block">
+                                <div class="card-text">
+                                    @if(isset($data->P_or_D))
+                                        @if($data->P_or_D == 0)
+                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
+                                            credit_score<span class="ml-1">ポイントが貯まる</span>
+                                        </div>
+                                        @elseif($data->P_or_D == 1)
+                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
+                                            credit_score<span class="ml-1">割引がある</span>
+                                        </div>
+                                        @else
+                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
+                                            credit_score<span class="ml-1">割引がある</span>
+                                        </div>
+                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
+                                            credit_score<span class="ml-1">ポイントが貯まる</span>
+                                        </div>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

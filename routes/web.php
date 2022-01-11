@@ -22,6 +22,9 @@ Route::get('/eventCalendar_2', 'ShopsiteController@eventCalendar_2');
 Route::get('/policy', function () {
 	return view('page.policyPage');
  })->name('policy');
+Route::get('/profile', function() {
+	return view('page.profile');
+})->name('profile');
 
 
 /********* 問い合わせフォーム **********/
@@ -46,7 +49,9 @@ Route::post('/sanwa_store', 'StoreSetController@sanwa_store');
 Route::post('/keio_store', 'StoreSetController@keio_store');
 Route::post('/santoku_store', 'StoreSetController@santoku_store');
 Route::post('/tobu_store', 'StoreSetController@tobu_store');
-
+Route::post('/ozam_store', 'StoreSetController@ozam_store');
+Route::post('/itoyokado', 'StoreSetController@itoyokado');
+Route::post('/aeon_store', 'StoreSetController@aeon_store');
 
 // event登録
 Route::post('/seiyu_5pctOff', 'EventSetController@seiyu_5pctOff');

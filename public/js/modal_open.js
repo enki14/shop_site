@@ -21,7 +21,7 @@ function initMap(){
     // マップ表示
     map = new google.maps.Map(convas, {
         center: centerp,
-        zoom: 16
+        zoom: 15
     });    
 
 };
@@ -52,7 +52,10 @@ $(function() {
         error();
         // リクエストがあったときに右から左に流れるやつ
         window.addEventListener('load', function(){
-            $("#fixed_nav").children("p").show();
+            let a_info = $("#fixed_nav").find(".animation-info");
+            a_info.fadeIn(500);
+            a_info.addClass("aInfo");
+
            
         });
     }
@@ -157,7 +160,8 @@ function setMarker(markerData){
         let shop = markerData[i]['shop_name'] || '';
         let store = markerData[i]['store_name'] || '';
         let sp_title = markerData[i]['sp_title'] || '';
-        let shop_id = markerData[i]['shop_id'];
+        let card_name = markerData[i]['card_name'] || '';
+        let link = markerData[i]['link'] || '';
 
 
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
@@ -181,8 +185,8 @@ function setMarker(markerData){
  
         }else{
             marker[i].setMap(map);
-            seachMarker(i);
             clickMarker(i);
+            // seachMarker(i);
         }
 
         var contentString = 
@@ -192,6 +196,7 @@ function setMarker(markerData){
                 "<p>"+ event_start + wave + event_end + "</p>" +
                 "<p>" + sp_title + "</p>" +
                 eventExist(markerData[i]['sp_url']) + 
+                "<p><span>" + cardOutput(card_name, link) + "</span></p>" +
             "</div>" +
         "</div>";     
 
@@ -244,33 +249,50 @@ function eventExist(sp_url){
     }
 }
 
+// カード情報を吹き出しの中で出力
+function cardOutput(card_name, link){
+    // カンマ区切りの複数のカード情報があるかないか
+    if(card_name.match(/,/) && link.match(/,/)){
+        card_name = card_name.split(',');
+        link = link.split(',');
+        console.log(card_name);
+        for(let i = 0; i < card_name.length; i++){
+            return "<a href="+ link[i] +" target='_blank'>" + card_name[i] + "</a>";
+        }
+    }else{
+        return "<a href="+ link +">" + card_name + "</a>";
+    }
+
+}
+
 
 let openWindow;
 
-function seachMarker(i){
-    // マップ検索直後のイベント
-    google.maps.event.addListener(marker[i],  "animation_changed", function(){
-        // ここでinfoWindowのスタイリング
-        var iwOuter = $('.gm-style-iw');
-        let custumIw = iwOuter.parent().addClass('custum-iw');
-        let iwCloseBtn = custumIw.next();
+// function seachMarker(i){
+//     // マップ検索直後のイベント
+//     google.maps.event.addListener(marker[i], "animation_changed", function(){
+//         // ここでinfoWindowのスタイリング
+//         var iwOuter = $('.gm-style-iw');
+//         let custumIw = iwOuter.parent().addClass('custum-iw');
+//         let iwCloseBtn = custumIw.next();
 
-        // 閉じるボタンにcss付与
-        iwCloseBtn.addClass("closebtn");
-        // fontawesomeのcloseボタン追加
-        iwCloseBtn.prepend('<i class="fas fa-times-circle"></i>');
+//         // 閉じるボタンにcss付与
+//         iwCloseBtn.addClass("closebtn");
+//         // fontawesomeのcloseボタン追加
+//         iwCloseBtn.prepend('<i class="fas fa-times-circle"></i>');
 
-        // 開けたままにしておかない
-        if(openWindow){
-            openWindow.close();
-        }
-        // クリックすると吹き出しが開いて中身のデータが入っている
-        infoWindow[i].open(map, marker[i]);
-        openWindow = infoWindow[i];
+        
+//         // 開けたままにしておかない
+//         if(openWindow){
+//             openWindow.close();
+//         }
+        
+//         infoWindow[i].open(map, marker[i]);
+//         openWindow = infoWindow[i];
     
-    })
+//     })
 
-};
+// };
 
 function clickMarker(i){
     // マーカーをクリックしたときのイベント

@@ -4,26 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {{--<div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>--}}
             <div class="container">
                 <h2>データベースの管理・編集</h2> 
                 
                 
                 <div class="col text-left mt-5">
                     <!-- 取得したい店舗によってaction先を変える -->    
-                    <form class="form-group" method="post" action="tobu_store">
+                    <form class="form-group" method="post" action="aeon_store">
                     @csrf
                         <button type="submit">ストア登録</button>
                     </form>

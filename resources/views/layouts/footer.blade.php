@@ -1,8 +1,6 @@
 @section('layouts.footer')
 <footer class="footer align-items-center" style="height: 150px">
-    <i class="fas fa-shopping-cart fa-sm cart"></i>
-    <i class="fas fa-shopping-cart fa-sm cart"></i>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center pt-3">
         <div class="footer-main mr-4 pt-1">
             <a href="#" class="footer-link">
                 <b class="text-center">プロフィール</b>
@@ -22,5 +20,6 @@
             </a>
         </div>
     </div>
+    
 </footer>
 @endsection

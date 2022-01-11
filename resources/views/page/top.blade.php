@@ -22,6 +22,9 @@
                 <h4 id="modalTitle" class="modal-title pb-2"></h4>
                 <div id="modal_description"></div>
             </div>
+            <div class="modal-footer mb-4">
+                <span class="c_name"></span>
+            </div>
         </div>
     </div>
 </div>
@@ -52,8 +55,7 @@ role="dialog" aria-hidden="true">
             </div>
         </div>
     </div>
-    <a href="#" class="top_down"><i class="fas fa-cloud fa-5x" data-toggle="scroll_down"></i></a>
-    {{--<a href="http://localhost/shop_site/public/" class="history_back"><i class="fas fa-chevron-circle-up fa-5x" data-toggle="scroll_top"></i></a>--}}
+    {{--<a href="#" class="top_down"><i class="fas fa-cloud fa-5x" data-toggle="scroll_down"></i></a>--}}
 </div>
 @endsection
 @section('resultScript')
@@ -61,11 +63,11 @@ role="dialog" aria-hidden="true">
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
+            initialView: 'listWeek',
             headerToolbar: {
-                    left: 'prev,today,next',
+                    left: 'prev,next',
                     center: 'title',
-                    right: 'dayGridMonth,listWeek'
+                    right: ''
             },
             // あとはShopsiteController@eventCalendar_2メソッドでDBをレスポンスすればうまくやってくれる
             // indexメソッドの方には特に初期値など要らない
@@ -74,6 +76,9 @@ role="dialog" aria-hidden="true">
             eventClick: function(info){
                 info.jsEvent.preventDefault();
                 console.log(info);
+                let c_name = info.event._def.extendedProps.c_name;
+                let c_link = info.event._def.extendedProps.c_link;
+                console.log(c_link);
                 let date = new Date(info.el.fcSeg.eventRange.range.start);
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1;
@@ -86,6 +91,7 @@ role="dialog" aria-hidden="true">
                 $('#modalTitle').html($('<a></a>', {href: info.event._def.url, target: "_blank"} ).text(info.event._def.extendedProps.main_title)); 
                 // モーダルの本文をセット
                 $('#modal_description').html(info.event._def.extendedProps.description);
+                $('.c_name').html(cardOutput_2(c_name, c_link));
                 // モーダル着火
                 $('#calendarModal').modal(); 
                 
@@ -106,13 +112,29 @@ role="dialog" aria-hidden="true">
                 month:    '月',
                 list:     '週間'
             },
+            
         });
+        
         calendar.render()
     });
+
+    
+    function cardOutput_2(c_name, c_link){
+        if(c_name.match(/,/)){
+            c_name = c_name.split(',');
+            c_link = c_link.split(',');
+            console.log(c_name);
+            for(let i = 0; i < c_name.length; i++){
+                return "<a href="+ c_link[i] +" target='_blank'>" + c_name[i] + "</a>";
+            }
+        }else{
+            return "<a href="+ c_link +" target='_blank'>" + c_name + "</a>";
+        }
+
+    }
  
 </script>
 <script src="{{ asset('/js/modal_open.js') }}"></script>
-<script src="{{ asset('/js/elevator.js') }}"></script> 
-{{--<script src="{{ asset('/js/map_search.js') }}"></script>--}}
+{{--<script src="{{ asset('/js/elevator.js') }}"></script>--}} 
 <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places" async defer></script>
 @endsection

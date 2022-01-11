@@ -251,6 +251,8 @@ nav{
     position: absolute;
     top: 10px;
     left: 5px;
+    font-family: "cursive", "Franklin Gothic", "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN",
+    "ＭＳ Ｐゴシック", "MS P Gothic", Verdana, Arial, Helvetica, sans-serif;
 }
 
 /* #ribbon:after{

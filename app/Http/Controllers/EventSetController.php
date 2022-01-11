@@ -104,6 +104,9 @@ class EventSetController extends Controller
         // 必要な素材：　img(src, alt), a(href), 添え付けられたテキスト
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
+        
+
+        $obj = new \stdClass();
 
         $sql_42 = 'select url, element_path from scrape where id = 42';
         $s_42 = DB::select($sql_42);
@@ -111,7 +114,7 @@ class EventSetController extends Controller
            
             $url = $data->url;
             $crawler = $client->request('GET', $url);
-            $link = $crawler->filter($data->element_path)->filter('a')
+            $link = $crawler->filter($data->element_path)->filter('ul > li > a')
             ->each(function($node){
                 return $node->attr('href');
             });
@@ -130,15 +133,23 @@ class EventSetController extends Controller
             ->each(function($node){
                 return $node->text();
             });
+
+            Log::debug($link);
+
         }
-        
 
         $imageAnnotator = new ImageAnnotatorClient();
 
+        $seiyu = [];
+        $shop_count = 0;
         for($i = 0; $i < count($src); $i++){
             
             $path = 'https://www.seiyu.co.jp' . $src[$i];  
             
+
+            // Log::debug($eventLink);
+
+            // Log::debug(print_r($obj, true));
             $image = file_get_contents($path);
             $response = $imageAnnotator->documentTextDetection($image);
             $annotation = $response->getFullTextAnnotation();
@@ -159,41 +170,131 @@ class EventSetController extends Controller
                                 // $block_text .= ' ';
                             }
                             $block_text .= " ";
-
+                            // Log::debug($block_text);
                         }
                         $allblockText .= $block_text;
+                        
                     }
                 }
-                
-                
-
             }
             $imageAnnotator->close();
-            
-            
-            
-        }
 
-
-        for($i = 0; $i < count($text); $i++){
             $eventLink = 'https://www.seiyu.co.jp' . $link[$i]; 
-            $seiyu = array(
-                'link' => $eventLink,
-                'ocr_text' => $allblockText,
-                'alt' => $alt[$i],
-                'text' => $text[$i]
-            );
+            $obj->eventLink = $eventLink;
+            $obj->text = $text[$i];
+            $obj->alt = $alt[$i];  
+            $obj->img_text = $allblockText;
+
+            $seiyu[$shop_count] = $obj;
+            $shop_count++;
             Log::debug($seiyu);
-    
-            $output = [];
-            $output['seiyu'] = $seiyu;
-            Log::debug($output);
-            return view('eventList', $output);
+            
         }
-        // return View::make('eventList')->with($seiyu);
+
+        $output = [];
+        $output['seiyu'] = $seiyu;
+        return view('eventList', $output);
             
             
     }
+
+
+
+    // public function event_list(){
+    //     // 必要な素材：　img(src, alt), a(href), 添え付けられたテキスト
+    //     $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+    //     // $obj = new \stdClass();
+
+    //     $sql_42 = 'select url, element_path from scrape where id = 42';
+    //     $s_42 = DB::select($sql_42);
+    //     foreach($s_42 as $data){
+           
+    //         $url = $data->url;
+    //         $crawler = $client->request('GET', $url);
+    //         $link = $crawler->filter($data->element_path)->filter('ul > li > a')
+    //         ->each(function($node){
+    //             return $node->attr('href');
+    //         });
+
+    //         $src = $crawler->filter($data->element_path)->filter('div > img')
+    //         ->each(function($node){
+    //             return $node->attr('src');
+    //         });
+
+    //         $alt = $crawler->filter($data->element_path)->filter('div > img')
+    //         ->each(function($node){
+    //             return $node->attr('alt');
+    //         });
+
+    //         $text = $crawler->filter($data->element_path)->filter('p.campaign_banner_term')
+    //         ->each(function($node){
+    //             return $node->text();
+    //         });
+
+    //         Log::debug($link);
+
+    //     }
+
+    //     $imageAnnotator = new ImageAnnotatorClient();
+
+    //     // $seiyu = [];
+    //     // $shop_count = 0;
+    //     for($i = 0; $i < count($src); $i++){
+            
+    //         $path = 'https://www.seiyu.co.jp' . $src[$i];  
+            
+
+    //         // Log::debug($eventLink);
+
+    //         // Log::debug(print_r($obj, true));
+    //         $image = file_get_contents($path);
+    //         $response = $imageAnnotator->documentTextDetection($image);
+    //         $annotation = $response->getFullTextAnnotation();
+
+    //         # Log::debug out detailed and structured information about document text
+    //         if ($annotation) {
+    //             $allblockText = '';
+    //             // getPages() : OCRによって検出されたページのリスト
+    //             foreach ($annotation->getPages() as $page) {
+    //                 foreach ($page->getBlocks() as $block) {
+    //                     $block_text = '';
+    //                     foreach ($block->getParagraphs() as $paragraph) {
+    //                         foreach ($paragraph->getWords() as $word) {
+    //                             foreach ($word->getSymbols() as $symbol) {
+    //                                 $block_text .= $symbol->getText();
+    //                             }
+    //                             // ↓↓↓　あとで要るかもしれないけど、スペースがあると日付が抽出できないのでコメントアウトにしている
+    //                             // $block_text .= ' ';
+    //                         }
+    //                         $block_text .= " ";
+    //                         // Log::debug($block_text);
+    //                     }
+    //                     $allblockText .= $block_text;
+                        
+    //                 }
+    //             }
+    //         }
+    //         $imageAnnotator->close();
+
+    //         $seiyu = [];
+    //         $seiyu['eventLink'] = 'https://www.seiyu.co.jp' . $link[$i]; 
+    //         $seiyu['text'] = $text[$i];
+    //         $seiyu['alt'] = $alt[$i];  
+    //         $seiyu['img_text'] = $allblockText;
+
+    //         $count = 0;
+    //         $output = [];
+    //         $output[$count] = $seiyu;
+    //         $count++;
+    //         Log::debug($output);
+    //         return view('eventList', $output);
+            
+    //     }
+
+            
+            
+    // }
 
 
 }

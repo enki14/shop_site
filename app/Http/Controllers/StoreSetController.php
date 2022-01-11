@@ -665,31 +665,31 @@ class StoreSetController extends Controller
         foreach($s_40 as $data){
             $url = $data->url;
             $crawler = $client->request('GET', $url);
-            $store = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            $store = $crawler->filter($data->element_path)->filter('section.fd > div.acd-content > table')->first()
             ->filter('td:nth-child(1)')
             ->each(function($node){
                 return $node->text();
             });
 
-            $link = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            $link = $crawler->filter($data->element_path)->filter('section.fd > div.acd-content > table')->first()
             ->filter('td:nth-child(1) > a')
             ->each(function($node){
                 return $node->attr('href');
             });
             Log::debug($link);
-            $time = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            $time = $crawler->filter($data->element_path)->filter('section.fd > div.acd-content > table')->first()
             ->filter('td:nth-child(2)')
             ->each(function($node){
                 return $node->text();
             });
             
             $zip_adr = $crawler->filter($data->element_path)
-            ->filter('section.sanwa > div.acd-content > table')->first()->filter('td:nth-child(3)')
+            ->filter('section.fd > div.acd-content > table')->first()->filter('td:nth-child(3)')
             ->each(function($node){
                 return $node->text();
             });
             
-            $tel = $crawler->filter($data->element_path)->filter('section.sanwa > div.acd-content > table')->first()
+            $tel = $crawler->filter($data->element_path)->filter('section.fd > div.acd-content > table')->first()
             ->filter('td:nth-child(4)')
             ->each(function($node){
                 return $node->text();
@@ -719,7 +719,7 @@ class StoreSetController extends Controller
                 $max_id = $max[0]->max_id;
 
                 $sql = "insert into store(shop_id, store_id, store_name, zip, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town) 
-                values(16, $max_id, '$store[$i]', '$zip[0]', '$address', '$tel[$i]', '$link[$i]', '$time[$i]', '$state', '$city', '$district')";
+                values(151, $max_id, '$store[$i]', '$zip[0]', '$address', '$tel[$i]', '$link[$i]', '$time[$i]', '$state', '$city', '$district')";
                 // dd($sql);
                 DB::insert($sql);
                 DB::commit();
@@ -927,5 +927,191 @@ class StoreSetController extends Controller
 
     }
 
+
+
+    public function ozam_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_45 = 'select url, element_path from scrape where id = 45';
+        $s_45 = DB::select($sql_45);
+        foreach($s_45 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->attr('href');
+            });
+        }
+
+        foreach($link as $s_link){
+            $crawler_2 = $client->request('GET', $s_link);
+
+            $store = $crawler_2->filter('#header > div > div > div.sitename > h1')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $zip = $crawler_2->filter('tr:nth-child(1) > td > p:nth-child(1)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $address = $crawler_2->filter('tr:nth-child(1) > td > p:nth-child(2)')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $time = $crawler_2->filter('tr:nth-child(2) > td')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler_2->filter('tr:nth-child(4) > td')
+            ->each(function($node){
+                return $node->text();
+            });
+            Log::debug($tel);
+
+            for($i = 0; $i < count($store); $i++){
+
+                $separate = Common::separate_address($address[$i]);
+                $store_zip = str_replace('〒', '', $zip[$i]);
+    
+                $state = $separate['state'];
+                $city = $separate['city'];
+                $district = $separate['district'];
+                
+                $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+                $exist = DB::select($count);
+    
+                // Log::debug($district);
+                if($exist[0]->cnt == 0){
+                    $id = "select max(store_id) + 1 as max_id from store";
+                    $max = DB::select($id);
+                    $max_id = $max[0]->max_id;
+    
+                    $sql = "insert into store(shop_id, store_id, store_name, zip, store_address, store_tel, store_url, business_hours, prefectures, town, ss_town) 
+                    values(21, $max_id, '$store[$i]', '$store_zip', '$address[$i]', '$tel[$i]', '$s_link', '$time[$i]', '$state', '$city', '$district')";
+                    // dd($sql);
+                    DB::insert($sql);
+                    DB::commit();
+                }
+            }
+
+        }
+    
+    }
+
+
+    public function itoyokado(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_46 = 'select url, element_path from scrape where id = 46';
+        $s_46 = DB::select($sql_46);
+        foreach($s_46 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+
+            $link = $crawler->filter('div.-item.cf > div.-c1 > h4 > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $store = $crawler->filter('div.-item.cf > div.-c1 > h4 > a')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $zip_adr = $crawler->filter('div.adds > span.zip')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter('div.-item.cf > div.-c1 > p:nth-child(3)')
+            ->each(function($node){
+                return $node->text();
+            });
+            Log::debug($tel);
+        }
+
+        for($i = 0; $i < count($store); $i++){
+            preg_match('/[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}/', $tel[$i], $store_tel);
+            preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i], $zip);
+            preg_match('/(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)/u', $zip_adr[$i], $address);
+            $address = str_replace('　', '', $address[0]);
+            $separate = Common::separate_address($address);
+            $store_zip = str_replace('〒', '', $zip[0]);
+
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+            
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, zip, store_address, store_tel, store_url, prefectures, town, ss_town) 
+                values(2, $max_id, '$store[$i]', '$store_zip', '$address', '$store_tel[0]', '$link[$i]', '$state', '$city', '$district')";
+                // dd($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+
+    }
+
+
+    public function aeon_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_47 = 'select url, element_path from scrape where id = 47';
+        $s_47 = DB::select($sql_47);
+        foreach($s_47 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $store = $crawler->filter($data->element_path)->filter('dt')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $address = $crawler->filter($data->element_path)->filter('dd:nth-child(2) > span.shop-address')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            Log::debug($address);
+
+        }
+
+        for($i = 0; $i < count($store); $i++){
+            $separate = Common::separate_address($address[$i]);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+            $link = 'https://www.aeon.com/store/イオン/' . $store[$i] . '/';
+            $st_name = str_replace('イオン', '', $store[$i]);
+            Log::debug($st_name);
+            $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+            $exist = DB::select($count);
+
+            // Log::debug($district);
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $sql = "insert into store(shop_id, store_id, store_name, store_address, store_url, prefectures, town, ss_town) 
+                values(4, $max_id, '$st_name', '$address[$i]', '$link', '$state', '$city', '$district')";
+                // dd($sql);
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+    }
 
 }
