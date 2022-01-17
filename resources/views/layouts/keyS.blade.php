@@ -1,5 +1,5 @@
 <div class="container keys-container py-2">
-    <h2 id="keys-h2" class="my-xl-5 text-center">話題・キーワード</h2>
+    <h2 id="keys-h2" class="my-5 text-center">話題・キーワード</h2>
     <form method="get" action="result-2" id="keys-form">
         @csrf
         {{-- ボタンにもそれぞれのvalue値が必要、かつ１つのformに統一された一意のname値 --}}

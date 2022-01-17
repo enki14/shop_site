@@ -1114,4 +1114,75 @@ class StoreSetController extends Controller
         }
     }
 
+
+    public function superalps(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_48 = 'select url, element_path from scrape where id = 48';
+        $s_48 = DB::select($sql_48);
+        foreach($s_48 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+
+            $link = $crawler->filter('.store-top-contents > section > div > section > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $store = $crawler->filter('.store-top-contents > section > div > section > a > 
+            .c-store-item__head > div > .c-store-box__info > .c-store-table > h4')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $address = $crawler->filter('.c-store-table > div.c-store-table__detail > 
+            dl.c-store-table__adress > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $tel = $crawler->filter('.c-store-table > div.c-store-table__detail > 
+            dl.c-store-table__tel > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $time = $crawler->filter('.c-store-table > div.c-store-table__detail > 
+            dl.c-store-table__hours > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+
+            for($i = 0; $i < count($store); $i++){
+                $separate = Common::separate_address($address[$i]);
+                $state = $separate['state'];
+                $city = $separate['city'];
+                $district = $separate['district'];
+                $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+                $exist = DB::select($count);
+    
+                // Log::debug($district);
+                if($exist[0]->cnt == 0){
+                    $id = "select max(store_id) + 1 as max_id from store";
+                    $max = DB::select($id);
+                    $max_id = $max[0]->max_id;
+    
+                    $sql = "insert into store(shop_id, store_id, store_name, store_address, store_tel, 
+                    store_url, business_hours, prefectures, town, ss_town) 
+                    values(22, $max_id, '$store[$i]', '$address[$i]', '$tel[$i]', '$link[$i]', '$time[$i]', '$state', '$city', '$district')";
+                    // dd($sql);
+                    DB::insert($sql);
+                    DB::commit();
+                }
+            }
+
+
+        }
+        
+    }
+
+
+
+
 }

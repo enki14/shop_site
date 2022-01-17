@@ -4,26 +4,30 @@
 
 
 
-@section('title', 'スーパーマーケットのポイントカード・クレジットカード情報♪　～東京都～')
-@section('description', 'スーパーマーケットのポイントカード・クレジットカードのお得な情報が検索できるサイトです♪♪')
+@section('title', 'スーパーマーケットのポイントカード情報♪　～東京都～')
+@section('description', 'スーパーマーケットのポイントカードのお得な情報が検索できるサイトです♪♪')
 {{-- カレンダー用モーダル --}}
 <div id="calendarModal" class="modal fade" aria-hidden="true" style="display: none">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <span id="modal-date" class="text-muted mt-3 ml-3"></span>
-            <div class="modal-header py-sm-0">
-                <p id="modalShop"></p>
+            <span id="modal-date" class="text-muted mt-3 pl-2"></span>
+            <div class="modal-header">
+                <h5 id="modalShop" class="pl-2"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>    
                     <span class="sr-only">close</span>
                 </button>
             </div>
             <div class="modal-body mb-4">
-                <h4 id="modalTitle" class="modal-title pb-2"></h4>
-                <div id="modal_description"></div>
-            </div>
-            <div class="modal-footer mb-4">
-                <span class="c_name"></span>
+                <h4 id="modalTitle" class="modal-title pb-2 px-sm-3"></h4>
+                <div id="modal_description" class="px-3 mb-3"></div>
+                <div class="container mt-5">
+                    <div class="row">
+                        <span class="col-6"><b>ココで使えるカード</span>&ensp;<i class="fas fa-angle-double-right">&ensp;</i></span>
+                        <div class="c_name col-6"></div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -45,17 +49,26 @@ role="dialog" aria-hidden="true">
 @section('layouts.content')
 <div id="content-main" class="mx-auto">
     <div id="content_row" class="row">
-        <div id="content-container" class="card mt-3 py-5 bg-light mx-auto col-lg-8">
-            <div class="card-body">
+        <div id="content-container" class="card mt-3 mx-auto col-lg-8">
+            <div class="container">
+                <div id="lens-set" class="col-lg-12 d-flex justify-content-center" style="top: -120%;">
+                    <i id="lens" class="fas fa-circle fa-sm"></i>
+                </div>
+            </div>
+            <div id="smart-dis" class="card-body bg-light p-5 my-5 mx-2">
                 @include('layouts.search_value')
                 @include('layouts.keyS')
                 @include('layouts.calendar_2')
                 @include('layouts.MapS')
                 @include('layouts.itiran2')
             </div>
+            <div class="container">
+                <div class="col-lg-12 d-flex justify-content-center" style="top: 30%;">
+                    <button type="button" class="btn bg-light smart-button"></button>
+                </div>
+            </div>
         </div>
     </div>
-    {{--<a href="#" class="top_down"><i class="fas fa-cloud fa-5x" data-toggle="scroll_down"></i></a>--}}
 </div>
 @endsection
 @section('resultScript')
@@ -84,7 +97,7 @@ role="dialog" aria-hidden="true">
                 let month = date.getMonth() + 1;
                 let day = date.getDate();
                 // モーダルの日付表示
-                $('#modal-date').html(year + '年' + month + '月' + day + '日');
+                $('#modal-date').html(month + '月' + day + '日');
                 // モーダルのタイトルを追加
                 $('#modalShop').html(info.event._def.title);
                 // タイトルのセット(append()ではなくhtml()を使う)
@@ -135,6 +148,6 @@ role="dialog" aria-hidden="true">
  
 </script>
 <script src="{{ asset('/js/modal_open.js') }}"></script>
-{{--<script src="{{ asset('/js/elevator.js') }}"></script>--}} 
+<script src="{{ asset('/js/elevator.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places" async defer></script>
 @endsection

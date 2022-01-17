@@ -12,7 +12,7 @@
             <input type="hidden" id="h_request_flag" value="{{ $request_flag }}" />
             <input id="kensaku-map" class="btn kensaku-btn fas mt-1" type="button" value="&#xf002; 検索" 
             data-toggle="modal" data-target="#list_modal" data-backdrop="true" 
-            style="width: 150px; height: 55px;" />
+            style="width: 9.5rem; height: 3.6rem;" />
             <a href="{{ url('/') }}" id="reset-btn" class="btn btn-lg" 
             role="button">
                 <span class="material-icons-outlined align-middle">restart_alt</span>
@@ -23,7 +23,7 @@
     </div>
     <div id="map" class="mt-3">
         <div class="row justify-content-center">
-            <div id="map_convas" class="col-md-10" style="width:600px; height:550px;"></div>
+            <div id="map_convas" class="col-md-12" style="width:700px; height:700px;"></div>
         </div>
     </div>
 </div>

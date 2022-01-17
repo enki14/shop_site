@@ -1,6 +1,6 @@
-<div class="container py-2 px-5">
-    <h1 id="privacy-h1" class="text-center mb-xl-5 font-weight-bold">プライバシーポリシー</h1>
-    <p>
+<div class="policy-conta container py-2 px-5">
+    <h1 id="privacy-h1" class="text-center mb-5 font-weight-bold">プライバシーポリシー</h1>
+    <p class="sengen">
         ポイントカード情報局（以下、「当サイト」と言います。）では、個人情報の保護に関する法律、その他の関係法令を遵守すると共に、
         以下に定めるプライバシーポリシーに従って、個人情報を安全かつ適切に取り扱うことを宣言いたします。
     </p>

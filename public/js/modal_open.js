@@ -52,9 +52,12 @@ $(function() {
         error();
         // リクエストがあったときに右から左に流れるやつ
         window.addEventListener('load', function(){
-            let a_info = $("#fixed_nav").find(".animation-info");
-            a_info.fadeIn(500);
-            a_info.addClass("aInfo");
+            let a_info = $(".animation-info");
+            let props = {
+                "display": "inline-block",
+            }
+            a_info.fadeIn(1000).css(props);
+            
 
            
         });
@@ -156,12 +159,17 @@ function setMarker(markerData){
         // nullやundefiendが表示されないようにパイプで空も設定している
         // 空値も変数にして含めないと、逆にほとんど表示されなくなる
         let event_start = start || '';
-        let event_end = end || ''; 
+        let event_end = end || '';
+        let shop_id = markerData[i]['shop_id'] || '';
+        let store_id = markerData[i]['store_id'] || ''; 
         let shop = markerData[i]['shop_name'] || '';
         let store = markerData[i]['store_name'] || '';
-        let sp_title = markerData[i]['sp_title'] || '';
+        let sh_title = markerData[i]['sh_title'] || '';
+        let st_title = markerData[i]['st_title'] || '';
         let card_name = markerData[i]['card_name'] || '';
         let link = markerData[i]['link'] || '';
+
+        
 
 
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
@@ -194,7 +202,7 @@ function setMarker(markerData){
             "<h5 class='firstHeading'>" + shop + store + "</h5>"+
             "<div class='info_Content'>" +
                 "<p>"+ event_start + wave + event_end + "</p>" +
-                "<p>" + sp_title + "</p>" +
+                spTitle(sh_title, st_title) +
                 eventExist(markerData[i]['sp_url']) + 
                 "<p><span>" + cardOutput(card_name, link) + "</span></p>" +
             "</div>" +
@@ -236,6 +244,19 @@ function colon(title){
     }
 }
 
+// jsで出力する際に、カラムはショップ情報とストア情報とそれぞれ別名義にする必要があった
+// 因みにbladeに渡した際はsqlには as で別名義にしなくても表示された
+function spTitle(sh_title, st_title){
+    if(sh_title){
+        return "<p>" + sh_title + "</p>";
+    }else if(st_title){
+        return "<p>" + st_title + "</p>";
+    }else{
+        return "";
+    }
+}
+
+
 // functionの中にfunctionを書かないように注意！
 // sp_urlの値があるかどうかの判定
 function eventExist(sp_url){
@@ -260,7 +281,7 @@ function cardOutput(card_name, link){
             return "<a href="+ link[i] +" target='_blank'>" + card_name[i] + "</a>";
         }
     }else{
-        return "<a href="+ link +">" + card_name + "</a>";
+        return "<a href="+ link +" target='_blank'>" + card_name + "</a>";
     }
 
 }

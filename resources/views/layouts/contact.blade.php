@@ -1,18 +1,18 @@
-<div class="container">
-    <h2 class="contact-h2 text-center">お問い合わせフォーム</h2>
+<div class="conta-container container">
+    <h2 class="h2 contact-h2 text-center">お問い合わせフォーム</h2>
     <form method="POST" action="{{ route('page.confirm_P') }}">
         @csrf
 
         <label class="mt-5">メールアドレス</label>
         <input name="email" value="{{ old('email') }}" type="text" 
-        class="form-control input-lg border-success" />
+        class="contact-input form-control input-lg border-success" />
         @if ($errors->has('email'))
             <p class="error-message mt-3 text-danger font-weight-bold">{{ $errors->first('email') }}</p>
         @endif
 
         <label class="mt-3">タイトル</label>
         <input name="title" value="{{ old('title') }}" type="text" 
-        class="form-control input-lg border-success" />
+        class="contact-input form-control input-lg border-success" />
         @if ($errors->has('title'))
             <p class="error-message mt-3 text-danger font-weight-bold">{{ $errors->first('title') }}</p>
         @endif
