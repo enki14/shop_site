@@ -1,18 +1,17 @@
 @section('layouts.header')
 <header>
     <div id="fixed_nav" class="fixed-top" style="height:70px;">
-    <div class="container-fulid">
-    <div class="row">
-        <div class="col-3">
-          <a href="{{ url('/') }}" class="logo_link"><img src="{{ asset('/img/point-card_logo4.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" width="100px" /></a>
-        </div>
-        <div class="col-6 board">
-          <p class="animation-info font-weight-bold pt-2 ml-2">地図下に検索の一覧が出ました</p>
+      <div class="container-fulid">
+        <div class="row">
+            <div class="col-3">
+              <a href="{{ url('/') }}" class="logo_link"><img src="{{ asset('/img/point-card_logo4.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" width="100px" /></a>
+            </div>
+            <div class="col-6 board">
+              <p class="animation-info font-weight-bold pt-2 ml-2">地図下に検索の一覧が出ました</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-      
-    </div>
     <nav class="navbar navbar-expand-lg navbar-light jumbotron p-0 mb-0">
       <div id="black_out" class="container-fluid p-0">
         {{-- web.phpのname()でページを指定している --}}
@@ -48,9 +47,28 @@
                 <h4 class="description-top text-light mt-5">今はまだ東京限定です (>_<)</h4>
               </div>
             </div>
-            
           </div>
-        @endif  
+        @endif
+        <div class="container d-flex justify-content-end mr-0">
+          <div class="row">
+            <div class="col-1">
+            <a href="http://www.facebook.com/share.php?u=https://point-everyday.com/" 
+            class="facebook" rel="nofollow" target="_blank">
+                <i class="fab fa-facebook fa-2x mb-5"></i>
+            </a>
+            <a href="https://twitter.com/share?url=https://point-everyday.com/
+            &text=スーパーマーケットのポイントカード情報を提供します【 東京版 】
+            &hashtags=スーパー,ポイントカード,クレジット,お得情報,東京"
+            class="twitter" rel="nofollow" target="_blank">
+                <i class="fab fa-twitter fa-2x mb-5"></i>
+            </a>
+            <a href="https://social-plugins.line.me/lineit/share?url=https://point-everyday.com/" 
+            class="line_button" rel="nofollow" target="_blank">
+                <i class="fab fa-line fa-2x mb-5"></i>
+            </a>
+            </div>
+          </div>
+        </div>  
       </div>
     </nav>
   

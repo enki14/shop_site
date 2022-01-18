@@ -9,7 +9,7 @@ create table pointsite.card
 credit int(1), P_or_D int(1), primary key(card_id))
 
 
--- localdataテーブルの説明
+-- localdataテーブルの説明　(現在は未使用)
 -- このテーブルのデータ投入はHomeController@localDataで実施している
 
 

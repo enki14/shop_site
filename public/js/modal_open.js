@@ -160,21 +160,19 @@ function setMarker(markerData){
         // 空値も変数にして含めないと、逆にほとんど表示されなくなる
         let event_start = start || '';
         let event_end = end || '';
-        let shop_id = markerData[i]['shop_id'] || '';
-        let store_id = markerData[i]['store_id'] || ''; 
         let shop = markerData[i]['shop_name'] || '';
         let store = markerData[i]['store_name'] || '';
         let sh_title = markerData[i]['sh_title'] || '';
         let st_title = markerData[i]['st_title'] || '';
+        let sh_subtitle = markerData[i]['sh_subtitle'] || '';
+        let st_subtitle = markerData[i]['st_subtitle'] || '';
+        let spsh_url = markerData[i]['spsh_url'] || '';
+        let spst_url = markerData[i]['spst_url'] || '';
         let card_name = markerData[i]['card_name'] || '';
         let link = markerData[i]['link'] || '';
 
-        
-
-
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
-        
-        // icon = new google.maps.MarkerImage('http://maps.google.co.jp/mapfiles/ms/icons/ltblue-dot.png');
+
 
         marker[i] = new google.maps.Marker({
             position: markerStore,
@@ -201,10 +199,15 @@ function setMarker(markerData){
         "<div class='info_win'>" +
             "<h5 class='firstHeading'>" + shop + store + "</h5>"+
             "<div class='info_Content'>" +
-                "<p>"+ event_start + wave + event_end + "</p>" +
-                spTitle(sh_title, st_title) +
+                "<p class='modal-mDate'>"+ event_start + wave + event_end + "</p>" +
+                spTitle(sh_title, st_title, spsh_url, spst_url) + 
+                spSubtitle(sh_subtitle, st_subtitle) +
                 eventExist(markerData[i]['sp_url']) + 
-                "<p><span>" + cardOutput(card_name, link) + "</span></p>" +
+                "<div class='container mt-5'>" + 
+                    "<div class='row'>" +
+                        "<small class='col-8 d-flex justify-content-start'><b>ココで使えるカード</span>&ensp;<i class='fas fa-angle-double-right'>&ensp;</i></small>" + 
+                        "<small class='col-4'>" + cardOutput(card_name, link) + "</small>" +
+                    "</div>"
             "</div>" +
         "</div>";     
 
@@ -246,11 +249,31 @@ function colon(title){
 
 // jsで出力する際に、カラムはショップ情報とストア情報とそれぞれ別名義にする必要があった
 // 因みにbladeに渡した際はsqlには as で別名義にしなくても表示された
-function spTitle(sh_title, st_title){
+function spTitle(sh_title, st_title, spsh_url, spst_url){
     if(sh_title){
-        return "<p>" + sh_title + "</p>";
+        if(spsh_url){
+            return "<a href='" + spsh_url + "'><p class='spTitle font-weight-bold'>" + sh_title + "</p></a>";
+        }else{
+            return "<p class='spTitle font-weight-bold'>" + sh_title + "</p>";
+        }    
     }else if(st_title){
-        return "<p>" + st_title + "</p>";
+        if(spst_url){
+            return "<a href='" + spst_url + "'><p class='spTitle font-weight-bold'>" + st_title + "</p></a>";
+        }else{
+            return "<p class='spTitle font-weight-bold'>" + st_title + "</p>";
+        }
+    }else{
+        return "";
+    }
+
+}
+
+
+function spSubtitle(sh_subtitle, st_subtitle){
+    if(sh_subtitle){
+        return "<p class='spSubtitle'>" + sh_subtitle + "</p>";
+    }else if(st_subtitle){
+        return "<p class='spSubtitle'>" + st_subtitle + "</p>";
     }else{
         return "";
     }
@@ -278,42 +301,16 @@ function cardOutput(card_name, link){
         link = link.split(',');
         console.log(card_name);
         for(let i = 0; i < card_name.length; i++){
-            return "<a href="+ link[i] +" target='_blank'>" + card_name[i] + "</a>";
+            return "<a href="+ link[i] +" target='_blank' class='pl-2'>" + card_name[i] + "</a>";
         }
     }else{
-        return "<a href="+ link +" target='_blank'>" + card_name + "</a>";
+        return "<a href="+ link +" target='_blank' class='pl-2'>" + card_name + "</a>";
     }
 
 }
 
 
 let openWindow;
-
-// function seachMarker(i){
-//     // マップ検索直後のイベント
-//     google.maps.event.addListener(marker[i], "animation_changed", function(){
-//         // ここでinfoWindowのスタイリング
-//         var iwOuter = $('.gm-style-iw');
-//         let custumIw = iwOuter.parent().addClass('custum-iw');
-//         let iwCloseBtn = custumIw.next();
-
-//         // 閉じるボタンにcss付与
-//         iwCloseBtn.addClass("closebtn");
-//         // fontawesomeのcloseボタン追加
-//         iwCloseBtn.prepend('<i class="fas fa-times-circle"></i>');
-
-        
-//         // 開けたままにしておかない
-//         if(openWindow){
-//             openWindow.close();
-//         }
-        
-//         infoWindow[i].open(map, marker[i]);
-//         openWindow = infoWindow[i];
-    
-//     })
-
-// };
 
 function clickMarker(i){
     // マーカーをクリックしたときのイベント

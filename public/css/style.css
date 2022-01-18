@@ -12,20 +12,6 @@ nav{
     z-index: 1; 
 }
 
-.facebook{
-    z-index: 2;
-	color: #1778f2;
-}
-
-.twitter{
-    z-index: 2;
-    color: #1da1f2;
-}
-
-.line_button{
-    z-index: 2;
-	color: #00b900;
-}
 
 img{
     max-width: 100%;
@@ -148,29 +134,36 @@ img{
 
 /************ ロゴのきらりと光るアニメーション ↑↑↑ ***********/
 
-
-
-/* hoverしたときに色を変えない仕様 */
-.facebook:hover{
-	color: #1778f2;
+.facebook{
+    color: #1778f2;
 }
 
-.twitter:hover{
+.twitter{
     color: #1da1f2;
 }
 
-.line_button:hover{
-	color: #00b900;
+.line_button{
+    color: #00b900;
 }
 
-
-.facebook:hover,
-.twitter:hover,
-.line_button:hover{
+/* hoverしたときに色を変えない仕様 */
+.fa-facebook:hover{
+	color: #1778f2;
     transform: scale(1.3);
     transition-duration: 0.5s;
 }
 
+.fa-twitter:hover{
+    color: #1da1f2;
+    transform: scale(1.3);
+    transition-duration: 0.5s;
+}
+
+.fa-line:hover{
+	color: #00b900;
+    transform: scale(1.3);
+    transition-duration: 0.5s;
+}
 
 #black_out{
     height: 700px;
@@ -781,7 +774,19 @@ thead{
      padding: 10px 10px 20px 10px;
      font-size: 16px;
  }
+
+ .modal-mDate{
+     letter-spacing: 0.1em;
+ }
  
+ .spTitle{
+     font-size: 20px;
+ }
+
+ /* .spSubtitle{
+    letter-spacing: 0.1em;
+} */
+
 
 .gm-style-iw{
     top: 0 !important;
@@ -993,30 +998,6 @@ thead{
     position: fixed;
 }
 
-
-.f-facebook{
-    color: #C0C0C0;
-}
-
-.f-twitter{
-    color: #C0C0C0;
-}
-
-.f-line_button{
-    color: #C0C0C0;
-}
-
-.f-facebook:hover{
-	color: #1778f2;
-}
-
-.f-twitter:hover{
-    color: #1da1f2;
-}
-
-.f-line_button:hover{
-	color: #00b900;
-}
 
 footer{
     bottom: 0;
