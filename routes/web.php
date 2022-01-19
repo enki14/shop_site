@@ -55,8 +55,10 @@ Route::post('/aeon_store', 'StoreSetController@aeon_store');
 Route::post('/superalps', 'StoreSetController@superalps');
 
 // event登録
-Route::post('/seiyu_5pctOff', 'EventSetController@seiyu_5pctOff');
+Route::post('/itoyokado_event', 'EventSetController@itoyokado_event');
+Route::post('/summit_event', 'EventSetController@summit_event');
 Route::get('/event_list', 'EventSetController@event_list');
+
 
 
 // サムネイル作成（ url先で更新すると一枚作成される ）

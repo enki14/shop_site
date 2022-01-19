@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\ScrapeCommand::class,   //コマンドの登録
-        // 追加
+        \app\Console\Commands\ItoyokadoCommand::class
     ];
 
     /**
@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('command:ScrapeCommand')->everyFiveMinutes();
-        // 追加
+        $schedule->command('command:ItoyokadoCommand')->everyTenMinutes();
+        $schedule->command('command:SummitCommand')->everyFiveMinutes();
     }
 
     /**

@@ -16,7 +16,7 @@
                     </form>
 
                     <!-- 取得したいイベントによってaction先を変える -->
-                    <form class="form-group" method="post" action="seiyu_5pctOff">
+                    <form class="form-group" method="post" action="summit_event">
                     @csrf
                         <button type="submit">イベント登録</button>
                     </form>
@@ -104,8 +104,7 @@
                     @foreach($list as $data)
                     <li>
                         {{ $data->shop_id }}&ensp;/&ensp;{{ $data->shop_name }}&ensp;/&ensp;
-                        {{ $data->shop_url }}&ensp;/&ensp;{{ $data->twitter_user_id }}&ensp;/&ensp;
-                        {{ $data->api_scrape_kubun }}&ensp;/&ensp;{{ $data->img_src }}
+                        {{ $data->shop_url }}&ensp;/&ensp;{{ $data->twitter_user_id }}&ensp;/&ensp;{{ $data->img_src }}
                     </li>
                     @endforeach
                 </ul>
