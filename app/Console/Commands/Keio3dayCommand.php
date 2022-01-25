@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\EventSetController;
 
-class SummitCommand extends Command
+class Keio3dayCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:summit_event';
+    protected $signature = 'keio3day';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'サミットキャッシュバックデー';
+    protected $description = '京王ストアのポイント３倍';
 
     /**
      * Create a new command instance.
@@ -38,6 +38,6 @@ class SummitCommand extends Command
      */
     public function handle()
     {
-        EventSetController::summit_event();
+        EventSetController::keio_3times();
     }
 }

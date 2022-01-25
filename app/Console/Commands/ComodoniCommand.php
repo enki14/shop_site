@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\EventSetController;
 
-class SummitCommand extends Command
+class ComodoniCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:summit_event';
+    protected $signature = 'ComodoniCommand';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'サミットキャッシュバックデー';
+    protected $description = 'コモディイイダのポイント５倍';
 
     /**
      * Create a new command instance.
@@ -38,6 +38,6 @@ class SummitCommand extends Command
      */
     public function handle()
     {
-        EventSetController::summit_event();
+        EventSetController::comodi_donichi();
     }
 }

@@ -37,7 +37,7 @@ img{
 
 @media only screen and (max-width: 420px) {
 
-    h1, h2, h3, h4, button{
+    h1, h2, h3, h4, p, button{
         font-size: 60% !important;
     }
 
@@ -134,17 +134,18 @@ img{
 
 /************ ロゴのきらりと光るアニメーション ↑↑↑ ***********/
 
-.facebook{
+.fa-facebook{
     color: #1778f2;
 }
 
-.twitter{
+.fa-twitter{
     color: #1da1f2;
 }
 
-.line_button{
+.fa-line{
     color: #00b900;
 }
+
 
 /* hoverしたときに色を変えない仕様 */
 .fa-facebook:hover{
@@ -231,6 +232,13 @@ img{
     .animation-info{
         font-size: 1.3em;
     }
+
+    .facebook,
+    .line_button,
+    .twitter{
+        font-size: 100% !important;
+    }
+
 }
 
 /****** 右から左に文字が流れる ↑↑↑　******/
@@ -754,8 +762,53 @@ thead{
 }
 
 
+.itiran_h4,
+.itiran_pgh,
+.itiran_days{
+    letter-spacing: 0.2rem;
+    line-height: 1.5;
+}
 
-/* 　　　infowindowのCSS　　　 */
+.itiran_days{
+    letter-spacing: 0.1rem;
+    line-height: 1.5;
+}
+
+.itiran_img{
+    width: 45em;
+}
+
+.sub-card{
+    width: 21.5rem;
+    height: 5rem;
+    padding: 1em 1.5em;
+    overflow: hidden;
+    box-shadow: .25rem 0 .25rem hsla(0, 0%, 0%, .2);
+    background-image:
+        linear-gradient(90deg, hsla(0, 0%, 45%, .1) 2rem, hsla(0, 100%, 100%, 0) 2.5rem)
+        , linear-gradient(90deg, hsla(15, 100%, 85%, 1), hsla(15, 100%, 85%, 1));
+    font-size: 1.125rem;
+    line-height: 2.2;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sub-card-long{
+    width: 16.5rem;
+    height: 14rem;
+    padding: 1.5em;
+    overflow: hidden;
+    box-shadow: 0 .25rem .25rem hsla(0, 0%, 0%, .2);
+    background-image:
+      linear-gradient(180deg, hsla(0, 0%, 45%, .1) 2rem, hsla(0, 100%, 100%, 0) 2.5rem)
+    , linear-gradient(180deg, hsla(200, 100%, 85%, 1), hsla(200, 100%, 85%, 1));
+    font-size: 1.125rem;
+    line-height: 1.8;
+}
+
+
+/*************** infowindowのCSS *******************/
+
 .gm-style-iw {
     width: 250px !important;
     top: 15px !important;
@@ -768,6 +821,7 @@ thead{
      color: #fff;
      margin: 0;
      padding: 20px;
+     letter-spacing: 0.1em;
  }
  
  .info_Content {
@@ -775,17 +829,14 @@ thead{
      font-size: 16px;
  }
 
- .modal-mDate{
+ .modal-mDate,
+ .spSubtitle{
      letter-spacing: 0.1em;
  }
  
  .spTitle{
      font-size: 20px;
  }
-
- /* .spSubtitle{
-    letter-spacing: 0.1em;
-} */
 
 
 .gm-style-iw{
@@ -839,7 +890,37 @@ thead{
     
  }
 
- @media only screen and (max-width: 420px) {
+
+ @media only screen and (max-width: 780px) {
+
+    .itiran_pgh{
+        font-size: 0.8em;
+    }
+
+    .sub-card{
+        width: 18.5rem;
+        height: 4rem;
+        line-height: 1.4;
+    }
+    
+    .sub-card-long{
+        width: 15rem;
+        height: 12rem;
+    }
+
+    .sub-card a,
+    .sub-card-long a{
+        font-size: 16px;
+    }
+
+    .cocode{
+        font-size: 60% !important;
+    }
+
+ }
+
+
+@media only screen and (max-width: 420px) {
 
     #maps-form{
         width: 80% !important;
@@ -864,7 +945,143 @@ thead{
         font-size: 12px;
     }
 
+    .ribbon{
+        width: 18% !important;
+        height: 2.3rem !important;
+    }
+
+    .sub-card{
+        width: 13rem !important;
+        height: 2.8rem !important;
+        font-size: 0.4rem !important;
+        line-height: 1.6;
+        padding-top: 2em;
+        padding-left: 1.4em;
+    }
+
+    .sub-card-long{
+        width: 12rem !important;
+        height: 10.5rem !important;
+        font-size: 0.4rem !important;
+        padding: 2.5em;
+    }
+
+    .sub-card a,
+    .sub-card{
+        margin-left: 1rem;
+        letter-spacing: 0.6em !important;
+    }
+
+    .sub-card-long a,
+    .sub-card-long{
+        margin-left: 0;
+        letter-spacing: 0.6em !important;
+    }
+
+
+    .itiran_pgh{
+        font-size: 60% !important;
+    }
+
+    .itiran_cash{
+        margin-top: 1.5em !important;
+        
+    }
+
+    #conta_cash{
+        margin-top: 1.2em;
+    }
+
+    .itiran_h4 a,
+    .itiran_h4{
+        font-size: 20px !important;
+    }
+
+    .itiran_tenmei a{
+        font-size: 18px !important;
+    }
+
+    .kakuten{
+        font-size: 10px !important;
+    }
+
+    .itiran_img{
+        width: 70%;
+        justify-content: center;
+        margin: 0em 2rem 0.5rem;
+    }
+
+    .itiran_title{
+        padding-top: 0 !important;
+        text-align: center;
+    }
+
+    .spTitle{
+        font-size: 14px !important;
+    }
+
+    .cocode{
+        font-size: 50% !important;
+    }
+
  }
+
+
+ @media only screen and (max-width: 300px) {
+
+    .sub-card{
+        width: 10rem !important;
+        height: 2.5rem !important;
+    }
+
+    .sub-card-long{
+        width: 10rem !important;
+        height: 7.8rem !important;
+    }
+
+    .sub-card a, 
+    .sub-card,
+    .sub-card-long a,
+    .sub-card-long{
+        margin-left: 0;
+    }
+
+    .itiran_img{
+        width: 70%;
+        margin: 0em 0.8rem 0.8rem;
+    }
+
+
+    .itiran_h4 a,
+    .itiran_h4{
+        font-size: 16px !important;
+    }
+
+    .slash::before,
+    .slash::after {
+        width: 15px !important;
+        height: 1px !important;
+        font-size: 2vw !important;
+    }
+
+
+    .itiran_days{
+        padding-right: 0 !important;
+    }
+
+    .fa-reply{
+        display: none;
+    }
+
+    #conta_cash{
+        margin-top: 0 !important;
+    }
+
+
+
+ }
+
+/******************* infowindow ↑↑↑↑↑↑ **********************/
 
 /******************* maps ↑↑↑↑↑↑ **********************/
 

@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use app\Http\Controllers\EventSetController;
+use App\Http\Controllers\EventSetController;
 
 class ItoyokadoCommand extends Command
 {

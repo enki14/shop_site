@@ -22,7 +22,7 @@ class EventSetController extends Controller
     }
 
     // 月末実行
-    public function itoyokado_event(){
+    public static function itoyokado_event(){
 
         $ymd = [];
         $ym = date('Ym', strtotime('next month'));
@@ -30,7 +30,7 @@ class EventSetController extends Controller
         $ymd[1] = $ym . '18';
         $ymd[2] = $ym . '28';
 
-        $today = date('ymd');
+        $today = date('Ymd');
 
         Log::debug($ymd);
         for($i = 0; $i < count($ymd); $i++){
@@ -53,8 +53,8 @@ class EventSetController extends Controller
     }
 
 
-    // 毎週日曜日実行
-    public function summit_event(){
+    // 毎週水曜日実行
+    public static function summit_event(){
         $tuesday = date('Ymd', strtotime('tuesday next week'));
 
 
@@ -62,7 +62,7 @@ class EventSetController extends Controller
         $max = DB::select($id);
         $max_id = $max[0]->max_id;
 
-        $today = date('ymd');
+        $today = date('Ymd');
 
         $summit = "insert into sale_point
         (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
@@ -73,7 +73,159 @@ class EventSetController extends Controller
         DB::insert($summit);
         DB::commit();
     }
+
+
+    // 前週月曜日実施
+    public static function maruetsu_5off(){
+        $sunday = date('Ymd', strtotime('sunday next week'));
+
+        $today = date('Ymd');
+        dd($today);
+
+        $s_id = array(10, 134);
+        for($i = 0; $i < count($s_id); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $maruetsu = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
+            event_start, cash_kubun, keyword, register_day)
+            values
+            ($max_id, $s_id[$i], '毎週日曜日は５％OFF❕', 
+            'マルエツ店舗でのクレジット払いで5%OFF', 'https://www.aeon.co.jp/card/lineup/maruetsu/', '$sunday', 
+            'マルエツカード（クレジット）', '毎週イベント', '$today')";
+            DB::insert($maruetsu);
+            DB::commit();
+
+        }
+
+    }
+
+    // 前月23日に実施
+    public static function maruetsu_5times(){
+        $firstday = date('Ymd', strtotime('first day of next month'));
+        $third_fri = date('Ymd', strtotime('third fri of next month'));
+
+        $today = date('Ymd');
+    
+
+        $s_id = array(10, 134);
+        for($i = 0; $i < count($s_id); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $maruetsu = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
+            event_start, cash_kubun, keyword, register_day)
+            values
+            ($max_id, $s_id[$i], 'マルエツの対象店舗なら、毎月1日・第3金曜日はWAON POINTが基本の5倍！', 
+            'クレジット払いで200円(税込)ごとに5ポイントプレゼント', 'https://www.aeon.co.jp/card/lineup/maruetsu/', '$firstday', 
+            'マルエツカード（クレジット）', '毎月イベント', '$today')";
+            DB::insert($maruetsu);
+            
+        }
+
+        for($i = 0; $i < count($s_id); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $maruetsu = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
+            event_start, cash_kubun, keyword, register_day)
+            values
+            ($max_id, $s_id[$i], 'マルエツの対象店舗なら、毎月1日・第3金曜日はWAON POINTが基本の5倍！', 
+            'クレジット払いで200円(税込)ごとに5ポイントプレゼント', 'https://www.aeon.co.jp/card/lineup/maruetsu/', '$third_fri', 
+            'マルエツカード（クレジット）', '毎月イベント', '$today')";
+            DB::insert($maruetsu);
+            
+        }
+
+        DB::commit();
+
+    }
         
+
+    // 当月初日に実施
+    public static function inageya_sannichi(){
+        $third_sun = date('Ymd', strtotime('third sun of this month'));
+        $today = date('Ymd');
+
+        $s_id = array(11, 146, 147, 154);
+
+        for($i = 0; $i < count($s_id); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $inageya = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
+            event_start, cash_kubun, keyword, register_day)
+            values
+            ($max_id, $s_id[$i], '毎月第３日曜日はさんにち割引', 
+            'Vカードご提示で５％OFF', 'https://ingfan.jp/about/', '$third_sun', 
+            'ing・fanVカード（クレジット）', '毎月イベント', '$today')";
+            DB::insert($inageya);
+            
+        }
+
+        DB::commit();
+
+    }
+
+    // 前週月曜日に実施
+    public static function comodi_donichi(){
+        $sat = date('Ymd', strtotime('next saturday'));
+        $sun = date('Ymd', strtotime('next sunday'));
+        $weekEnd = array($sat, $sun);
+        $today = date('Ymd');
+
+
+        for($i = 0; $i < count($weekEnd); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $comodi = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, 
+            event_start, cash_kubun, keyword, register_day)
+            values
+            ($max_id, 12, '毎週土日はコモカードポイント５倍！', 
+            '※一部対象外がございます。', '$weekEnd[$i]', 
+            'コモカード', '毎週イベント', '$today')";
+            DB::insert($comodi);
+            DB::commit();
+        }
+
+    }
+
+    // 今週土曜日に実施
+    public static function keio_3times(){
+        $wed = date('Ymd', strtotime('next wednesday'));
+        $fri = date('Ymd', strtotime('next friday'));
+        $today = date('Ymd');
+        $s_id = array(17, 152, 153);
+
+        for($i = 0; $i < count($s_id); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $keio = "insert into sale_point
+            (sp_code, shop_id, sp_title, 
+            event_start, event_end, cash_kubun, keyword, register_day)
+            values
+            ($max_id, $s_id[$i], '毎週水曜日から金曜日はポイント3倍', 
+            '$wed', '$fri', '京王パスポートカード', '毎週イベント', '$today')";
+            DB::insert($keio);
+            DB::commit();
+        }
+
+    }
+
+
 
 
 

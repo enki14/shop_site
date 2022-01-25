@@ -53,8 +53,8 @@ class ShopsiteController extends Controller
             sp_st.event_start as store_sale_eventStart,
             sp_sh.event_end as shop_sale_eventEnd,
             sp_st.event_end as store_sale_eventEnd,
-            sp_sh.cash_kubun as shop_sale_cashKubn,
-            sp_st.cash_kubun as store_sale_cashKubun,
+            sp_sh.cash_kubun as shop_cashKubun,
+            sp_st.cash_kubun as store_cashKubun,
             c_sh.card_name, 
             c_sh.link,
             c_sh.P_or_D
@@ -199,7 +199,7 @@ class ShopsiteController extends Controller
         $sql = "select 
         sp.shop_id, sp.store_id, s.shop_name, 
         s2.store_name, s.shop_url, s2.store_url, 
-        s.img_src, sp.cash_kubun, sp.sp_title, 
+        s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
         sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
         c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day 
         from shop s
@@ -224,8 +224,9 @@ class ShopsiteController extends Controller
         "union all 
         select 
         sp.shop_id, sp.store_id, s.shop_name, 
-        s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
-        sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
+        s2.store_name, s.shop_url, s2.store_url, 
+        s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
+        sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
         c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day
         from store s2
         inner join sale_point sp 
@@ -287,7 +288,7 @@ class ShopsiteController extends Controller
         sp.shop_id, sp.store_id, s.shop_name, 
         s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
         sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day
+        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, sp.card_true
         from shop s
         inner join sale_point sp 
         on s.shop_id = sp.shop_id
@@ -312,7 +313,7 @@ class ShopsiteController extends Controller
         sp.shop_id, sp.store_id, s.shop_name, 
         s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
         sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day
+        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, sp.card_true
         from store s2
         inner join sale_point sp 
         on s2.store_id = sp.store_id
@@ -428,10 +429,10 @@ class ShopsiteController extends Controller
             sp_st.sp_subtitle as st_subtitle,
             sp_sh.sp_url as spsh_url,
             sp_st.sp_url as spst_url,
-            sp_sh.event_start,
-            sp_st.event_start,
-            sp_sh.event_end,
-            sp_st.event_end,
+            sp_sh.event_start as sh_start,
+            sp_st.event_start as st_start,
+            sp_sh.event_end as sh_end,
+            sp_st.event_end as st_end,
             sp_sh.cash_kubun,
             sp_st.cash_kubun,
             c_sh.card_name, 

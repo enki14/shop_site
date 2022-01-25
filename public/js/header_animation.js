@@ -1,3 +1,4 @@
+    
 $(window).on('load', function(){
     const CLASSNAME = "-visible";
     const CLASSNAME_2 = "-visible_2";
@@ -11,7 +12,6 @@ $(window).on('load', function(){
         }, TIMEOUT);
     });
 
-
     setInterval(() => {
         setTimeout(() => {
             $target_2.addClass(CLASSNAME_2);
@@ -19,6 +19,9 @@ $(window).on('load', function(){
     });
     
 });
+
+
+
 
 
 

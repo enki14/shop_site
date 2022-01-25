@@ -5,7 +5,7 @@ namespace App\Http\Lib;
 use Illuminate\Support\Facades\DB;
 use Goutte\Client;
 use Symfony\Component\HttpClient\HttpClient;
-
+use Illuminate\Support\Facades\Log;
 
 class Common {
 
@@ -62,6 +62,17 @@ class Common {
     public static function dateFormat($ymd) {
         if(!empty($ymd)){
             return date('Y年n月j日', strtotime($ymd));
+        }else{
+            return '';
+        }
+        
+    }
+
+    public static function dateFormat_2($ymd) {
+        if(!empty($ymd)){
+            $nengappi = date('Y年n月j日', strtotime($ymd));
+            preg_match('/([1-9]|1[0-2])月([1-9]|[12][0-9]|3[1])日$/u', $nengappi, $match);
+            return $match[0];
         }else{
             return '';
         }

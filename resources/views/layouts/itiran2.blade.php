@@ -24,7 +24,7 @@
                 aria-labelledby="headingOne{{ $data->shop_id }}_{{ $data->store_id }}" 
                 data-parent="#accordionExample{{ $data->shop_id }}_{{ $data->store_id }}">
                     <div class="card-body">
-                        <h4 class="mt-2">
+                        <h4 class="my-3 font-weight-bold itiran_h4">
                             @if($data->shop_sale_title)
                                 @if(!empty($data->shop_sale_spUrl))
                                     <a href="{{ $data->shop_sale_spUrl }}">{{ $data->shop_sale_title }}</a>
@@ -38,38 +38,78 @@
                                     {{ $data->store_sale_title }}
                                 @endif
                             @endif
-                        </h4 class="mt-2">
-                        @if($data->shop_sale_title)
-                            @if(!empty($data->shop_sale_subtitle))
-                                <p>{{ $data->shop_sale_subtitle }}</p>
-                            @endif
-                        @else
-                            @if(!empty($data->store_sale_subtitle))
-                                <p>{{ $data->store_sale_subtitle }}</p>
-                            @endif
-                        @endif
-                        <p class="mt-5">
+                        </h4>
+                        <p class="itiran_pgh">
                             @if($data->shop_sale_title)
-                                @if(!empty($data->shop_sale_eventStart) && !empty($data->shop_sale_eventEnd)) 
-                                    開催日：{{ Common::dateFormat($data->shop_sale_eventStart) }} ～ 
-                                    {{ Common::dateFormat($data->shop_sale_eventEnd) }}  
-                                @elseif(!empty($data->shop_sale_eventStart) && empty($data->shop_sale_eventEnd))
-                                    開催日：{{ Common::dateFormat($data->shop_sale_eventStart) }}
-                                @elseif(empty($data->shop_sale_eventStart) && !empty($data->shop_sale_eventEnd))
-                                    開催日：～ {{ Common::dateFormat($data->shop_sale_eventEnd) }}
+                                @if(!empty($data->shop_sale_subtitle))
+                                    {{ $data->shop_sale_subtitle }}
                                 @endif
                             @else
-                                @if(!empty($data->store_sale_eventStart) && !empty($data->store_sale_eventEnd)) 
-                                    開催日：{{ Common::dateFormat($data->store_sale_eventStart) }} ～ 
-                                    {{ Common::dateFormat($data->store_sale_eventEnd) }}  
-                                @elseif(!empty($data->store_sale_eventStart) && empty($data->store_sale_eventEnd))
-                                    開催日：{{ Common::dateFormat($data->store_sale_eventStart) }}
-                                @elseif(empty($data->store_sale_eventStart) && !empty($data->store_sale_eventEnd))
-                                    開催日：～ {{ Common::dateFormat($data->store_sale_eventEnd) }}
+                                @if(!empty($data->store_sale_subtitle))
+                                    {{ $data->store_sale_subtitle }}
                                 @endif
                             @endif
                         </p>
-                        <div class="row mt-5 mb-1">
+                        <div id="conta_cash" class="container mt-5">
+                            {{-- 親要素にd-flex align-items-startを加えることでflexboxの子要素同士の可変が可能 --}}
+                            @if(!empty($data->shop_cashKubun) or !empty($data->store_cashKubun))
+                                <div class="row d-flex align-items-start">
+                                    <div class="col-2 arrow d-flex justify-content-end mt-5">
+                                        <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
+                                    </div>
+                                    <div class="col-10 pl-0 itiran_cash">
+                                        <span class="slash d-flex align-items-center position-relative font-weight-bold">
+                                            対象カード
+                                        </span>
+                                        @if(!empty($data->shop_cashKubun))
+                                            @if(strlen($data->shop_cashKubun) >= 50)
+                                                <p class="sub-card-long mt-3">
+                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->shop_cashKubun }}</a>
+                                                </p>
+                                            @else
+                                                <p class="sub-card mt-3">
+                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->shop_cashKubun }}</a>
+                                                </p>
+                                            @endif
+                                        @else    
+                                            @if(strlen($data->store_cashKubun) >= 50)
+                                                <p class="sub-card-long mt-3">
+                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->store_cashKubun }}</a>
+                                                </p>
+                                            @else
+                                                <p class="sub-card mt-3">
+                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->store_cashKubun }}</a>
+                                                </p>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                            <p class="itiran_days d-flex justify-content-end pt-3 pr-3">
+                                @if($data->shop_sale_title)
+                                    @if(!empty($data->shop_sale_eventStart) && !empty($data->shop_sale_eventEnd))
+                                        開催日：{{ Common::dateFormat($data->shop_sale_eventStart) }} ～ 
+                                        {{ Common::dateFormat_2($data->shop_sale_eventEnd) }}  
+                                    @elseif(!empty($data->shop_sale_eventStart) && empty($data->shop_sale_eventEnd))
+                                        開催日：{{ Common::dateFormat($data->shop_sale_eventStart) }}
+                                    @elseif(empty($data->shop_sale_eventStart) && !empty($data->shop_sale_eventEnd))
+                                        開催日：～ {{ Common::dateFormat_2($data->shop_sale_eventEnd) }}
+                                    @endif
+                                @else
+                                    @if(!empty($data->store_sale_eventStart) && !empty($data->store_sale_eventEnd)) 
+                                        開催日：{{ Common::dateFormat($data->store_sale_eventStart) }} ～ 
+                                        {{ Common::dateFormat_2($data->store_sale_eventEnd) }}  
+                                    @elseif(!empty($data->store_sale_eventStart) && empty($data->store_sale_eventEnd))
+                                        開催日：{{ Common::dateFormat($data->store_sale_eventStart) }}
+                                    @elseif(empty($data->store_sale_eventStart) && !empty($data->store_sale_eventEnd))
+                                        開催日：～ {{ Common::dateFormat_2($data->store_sale_eventEnd) }}
+                                    @endif
+                                @endif
+                            </p>
+                        </div>
+                        
+                        
+                        {{--<div class="row mt-5 mb-1">
                             <div class="col-8">
                                 <div class="card-text">
                                     @if(isset($data->P_or_D))
@@ -109,7 +149,7 @@
                                     @endif
                                 </div>
                             </div>
-                        </div>
+                        </div>--}}
                         
                         
                     </div>

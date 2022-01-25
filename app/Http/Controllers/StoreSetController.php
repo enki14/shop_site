@@ -1183,6 +1183,81 @@ class StoreSetController extends Controller
     }
 
 
+    public function york(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_49 = 'select url, element_path from scrape where id = 49';
+        $s_49 = DB::select($sql_49);
+        foreach($s_49 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+
+            $link = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $address = $crawler->filter('tr > td.td-store-info.store-td > p > span')
+            ->each(function($node){
+                return $node->text();
+            });
+           
+        }
+
+        for($i = 0; $i < count($address); $i++){
+
+            $st_link = 'https://www.york-inc.com/' . $link[$i];
+    
+            
+            $crawler_2 = $client->request('GET', $st_link);
+            // [0]t [1]s
+            $store_time = $crawler_2->filter('tr:nth-child(1) > td')
+            ->each(function($node){
+                return $node->text();
+            });
+            
+            $store = str_replace('ヨーク', '', $store_time[1]);
+            $time = $store_time[0];
+            Log::debug($time);
+           
+            // [0]
+            $zip = $crawler_2->filter('#address > span')
+            ->each(function($node){
+                return $node->text();
+            });
+            $st_zip = str_replace('〒', '', $zip);
+            
+            // [0]
+            $tel = $crawler_2->filter('tr:nth-child(3) > td')
+            ->each(function($node){
+                return $node->text();
+            });
+            $st_tel = str_replace(' 【電話受付時間：開店～20時】', '', $tel);
+        
+            
+            $separate = Common::separate_address($address[$i]);
+            $state = $separate['state'];
+            $city = $separate['city'];
+            $district = $separate['district'];
+            $count = "select count(*) as cnt from store where store_address = '$address[$i]'";
+            $exist = DB::select($count);
+            
+            if($exist[0]->cnt == 0){
+                $id = "select max(store_id) + 1 as max_id from store";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+                
+                $sql = "insert into store(shop_id, store_id, store_name, zip, store_address,
+                store_tel, store_url, business_hours, prefectures, town, ss_town) 
+                values(23, $max_id, '$store', '$st_zip[0]', '$address[$i]', '$st_tel[0]', 
+                '$st_link', '$time', '$state', '$city', '$district')";
+                DB::insert($sql);
+                DB::commit();
+            }
+        }
+    }
+
+
 
 
 }

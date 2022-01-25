@@ -13,8 +13,15 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\ScrapeCommand::class,   //コマンドの登録
-        \app\Console\Commands\ItoyokadoCommand::class
+        //コマンドの登録
+        \app\Console\Commands\ItoyokadoCommand::class,
+        \app\Console\Commands\SummitCommand::class,
+        \app\Console\Commands\Maruetsu_5offCommand::class,
+        \app\Console\Commands\Maruetsu_5timesCommand::class,
+        \app\Console\Commands\InasanCommand::class,
+        \app\Console\Commands\ComodoniCommand::class,
+        \app\Console\Commands\Keio3dayCommand::class
+
     ];
 
     /**
@@ -25,9 +32,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('command:ScrapeCommand')->everyFiveMinutes();
-        $schedule->command('command:ItoyokadoCommand')->everyTenMinutes();
-        $schedule->command('command:SummitCommand')->everyFiveMinutes();
+        $schedule->command('ItoyokadoCommand')->monthlyOn(28, '11:00');
+        $schedule->command('SummitCommand')->weeklyOn(3, '11:00');
+        $schedule->command('Maruetsu_5times')->weeklyOn(1, '11:00');
+        $schedule->command('Maruetsu_5off')->monthlyOn(23, '11:00');
+        $schedule->command('InasanCommand')->monthlyOn(1, '11:00');
+        $schedule->command('ComodoniCommand')->weeklyOn(1, '11:00');
+        $schedule->command('Keio3day')->weeklyOn(6, '11:00');
     }
 
     /**

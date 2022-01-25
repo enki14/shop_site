@@ -53,10 +53,16 @@ Route::post('/ozam_store', 'StoreSetController@ozam_store');
 Route::post('/itoyokado', 'StoreSetController@itoyokado');
 Route::post('/aeon_store', 'StoreSetController@aeon_store');
 Route::post('/superalps', 'StoreSetController@superalps');
+Route::post('/york', 'StoreSetController@york');
 
 // event登録
 Route::post('/itoyokado_event', 'EventSetController@itoyokado_event');
 Route::post('/summit_event', 'EventSetController@summit_event');
+Route::post('/maruetsu_5off', 'EventSetController@maruetsu_5off');
+Route::post('/maruetsu_5times', 'EventSetController@maruetsu_5times');
+Route::post('/inageya_sannichi', 'EventSetController@inageya_sannichi');
+Route::post('/comodi_donichi', 'EventSetController@comodi_donichi');
+Route::post('/keio_3times', 'EventSetController@keio_3times');
 Route::get('/event_list', 'EventSetController@event_list');
 
 
@@ -64,14 +70,14 @@ Route::get('/event_list', 'EventSetController@event_list');
 // サムネイル作成（ url先で更新すると一枚作成される ）
 // storage_path のファイル名と $file のファイル名を、作成したいファイル名に差し替える
 Route::get('thumbnail', function(){
-	$image = Image::make(storage_path('app') . '/public/image/summit_test.png');
-	$file = 'summit_test.png';
+	$image = Image::make(storage_path('app') . '/public/image/maruetu_test.png');
+	$file = 'maruetu_test.png';
 	$path = public_path(). '/img/';
-	$image->resize(150, 100, function($constraint){
+	$image->resize(180, 180, function($constraint){
 		$constraint->aspectRatio();
 	// crop()で黒い土台座標の高さと幅を調整することができる
 	// crop()は基本、resize()に合わせておく
-	})->crop(150, 100)->save($path . 'thumbnail-' . $file);
+	})->crop(180, 180)->save($path . 'thumbnail-' . $file);
 	return $image->response('png');
 });
 

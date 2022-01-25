@@ -35,13 +35,13 @@
                         @endif
                     @endif
                     <div class="row">
-                        <h2 class="col-md-12 text-center font-weight-bold mt-2">
+                        <h2 class="itiran_tenmei col-md-12 text-center font-weight-bold mt-4">
                             @if(!empty($data->store_url))
-                                <a href="{{ $data->store_url }}" target="_blank">
+                                <a href="{{ $data->store_url }}" target="_blank" class="text-dark">
                                     {{ $data->shop_name }}{{ $data->store_name }}
                                 </a>
                             @elseif(!empty($data->shop_url))
-                                <a href="{{ $data->shop_url }}" target="_blank">
+                                <a href="{{ $data->shop_url }}" target="_blank" class="text-dark">
                                     {{ $data->shop_name }}<small class="kakuten"> 各店</small>
                                 </a>
                             @elseif(empty($data->store_url) && empty($data->shop_url) && !empty($data->store_name))
@@ -52,40 +52,99 @@
                         </h2>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4 mt-3">
                         @if(!empty($data->img_src))
-                            <img src="{{ asset($data->img_src) }}" alt="テスト画像">
+                            <img src="{{ asset($data->img_src) }}" alt="テスト画像" class="itiran_img"/>
                         @else
-                            <img src="{{ asset('/img/thumbnail-20200501_noimage.png') }}" alt="no_image">
+                            <img src="{{ asset('/img/thumbnail-20200501_noimage.png') }}" alt="no_image" class="itiran_img"/>
                         @endif
                         </div>
-                        <div class="col-md-8 pt-5"> 
-                        @if(!empty($data->cash_kubun))
-                            <p class="card-text">お支払方法：
-                                {{ $data->cash_kubun }}
-                            </p>
-                        @endif
-                            <h4 class="card-title font-weight-bold">{{ $data->sp_title }}</h4>
-                            <p class="card-text pt-2">{{ $data->sp_subtitle }}</p>
-                            <p class="card-text pt-4">
+                        <div class="itiran_title col-md-7 pt-5"> 
+                            @if(!empty($data->sp_url))
+                                <h4 class="itiran_h4 card-title font-weight-bold">
+                                    <a href="{{ $data->sp_url }}" target="_blank">{{ $data->sp_title }}</a>
+                                </h4>
+                            @else
+                                <h4 class="itiran_h4 card-title font-weight-bold">
+                                    {{ $data->sp_title }}
+                                </h4>
+                            @endif
+                            <p class="itiran_pgh card-text pt-2">{{ $data->sp_subtitle }}</p>
+                        </div>
+                        <div class="container mt-2">
+                            <div class="row">
+                                <div class="col-11 d-flex justify-content-center">
+                                @if(!empty($data->cash_kubun))
+                                    @if($data->card_true == 1)
+                                        <div class="row d-flex align-items-start">
+                                            <div class="col-2 arrow pt-2 mt-5">
+                                                <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
+                                            </div>
+                                            <div class="col-9 pl-0 mt-3 itiran_cash">
+                                                <span class="slash d-flex align-items-center position-relative font-weight-bold">
+                                                    対象カード
+                                                </span>
+                                                    @if(strlen($data->cash_kubun) >= 50)
+                                                        <p class="sub-card-long mt-3">
+                                                            @if(!empty($data->link))
+                                                                <a href="{{ $data->link }}" target="_blank" class="text-dark font-weight-bold">
+                                                                    {{ $data->cash_kubun }}
+                                                                </a>
+                                                            @else
+                                                                {{ $data->cash_kubun }}
+                                                            @endif
+                                                        </p>
+                                                    @else
+                                                        <p class="sub-card mt-3">
+                                                            @if(!empty($data->link))
+                                                            <?php Log::debug($data->link); ?>
+                                                                <a href="{{ $data->link }}" target="_blank" class="text-dark font-weight-bold">
+                                                                    {{ $data->cash_kubun }}
+                                                                </a>
+                                                            @else
+                                                                {{ $data->cash_kubun }}
+                                                            @endif
+                                                        </p>
+                                                    @endif   
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="row d-flex align-items-start">
+                                            <div class="col-2 arrow d-flex justify-content-end mt-5">
+                                                <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
+                                            </div>
+                                            <div class="col-9 mt-3 itiran_cash">
+                                                <span class="slash d-flex align-items-center position-relative font-weight-bold">
+                                                    対象のお支払
+                                                </span>
+                                                @if(strlen($data->cash_kubun) >= 50)
+                                                    <p class="sub-card-long mt-3 font-weight-bold">{{ $data->cash_kubun }}</p>
+                                                @else
+                                                    <p class="sub-card mt-3 font-weight-bold">{{ $data->cash_kubun }}</p>
+                                                @endif   
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+                                </div>
+                            </div>
+                            <p class="itiran_days card-text mt-3 pr-5 d-flex justify-content-end font-weight-bold">
                                 @if(!empty($data->event_start) && !empty($data->event_end))
-                                    期間：{{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat($data->event_end) }}
+                                    開催日：{{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat_2($data->event_end) }}
                                 @elseif(!empty($data->event_start) && empty($data->event_end))
-                                    期間：{{ Common::dateFormat($data->event_start) }}
+                                    開催日：{{ Common::dateFormat($data->event_start) }}
                                 @elseif(empty($data->event_start) && !empty($data->event_end))
-                                    期間：～ {{ Common::dateFormat($data->event_end) }}
+                                    開催日：～ {{ Common::dateFormat_2($data->event_end) }}
                                 @endif
                             </p>
-                            <p class="card-text">
-                            @if(!empty($data->sp_url))
-                                <a href="{{ $data->sp_url }}" target="_blank">
-                                    <small class="text-muted">詳しくはこちら</small>
-                                </a>
-                            @endif
-                            </p>
+                        {{--@if(!empty($data->sp_url))
+                            <a href="{{ $data->sp_url }}" target="_blank">
+                                <p class="font-weight-bold ml-5 px-4">詳しくはこちら</p>
+                            </a>
+                        @endif--}}
                         </div>
                     </div>
-                    <div class="container mt-5">
+                    {{--<div class="container mt-5">
                         <span class="slash d-flex align-items-center position-relative font-weight-bold ml-5">
                             ココで使える
                         </span>
@@ -131,7 +190,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
         </div>    
