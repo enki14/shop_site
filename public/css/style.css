@@ -18,20 +18,6 @@ img{
     height: auto;
 }
 
-#modalShop,
-.modal-body{
-    letter-spacing: 0.2em;
-    line-height: 1.2em;
-}
-
-#modalShop{
-    font-weight: bold;
-}
-
-.c_name{
-    font-size: 20px;
-}
-
 
 
 
@@ -643,6 +629,42 @@ h2{
 
 /******************* calendar ↓↓↓　**********************/
 
+#modal_frame{
+    padding: 60px 20px 50px;
+    background: #eee55d;
+    border-radius: 5%;
+    box-shadow: 3px 3px 4px 3px #111111;
+    
+}
+
+.modal_conta{
+    box-shadow: 0px 5px 10px 3px #ccc inset;
+}
+
+#modalShop,
+.modal-body{
+    letter-spacing: 0.2em;
+    line-height: 1.5em;
+}
+
+#modalShop{
+    font-size: 24px;
+}
+
+#modal-date{
+    letter-spacing: 0.2em;
+}
+
+.c_name{
+    font-size: 14px;
+}
+
+.modal_a{
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
 a.fc-daygrid-event{
     padding: 0.5em 1em;
     margin: 2em 0;
@@ -670,8 +692,9 @@ div.fc-header-toolbar{
 }
 
 /* タイトルの先頭にあった「all-day」とかいう表示 */
-.fc-list-event-time{
-    display: none;
+.fc-list-event-time,
+.fc-list-event-dot{
+    display: none !important;
 }
 
 
@@ -729,6 +752,40 @@ thead{
     button.fc-next-button{
         width: 20%;
         height: 40%;
+    }
+
+    #modal_frame{
+        padding: 40px 10px 30px
+    }
+
+
+    .modal_a{
+        font-size: 18px !important;
+        display: flex;
+        justify-content: center;
+    }
+
+    #modal-date{
+        letter-spacing: 0.1em !important;
+        font-size: 13px !important;
+    }
+
+    #modal_description{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        font-size: 13px !important;
+    }
+
+    #modalShop{
+        font-size: 20px;
+    }
+
+    
+}
+
+@media only screen and (max-width: 300px) {
+    #modal-date{
+        padding-left: 0;
     }
 }
 
@@ -1226,13 +1283,24 @@ footer{
 }
 
 
-.footer-main{
+.footer-main:nth-child(2),
+.footer-main:nth-child(3){
     padding-left: 1rem; 
     border-left: 6px solid #d2691e;
 }
 
 .footer-link{
     color:#000;
+}
+
+.footer-link:hover{
+    color: #000;
+}
+
+.footer-link:hover{
+    text-decoration: none;
+    text-shadow: 0 0 6px #FFFF66,0 0 12px #ffff00;
+    transition: 0.8s;
 }
 
 
@@ -1244,18 +1312,6 @@ footer{
 }
 
 
-
-/* @media only screen and (max-width: 780px) {
-    .contact-h2{
-        font-size: 2rem;
-    }
-
-}  */
-
-@media only screen and (max-width: 420px) {
-
-
-} 
 
 
 /******************* お問い合わせフォーム関係 ***********************/
@@ -1281,12 +1337,6 @@ footer{
 
 .contact-back:hover{
     background: #fafad2;
-}
-
-.footer-link:hover{
-    text-decoration: none;
-    text-shadow: 0 0 10px blue,0 0 15px blue;
-    transition: 0.5s;
 }
 
 

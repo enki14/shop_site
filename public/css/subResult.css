@@ -330,8 +330,19 @@ footer{
     background-color: #6495ED;
 } 
 
-.cart{
-    color: #43bb2a;
+.footer-main:nth-child(2),
+.footer-main:nth-child(3){
+   padding-left: 1rem; 
+   border-left: 6px solid #d2691e;
 }
 
+.footer-link{
+   color:#000;
+}
+
+.footer-link:hover{
+   text-decoration: none;
+   text-shadow: 0 0 6px #CCFFFF,0 0 12px #33FFFF;
+   transition: 0.8s;
+}
  

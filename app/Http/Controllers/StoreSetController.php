@@ -1258,6 +1258,97 @@ class StoreSetController extends Controller
     }
 
 
+    public function ok_store(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_50 = 'select url, element_path from scrape where id = 50';
+        $s_50 = DB::select($sql_50);
+        foreach($s_50 as $data){
+            $p2 = $data->url . 'page/2/';
+            $p3 = $data->url . 'page/3/';
+            $p4 = $data->url . 'page/4/';
+            $p5 = $data->url . 'page/5/';
+            $p6 = $data->url . 'page/6/';
+
+            $u_array = [
+                $data->url, $p2, $p3, $p4, $p5, $p6
+            ];
+
+            // dd($u_array);
+            foreach($u_array as $data){
+                $crawler = $client->request('GET', $data);
+
+                $link = $crawler->filter('div.module-section > div > p > a.btn-red')
+                ->each(function($node){
+                    return $node->attr('href');
+                });
+                
+
+                $store = $crawler->filter('div.module-section > div > h2')
+                ->each(function($node){
+                    return $node->text();
+                });
+                // Log::debug($store);
+
+                $zip_adr = $crawler
+                ->filter('.shop-outline > li:nth-child(1)')
+                ->each(function($node){
+                    return $node->text();
+                });
+                
+                $tel = $crawler->filter('.shop-outline > li:nth-child(3)')
+                ->each(function($node){
+                    return $node->text();
+                });
+
+                $time = $crawler->filter('.shop-outline > li:nth-child(2)')
+                ->each(function($node){
+                    return $node->text();
+                });
+
+                for($i = 0; $i < count($store); $i++){
+                    $st = str_replace('オーケー　', '', $store[$i]);
+                    $st_tel = str_replace('電話番号：', '', $tel[$i]);
+                    $st_time = str_replace('営業時間：', '', $time[$i]);
+                    preg_match('/\d{3}(-(\d{4}|\d{2}))?/u', $zip_adr[$i], $zip);
+                    $st_adr = preg_replace('/住所：〒\d{3}(-(\d{4}|\d{2}))? /u', '', $zip_adr[$i]);
+                    $st_adr = preg_replace('/(.{2,3}?[都道府県])/u', '', $st_adr);
+                    // Log::debug($st_adr);
+                    $separate = Common::separate_address_one($st_adr);
+                    $city = $separate['city'];
+                    $district = $separate['district'];
+                    // Log::debug($district);
+                    // Log::debug($link[$i]);
+                    $count = "select count(*) as cnt from store where store_name = '$st'";
+                    $exist = DB::select($count);
+                    
+                    if($exist[0]->cnt == 0){
+                        $id = "select max(store_id) + 1 as max_id from store";
+                        $max = DB::select($id);
+                        $max_id = $max[0]->max_id;
+                        
+                        $sql = "insert into store(shop_id, store_id, store_name, zip, store_address,
+                        store_tel, store_url, business_hours, prefectures, town, ss_town) 
+                        values(101, $max_id, '$st', '$zip[0]', '$st_adr', '$st_tel', 
+                        '$link[$i]', '$st_time', '東京都', '$city', '$district')";
+                        // dd($sql);
+                        DB::insert($sql);
+                        DB::commit();
+                    }
+
+                }
+
+            }
+
+            
+
+        }
+
+
+
+    }
+
+
 
 
 }

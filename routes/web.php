@@ -54,6 +54,7 @@ Route::post('/itoyokado', 'StoreSetController@itoyokado');
 Route::post('/aeon_store', 'StoreSetController@aeon_store');
 Route::post('/superalps', 'StoreSetController@superalps');
 Route::post('/york', 'StoreSetController@york');
+Route::post('/ok_store', 'StoreSetController@ok_store');
 
 // event登録
 Route::post('/itoyokado_event', 'EventSetController@itoyokado_event');
@@ -63,6 +64,8 @@ Route::post('/maruetsu_5times', 'EventSetController@maruetsu_5times');
 Route::post('/inageya_sannichi', 'EventSetController@inageya_sannichi');
 Route::post('/comodi_donichi', 'EventSetController@comodi_donichi');
 Route::post('/keio_3times', 'EventSetController@keio_3times');
+Route::post('/tobu_Tmoney', 'EventSetController@tobu_Tmoney');
+Route::post('/alps_doniti', 'EventSetController@alps_doniti');
 Route::get('/event_list', 'EventSetController@event_list');
 
 
@@ -87,40 +90,10 @@ Route::get('business_card', 'DetectDocumentController@detect_document_text');
 Route::get('business_card_2', 'DetectDocumentController@detect_document_text_2');
 Route::get('itoyokado_event', 'DetectDocumentController@itoyokado_event');
 
-
-// Route::get('/sample', 'SampleController@index');  //sampleはurl、controllerはどのメソッドまでかを指定
-// ajax用データベース読み込み
-Route::get('/ajax', 'AjaxController@index');
-Route::post('/ajax_insert', 'AjaxController@insert');
-Route::post('/ajax_update', 'AjaxController@update');
-Route::get('/ajax_delete', 'AjaxController@delete');
-
-
-//form用データベース読み込み
-Route::get('form', 'FormController@index')->name('form');
-Route::post('form_insert', 'FormController@insert')->name('form_insert');
-Route::post('form_update', 'FormController@update')->name('form_update');
-Route::post('form_delete', 'FormController@delete')->name('form_delete');
-
-// scrapingTest
-Route::get('/scrape','TestController@scrape');
-
-
 // twitter api
 Route::get('twitter', 'TwitterController@index');
 
-// google maps api（仮）　※とりあえず表示だけの仕様
-Route::get('maps', function () {
-   return view('maps');
-});
 
-// google maps api　(遊び)
-Route::get('google', 'GMapController@index');
-Route::get('google_shop', 'GMapController@shopInfo');
-Route::get('goo_result', 'GMapController@gooResult');
-
-Route::get('calendar', 'CalendarController@index');
-Route::any('calendar_event', 'CalendarController@eventCalendar');
 
 /*************************** 管理画面用↓↓↓ *************************/
 

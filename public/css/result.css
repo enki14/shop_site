@@ -230,11 +230,6 @@ nav{
     margin: 15px;
 } 
 
-/* #map-input{
-    width: 950px;
-    text-align: center;
-    margin: 30px 0 20px 0;
-} */
 
 #map-select{
     width: 140px;
@@ -333,8 +328,14 @@ footer{
     background-color: #e39c68;
 } 
 
-.cart{
-    color: #43bb2a;
-}
+.footer-link{
+    color:#000;
+ }
+ 
+ .footer-link:hover{
+    text-decoration: none;
+    text-shadow: 0 0 6px #FF99FF,0 0 12px #FF66CC;
+    transition: 0.8s;
+ }
 
  

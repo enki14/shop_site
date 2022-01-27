@@ -74,7 +74,7 @@ class ShopsiteController extends Controller
         left outer join (
             select * from sale_point
             where (shop_id, event_start) in (
-                select shop_id, max(event_start) as event_start
+                select shop_id, min(event_start) as event_start
                 from sale_point
                 where shop_id is not null
                 and event_start >= curdate() or event_end >= curdate()
@@ -85,7 +85,7 @@ class ShopsiteController extends Controller
             (
             select * from sale_point
             where (store_id, event_start) in (
-                select store_id, max(event_start) as event_start
+                select store_id, min(event_start) as event_start
                 from sale_point
                 where store_id is not null
                 and event_start >= curdate() or event_end >= curdate()
@@ -454,7 +454,7 @@ class ShopsiteController extends Controller
         left outer join (
             select * from sale_point
             where (shop_id, event_start) in (
-                select shop_id, max(event_start) as event_start
+                select shop_id, min(event_start) as event_start
                 from sale_point
                 where shop_id is not null
                 and event_start >= curdate() or event_end >= curdate()
@@ -465,7 +465,7 @@ class ShopsiteController extends Controller
             (
             select * from sale_point
             where (store_id, event_start) in (
-                select store_id, max(event_start) as event_start
+                select store_id, min(event_start) as event_start
                 from sale_point
                 where store_id is not null
                 and event_start >= curdate() or event_end >= curdate()

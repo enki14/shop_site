@@ -40,12 +40,12 @@ class EventSetController extends Controller
 
             $itoyokado = "insert into sale_point
             (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
-            event_start, cash_kubun, register_day)
+            event_start, cash_kubun, register_day, card_true)
             values
             ($max_id, 2, '毎月８のつく日はハッピーデー🎉', 
             '店頭にて対象カードご利用で５％オフ', 'https://www.itoyokado.co.jp/special/happyday/index.html', '$ymd[$i]', 
             'セブンカードの現金決済・クレジット決済、nanaco全額決済、クラブオン/ミレニアムカードセゾンのクレジット決済',
-            '$today')";
+            '$today', 1)";
             DB::insert($itoyokado);
             DB::commit();
 
@@ -66,10 +66,10 @@ class EventSetController extends Controller
 
         $summit = "insert into sale_point
         (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
-        event_start, cash_kubun, register_day)
+        event_start, cash_kubun, register_day, 1)
         values
         ($max_id, 8, '毎週火曜日はキャッシュバックサービスデー', '貯まったポイント が 現金で戻る！', 
-        'https://www.summitstore.co.jp/otoku/cashback/', '$tuesday', 'サミットポイントカード', '$today')";
+        'https://www.summitstore.co.jp/otoku/cashback/', '$tuesday', 'サミットポイントカード', '$today', 1)";
         DB::insert($summit);
         DB::commit();
     }
@@ -90,11 +90,11 @@ class EventSetController extends Controller
 
             $maruetsu = "insert into sale_point
             (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
-            event_start, cash_kubun, keyword, register_day)
+            event_start, cash_kubun, keyword, register_day, card_true)
             values
-            ($max_id, $s_id[$i], '毎週日曜日は５％OFF❕', 
+            ($max_id, $s_id[$i], '毎週日曜日は５％OFF !', 
             'マルエツ店舗でのクレジット払いで5%OFF', 'https://www.aeon.co.jp/card/lineup/maruetsu/', '$sunday', 
-            'マルエツカード（クレジット）', '毎週イベント', '$today')";
+            'マルエツカード（クレジット）', '毎週イベント', '$today', 1)";
             DB::insert($maruetsu);
             DB::commit();
 
@@ -118,11 +118,11 @@ class EventSetController extends Controller
 
             $maruetsu = "insert into sale_point
             (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
-            event_start, cash_kubun, keyword, register_day)
+            event_start, cash_kubun, keyword, register_day, card_true)
             values
             ($max_id, $s_id[$i], 'マルエツの対象店舗なら、毎月1日・第3金曜日はWAON POINTが基本の5倍！', 
             'クレジット払いで200円(税込)ごとに5ポイントプレゼント', 'https://www.aeon.co.jp/card/lineup/maruetsu/', '$firstday', 
-            'マルエツカード（クレジット）', '毎月イベント', '$today')";
+            'マルエツカード（クレジット）', '毎月イベント', '$today' 1)";
             DB::insert($maruetsu);
             
         }
@@ -134,11 +134,11 @@ class EventSetController extends Controller
 
             $maruetsu = "insert into sale_point
             (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
-            event_start, cash_kubun, keyword, register_day)
+            event_start, cash_kubun, keyword, register_day, card_true)
             values
             ($max_id, $s_id[$i], 'マルエツの対象店舗なら、毎月1日・第3金曜日はWAON POINTが基本の5倍！', 
             'クレジット払いで200円(税込)ごとに5ポイントプレゼント', 'https://www.aeon.co.jp/card/lineup/maruetsu/', '$third_fri', 
-            'マルエツカード（クレジット）', '毎月イベント', '$today')";
+            'マルエツカード（クレジット）', '毎月イベント', '$today', 1)";
             DB::insert($maruetsu);
             
         }
@@ -162,11 +162,11 @@ class EventSetController extends Controller
 
             $inageya = "insert into sale_point
             (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
-            event_start, cash_kubun, keyword, register_day)
+            event_start, cash_kubun, keyword, register_day, card_true)
             values
             ($max_id, $s_id[$i], '毎月第３日曜日はさんにち割引', 
             'Vカードご提示で５％OFF', 'https://ingfan.jp/about/', '$third_sun', 
-            'ing・fanVカード（クレジット）', '毎月イベント', '$today')";
+            'ing・fanVカード（クレジット）', '毎月イベント', '$today', 1)";
             DB::insert($inageya);
             
         }
@@ -189,12 +189,12 @@ class EventSetController extends Controller
             $max_id = $max[0]->max_id;
 
             $comodi = "insert into sale_point
-            (sp_code, shop_id, sp_title, sp_subtitle, 
-            event_start, cash_kubun, keyword, register_day)
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url,
+            event_start, cash_kubun, keyword, register_day, card_true)
             values
-            ($max_id, 12, '毎週土日はコモカードポイント５倍！', 
-            '※一部対象外がございます。', '$weekEnd[$i]', 
-            'コモカード', '毎週イベント', '$today')";
+            ($max_id, 12, '毎週土日はコモカードポイント５倍！', '※一部対象外がございます。', 
+            'https://www.comodi-iida.co.jp/event/pdf/cld202201.pdf', '$weekEnd[$i]', 
+            'コモカード', '毎週イベント', '$today', 1)";
             DB::insert($comodi);
             DB::commit();
         }
@@ -214,11 +214,11 @@ class EventSetController extends Controller
             $max_id = $max[0]->max_id;
 
             $keio = "insert into sale_point
-            (sp_code, shop_id, sp_title, 
-            event_start, event_end, cash_kubun, keyword, register_day)
+            (sp_code, shop_id, sp_title, sp_url,
+            event_start, event_end, cash_kubun, keyword, register_day, card_true)
             values
-            ($max_id, $s_id[$i], '毎週水曜日から金曜日はポイント3倍', 
-            '$wed', '$fri', '京王パスポートカード', '毎週イベント', '$today')";
+            ($max_id, $s_id[$i], '毎週水曜日から金曜日はポイント3倍', 'https://www.keiostore.co.jp/service/point.html', 
+            '$wed', '$fri', '京王パスポートカード', '毎週イベント', '$today', 1)";
             DB::insert($keio);
             DB::commit();
         }
@@ -226,6 +226,56 @@ class EventSetController extends Controller
     }
 
 
+
+    // 毎週月曜に実施
+    // 3月末までの期間限定
+    public static function tobu_Tmoney(){
+        $sun = date('Ymd', strtotime('next sunday'));
+        $fri = date('Ymd', strtotime('next friday'));
+        $week = array($sun, $fri);
+
+        $today = date('Ymd');
+        
+
+        for($i = 0; $i < count($week); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $tobu = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url,
+            event_start, cash_kubun, keyword, register_day, card_true)
+            values
+            ($max_id, 20, '毎週金曜・日曜は Tマネー決済の日', 'https://tsite.jp/cp/index.pl?xpg=PCIC0102&cp_id=26108', 
+            'Ｔマネーで2,000円（税込）以上のお支払いが対象です（お一人様1日1回限り）。', 
+            '$week[$i]', 'Tマネー', '期間限定', '$today', 1)";
+            DB::insert($tobu);
+            DB::commit();
+        }
+    }
+
+    
+    // 毎週月曜日実施
+    public static function alps_doniti(){
+        $sat = date('Ymd', strtotime('next saturday'));
+        $sun = date('Ymd', strtotime('next sunday'));
+
+        $today = date('Ymd');
+
+        $id = "select max(sp_code) + 1 as max_id from sale_point";
+        $max = DB::select($id);
+        $max_id = $max[0]->max_id;
+
+        $alps = "insert into sale_point
+        (sp_code, shop_id, sp_title, sp_url,
+        event_start, event_end, cash_kubun, keyword, register_day, card_true)
+        values
+        ($max_id, 22, '毎週土曜・日曜はポイント２倍デー', 'http://superalps.info/card',
+        '$sat', '$sun', '現金・Edy・クレジットカードなど', '毎週イベント', '$today', 0)";
+        DB::insert($alps);
+        DB::commit();
+        
+    }
 
 
 

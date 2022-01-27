@@ -20,8 +20,9 @@ class Kernel extends ConsoleKernel
         \app\Console\Commands\Maruetsu_5timesCommand::class,
         \app\Console\Commands\InasanCommand::class,
         \app\Console\Commands\ComodoniCommand::class,
-        \app\Console\Commands\Keio3dayCommand::class
-
+        \app\Console\Commands\Keio3dayCommand::class,
+        \app\Console\Commands\TobuTCommand::class,
+        \app\Console\Commands\AlpsDonitiCommand::class
     ];
 
     /**
@@ -39,6 +40,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('InasanCommand')->monthlyOn(1, '11:00');
         $schedule->command('ComodoniCommand')->weeklyOn(1, '11:00');
         $schedule->command('Keio3day')->weeklyOn(6, '11:00');
+        $schedule->command('tobuTmoney')->weeklyOn(1, '11:00');
+        $schedule->command('alpsDoniti')->weeklyOn(1, '11:00');
     }
 
     /**

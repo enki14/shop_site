@@ -72,7 +72,10 @@ class Common {
         if(!empty($ymd)){
             $nengappi = date('Y年n月j日', strtotime($ymd));
             preg_match('/([1-9]|1[0-2])月([1-9]|[12][0-9]|3[1])日$/u', $nengappi, $match);
-            return $match[0];
+            
+            if(!empty($match[0])){
+                return $match[0];
+            }
         }else{
             return '';
         }

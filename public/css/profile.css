@@ -1010,13 +1010,20 @@ footer{
 }
 
 
-.footer-main{
+.footer-main:nth-child(2),
+.footer-main:nth-child(3){
    padding-left: 1rem; 
    border-left: 6px solid #d2691e;
 }
 
 .footer-link{
    color:#000;
+}
+
+.footer-link:hover{
+   text-decoration: none;
+   text-shadow: 0 0 6px #FFFF66,0 0 12px #ffff00;
+   transition: 0.8s;
 }
 
 
@@ -1028,18 +1035,6 @@ footer{
 }
 
 
-
-/* @media only screen and (max-width: 780px) {
-   .contact-h2{
-       font-size: 2rem;
-   }
-
-}  */
-
-@media only screen and (max-width: 420px) {
-
-
-} 
 
 
 /******************* お問い合わせフォーム関係 ***********************/
@@ -1065,12 +1060,6 @@ footer{
 
 .contact-back:hover{
    background: #fafad2;
-}
-
-.footer-link:hover{
-   text-decoration: none;
-   text-shadow: 0 0 10px blue,0 0 15px blue;
-   transition: 0.5s;
 }
 
 

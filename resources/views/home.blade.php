@@ -10,13 +10,13 @@
                 
                 <div class="col text-left mt-5">
                     <!-- 取得したい店舗によってaction先を変える -->    
-                    <form class="form-group" method="post" action="york">
+                    <form class="form-group" method="post" action="ok_store">
                     @csrf
                         <button type="submit">ストア登録</button>
                     </form>
 
                     <!-- 取得したいイベントによってaction先を変える -->
-                    <form class="form-group" method="post" action="keio_3times">
+                    <form class="form-group" method="post" action="alps_doniti">
                     @csrf
                         <button type="submit">イベント登録</button>
                     </form>

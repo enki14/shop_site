@@ -9,25 +9,22 @@
 {{-- カレンダー用モーダル --}}
 <div id="calendarModal" class="modal fade" aria-hidden="true" style="display: none">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <span id="modal-date" class="text-muted mt-3 pl-2"></span>
-            <div class="modal-header">
-                <h5 id="modalShop" class="pl-2"></h5>
+        <div id="modal_frame" class="modal-content">
+            <h5 id="modalShop" class="text-center pb-5 font-weight-bold text-dark"></h5>
+            <div class="modal_conta container bg-light py-4">
+                <span id="modal-date" class="pl-4 mt-3 font-weight-bold"></span>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>    
                     <span class="sr-only">close</span>
                 </button>
-            </div>
-            <div class="modal-body mb-4">
-                <h4 id="modalTitle" class="modal-title pb-2 px-sm-3"></h4>
-                <div id="modal_description" class="px-3 mb-3"></div>
-                <div class="container mt-5">
-                    <div class="row">
-                        <span class="col-6"><b>ココで使えるカード</span>&ensp;<i class="fas fa-angle-double-right">&ensp;</i></span>
-                        <div class="c_name col-6"></div>
+                <div class="modal-body mb-4">
+                    <h4 id="modalTitle" class="modal-title pb-2 px-sm-3"></h4>
+                    <div id="modal_description" class="px-3 mb-3 mt-2"></div>
+                    <div class="container mt-5">
+                        <div class="row c_name">
+                        </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -92,16 +89,26 @@ role="dialog" aria-hidden="true">
                 let c_name = info.event._def.extendedProps.c_name;
                 let c_link = info.event._def.extendedProps.c_link;
                 console.log(c_link);
-                let date = new Date(info.el.fcSeg.eventRange.range.start);
-                let year = date.getFullYear();
-                let month = date.getMonth() + 1;
-                let day = date.getDate();
+                let start = new Date(info.event.start);
+                let end = new Date(info.event.end);
+                console.log(end);
+                let s_month = start.getMonth() + 1;
+                let s_day = start.getDate();
+                let e_month = end.getMonth() + 1;
+                let e_day = end.getDate();
+                let def = 'Thu Jan 01 1970 09:00:00 GMT+0900 (GMT+09:00)';
                 // モーダルの日付表示
-                $('#modal-date').html(month + '月' + day + '日');
+                if(end != def){
+                    $('#modal-date').html('開催日　' + s_month + '月' + s_day + '日 ~ ' + e_month + '月' + e_day + '日');
+                }else{
+                    $('#modal-date').html('開催日　' + s_month + '月' + s_day + '日');
+                }
+                
                 // モーダルのタイトルを追加
                 $('#modalShop').html(info.event._def.title);
                 // タイトルのセット(append()ではなくhtml()を使う)
-                $('#modalTitle').html($('<a></a>', {href: info.event._def.url, target: "_blank"} ).text(info.event._def.extendedProps.main_title)); 
+                $('#modalTitle').html($('<a></a>', {href: info.event._def.url, target: "_blank", class: "modal_a"} )
+                .text(info.event._def.extendedProps.main_title)); 
                 // モーダルの本文をセット
                 $('#modal_description').html(info.event._def.extendedProps.description);
                 $('.c_name').html(cardOutput_2(c_name, c_link));
@@ -133,15 +140,19 @@ role="dialog" aria-hidden="true">
 
     
     function cardOutput_2(c_name, c_link){
-        if(c_name.match(/,/)){
+        if(c_name === null || c_name == ''){
+            return '';
+        }else if(c_name.match(/,/)){
             c_name = c_name.split(',');
             c_link = c_link.split(',');
             console.log(c_name);
             for(let i = 0; i < c_name.length; i++){
-                return "<a href="+ c_link[i] +" target='_blank'>" + c_name[i] + "</a>";
+                return "<span class='col-8'><b>ココで使えるカード</b>&ensp;<i class='fas fa-angle-double-right p-0'>&ensp;</i></span>" 
+                + "<div class='col-4 px-0'><a href="+ c_link[i] +" target='_blank'>" + c_name[i] + "</a></div>";
             }
         }else{
-            return "<a href="+ c_link +" target='_blank'>" + c_name + "</a>";
+            return "<span class='col-8'><b>ココで使えるカード</b>&ensp;<i class='fas fa-angle-double-right p-0'>&ensp;</i></span>" 
+            + "<div class='col-4 px-0'><a href="+ c_link +" target='_blank'>" + c_name + "</a></div>";
         }
 
     }
