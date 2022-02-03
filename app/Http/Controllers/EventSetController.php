@@ -246,8 +246,8 @@ class EventSetController extends Controller
             (sp_code, shop_id, sp_title, sp_subtitle, sp_url,
             event_start, cash_kubun, keyword, register_day, card_true)
             values
-            ($max_id, 20, '毎週金曜・日曜は Tマネー決済の日', 'https://tsite.jp/cp/index.pl?xpg=PCIC0102&cp_id=26108', 
-            'Ｔマネーで2,000円（税込）以上のお支払いが対象です（お一人様1日1回限り）。', 
+            ($max_id, 20, '毎週金曜・日曜は Tマネー決済の日', 'Ｔマネーで2,000円（税込）以上のお支払いが対象です（お一人様1日1回限り）。', 
+            'https://tsite.jp/cp/index.pl?xpg=PCIC0102&cp_id=26108', 
             '$week[$i]', 'Tマネー', '期間限定', '$today', 1)";
             DB::insert($tobu);
             DB::commit();
@@ -277,15 +277,44 @@ class EventSetController extends Controller
         
     }
 
+    // 当月26日に実施
+    // イオングループ全体のもの
+    public static function aeon_wakuwaku(){
+        $ymd = [];
+        $ym = date('Ym', strtotime('next month'));
+        $ymd[0] = $ym . '05';
+        $ymd[1] = $ym . '15';
+        $ymd[2] = $ym . '25';
+
+        $today = date('Ymd');
+
+        for($i = 0; $i < count($ymd); $i++){
+
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $aeon = "insert into sale_point
+            (sp_code, series_id, sp_title, sp_subtitle, sp_url,
+            event_start, cash_kubun, keyword, register_day, card_true)
+            values
+            ($max_id, 1, 'お客様わくわくデー', 
+            '毎月5日・15日・25日に対象店舗にて、WAONのお支払いでWAON POINTが2倍となります。', 
+            'https://www.waon.net/point/wakuwaku_day/',
+            '$ymd[$i]', 'waon', '毎月イベント', '$today', 1)";
+            DB::insert($aeon);
+            
+        }
+        DB::commit();
+
+    }
 
 
-    public function event_list(){
-        // 必要な素材：　img(src, alt), a(href), 添え付けられたテキスト
+    // コマンド実施対象外
+    // 画像の識字は読み取り専用なのでテーブルに格納できなかった
+    public static function seiyu_list(){
         $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
 
-        
-
-        $obj = new \stdClass();
 
         $sql_42 = 'select url, element_path from scrape where id = 42';
         $s_42 = DB::select($sql_42);
@@ -303,79 +332,309 @@ class EventSetController extends Controller
                 return $node->attr('src');
             });
 
-            $alt = $crawler->filter($data->element_path)->filter('div > img')
-            ->each(function($node){
-                return $node->attr('alt');
-            });
-
             $text = $crawler->filter($data->element_path)->filter('p.campaign_banner_term')
             ->each(function($node){
                 return $node->text();
             });
 
-            Log::debug($link);
+            $imageAnnotator = new ImageAnnotatorClient();
 
-        }
+            $seiyu = [];
+            $shop_count = 0;
+            for($i = 0; $i < count($src); $i++){
+                
+                $path = 'https://www.seiyu.co.jp' . $src[$i];  
 
-        $imageAnnotator = new ImageAnnotatorClient();
+                // Log::debug(print_r($obj, true));
+                $image = file_get_contents($path);
+                $response = $imageAnnotator->documentTextDetection($image);
+                $annotation = $response->getFullTextAnnotation();
 
-        $seiyu = [];
-        $shop_count = 0;
-        for($i = 0; $i < count($src); $i++){
-            
-            $path = 'https://www.seiyu.co.jp' . $src[$i];  
-            
-
-            // Log::debug($eventLink);
-
-            // Log::debug(print_r($obj, true));
-            $image = file_get_contents($path);
-            $response = $imageAnnotator->documentTextDetection($image);
-            $annotation = $response->getFullTextAnnotation();
-
-            # Log::debug out detailed and structured information about document text
-            if ($annotation) {
-                $allblockText = '';
-                // getPages() : OCRによって検出されたページのリスト
-                foreach ($annotation->getPages() as $page) {
-                    foreach ($page->getBlocks() as $block) {
-                        $block_text = '';
-                        foreach ($block->getParagraphs() as $paragraph) {
-                            foreach ($paragraph->getWords() as $word) {
-                                foreach ($word->getSymbols() as $symbol) {
-                                    $block_text .= $symbol->getText();
+                # Log::debug out detailed and structured information about document text
+                if ($annotation) {
+                    $allblockText = '';
+                    // getPages() : OCRによって検出されたページのリスト
+                    foreach ($annotation->getPages() as $page) {
+                        foreach ($page->getBlocks() as $block) {
+                            $block_text = '';
+                            foreach ($block->getParagraphs() as $paragraph) {
+                                foreach ($paragraph->getWords() as $word) {
+                                    foreach ($word->getSymbols() as $symbol) {
+                                        $block_text .= $symbol->getText();
+                                    }
+                                    // ↓↓↓　あとで要るかもしれないけど、スペースがあると日付が抽出できないのでコメントアウトにしている
+                                    $block_text .= ' ';
                                 }
-                                // ↓↓↓　あとで要るかもしれないけど、スペースがあると日付が抽出できないのでコメントアウトにしている
-                                // $block_text .= ' ';
+                                $block_text .= " ";
                             }
-                            $block_text .= " ";
-                            // Log::debug($block_text);
+                            $allblockText .= $block_text;
                         }
-                        $allblockText .= $block_text;
-                        
                     }
                 }
+                $imageAnnotator->close();
+
+                $id = "select max(el_id) + 1 as max_id from event_list";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id;
+
+                $eventLink = 'https://www.seiyu.co.jp' . $link[$i]; 
+                $today = date('Ymd');
+    
+                Log::debug($text[$i]);
+
+                $sql = "insert into event_list(el_id, el_name, link, el_title, ocr_text, register_day)
+                values ($max_id, '西友のイベ一覧', '$eventLink', '$text[$i]', '$allblockText[$i]', $today)";
+                DB::insert($sql);
+                DB::commit();
+                    
             }
-            $imageAnnotator->close();
-
-            $eventLink = 'https://www.seiyu.co.jp' . $link[$i]; 
-            $obj->eventLink = $eventLink;
-            $obj->text = $text[$i];
-            $obj->alt = $alt[$i];  
-            $obj->img_text = $allblockText;
-
-            $seiyu[$shop_count] = $obj;
-            $shop_count++;
-            Log::debug($seiyu);
-            
         }
+               
+    }
+
+
+    // 現在は未使用
+    public function itoyokado_list(){
+        $sql = "select * from event_list where el_name = 'イトーヨーカドーのイベ一覧'";
+        $itoyo = DB::select($sql);
+        DB::commit();
+
+        $output = [];
+        $output['itoyo'] = $itoyo;
+        return view('eventList', $output);
+    }
+
+
+
+    public static function megadonki_list(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+
+        $sql_51 = 'select url, element_path from scrape where id = 51';
+        $s_51 = DB::select($sql_51);
+        foreach($s_51 as $data){
+           
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('ul > li > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+            array_splice($link, 0, 2, null);
+
+            $title = $crawler->filter($data->element_path)->filter('ul > li > a > dl > dt')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $subtitle = $crawler->filter($data->element_path)->filter('ul > li > a > dl > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+
+
+            for($i = 0; $i < count($title); $i++){
+                if(preg_match('/^https/u', $link[$i])){
+                    $e_l = $link[$i];
+                }else{
+                    $e_link = str_replace('.', '', $link[$i]);
+                    $e_l = 'https://www.majica-net.com/campaign' . $e_link;
+                }
+
+                $today = date('Ymd');
+
+                $id = "select max(el_id) + 1 as max_id from event_list";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id; 
+
+                $sql = "insert into event_list(el_id, el_name, link, el_title, el_subtitle, register_day)
+                values ($max_id, 'メガドンキのイベ一覧', '$e_l', '$title[$i]', '$subtitle[$i]', $today)";
+                DB::insert($sql);
+                DB::commit();
+
+                    
+            }
+
+        }
+    }
+
+
+    public static function aeon_list(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+
+        $sql_52 = 'select url, element_path from scrape where id = 52';
+        $s_52 = DB::select($sql_52);
+        foreach($s_52 as $data){
+           
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('div.bnr > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $title = $crawler->filter($data->element_path)->filter('div.txt > div.tit > h2')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $subtitle = $crawler->filter($data->element_path)->filter('div.txt > div.info > p')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            // Log::debug($link);
+
+
+            for($i = 0; $i < count($title); $i++){
+                if(preg_match('/^http/u', $link[$i])){
+                    $e_l = $link[$i];
+                }else{
+                    $e_l = 'https://www.aeonretail.jp' . $link[$i];
+                }
+
+                $today = date('Ymd');
+
+                $id = "select max(el_id) + 1 as max_id from event_list";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id; 
+
+                $sql = "insert into event_list(el_id, el_name, link, el_title, el_subtitle, register_day)
+                values ($max_id, 'イオンのイベ一覧', '$e_l', '$title[$i]', '$subtitle[$i]', $today)";
+                DB::insert($sql);
+                DB::commit();
+
+                    
+            }
+
+        }
+    }
+
+
+    public static function york_list(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+
+        $sql_53 = 'select url, element_path from scrape where id = 53';
+        $s_53 = DB::select($sql_53);
+        foreach($s_53 as $data){
+           
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)->filter('a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+            $link_even = array_map('current', array_chunk($link, 2));
+            // Log::debug($link_even);
+
+            $title = $crawler->filter($data->element_path)->filter('p.title')
+            ->each(function($node){
+                return $node->text();
+            });
+            $title_even = array_map('current', array_chunk($title, 2));
+            Log::debug($title_even);
+            
+            
+
+            $subtitle = $crawler->filter($data->element_path)->filter('p.description')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            // Log::debug($link_even);
+
+            for($i = 0; $i < count($title_even); $i++){
+
+                $today = date('Ymd');
+
+                $id = "select max(el_id) + 1 as max_id from event_list";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id; 
+
+                $sql = "insert into event_list(el_id, el_name, link, el_title, el_subtitle, register_day)
+                values ($max_id, 'ヨークのイベ一覧', '$link_even[$i]', '$title_even[$i]', '$subtitle[$i]', $today)";
+                DB::insert($sql);
+                DB::commit();
+
+                    
+            }
+
+        }
+    }
+
+
+
+    public static function seizyo_list(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+
+        $sql_54 = 'select url, element_path from scrape where id = 54';
+        $s_54 = DB::select($sql_54);
+        foreach($s_54 as $data){
+           
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+            $link = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->attr('href');
+            });
+            array_splice($link, 12);
+
+            $title = $crawler->filter($data->element_path)
+            ->each(function($node){
+                return $node->text();
+            });
+            array_splice($title, 12);
+
+            for($i = 0; $i < count($title); $i++){
+
+                $today = date('Ymd');
+
+                $id = "select max(el_id) + 1 as max_id from event_list";
+                $max = DB::select($id);
+                $max_id = $max[0]->max_id; 
+
+                $sql = "insert into event_list(el_id, el_name, link, el_title, register_day)
+                values ($max_id, '成城石井のイベ一覧', '$link[$i]', '$title[$i]', $today)";
+                DB::insert($sql);
+                DB::commit();
+
+                    
+            }
+        }
+    }
+
+
+
+    // 不定期イベント出力用（不定期イベント作成後、その都度加えていく）
+    public function event_list(){
+        $s_1 = "select * from event_list where el_id between 1 and 8";
+        $seiyu = DB::select($s_1);
+
+        $s_2 = "select * from event_list where el_name = 'メガドンキのイベ一覧'";
+        $donki = DB::select($s_2);
+
+        $s_3 = "select * from event_list where el_name = 'イオンのイベ一覧'";
+        $aeon = DB::select($s_3);
+
+        $s_4 = "select * from event_list where el_name = 'ヨークのイベ一覧' order by register_day desc";
+        $york = DB::select($s_4);
+
+        $s_5 = "select * from event_list where el_name = '成城石井のイベ一覧' order by register_day desc";
+        $seizyo = DB::select($s_5);
 
         $output = [];
         $output['seiyu'] = $seiyu;
+        $output['donki'] = $donki;
+        $output['aeon'] = $aeon; 
+        $output['york'] = $york;
+        $output['seizyo'] = $seizyo;
         return view('eventList', $output);
-            
-            
-    }
 
+        DB::commit();
+
+    }
 
 }

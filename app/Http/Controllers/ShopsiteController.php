@@ -20,9 +20,7 @@ class ShopsiteController extends Controller
         // 住所か店舗を判断するフラグ（map_search.jsのパラメータ）
         $s_flag = $request->input('s_flag');
 
-
-        // Log::debug($lat);
-        // Log::debug($lng);
+        
         if($lat == '' or $lng == ''){
             // ないときは初期表示用の座標
             $search_lat = '35.704406';
@@ -37,81 +35,113 @@ class ShopsiteController extends Controller
 
             // $shop_listでmapの結果一覧を取得する
             $sql = "select
-            sht.shop_id,
-            sht.store_id,
-            sht.distance,
-            si.shop_name,
-            st.store_name,
-            si.img_src,
-            sp_sh.sp_title as shop_sale_title,
-            sp_st.sp_title as store_sale_title,
-            sp_sh.sp_subtitle as shop_sale_subtitle,
-            sp_st.sp_subtitle as store_sale_subtitle,
-            sp_sh.sp_url as shop_sale_spUrl,
-            sp_st.sp_url as store_sale_spUrl,
-            sp_sh.event_start as shop_sale_eventStart,
-            sp_st.event_start as store_sale_eventStart,
-            sp_sh.event_end as shop_sale_eventEnd,
-            sp_st.event_end as store_sale_eventEnd,
-            sp_sh.cash_kubun as shop_cashKubun,
-            sp_st.cash_kubun as store_cashKubun,
-            c_sh.card_name, 
-            c_sh.link,
-            c_sh.P_or_D
-        from (
-            select 
-                s2.shop_id,
-                s2.store_id,
-                GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
-                X(s2.location), ' ', Y(s2.location), ')'))) as distance 
-            from shop s 
-            inner join store s2 
-            on s.shop_id = s2.shop_id
-            having distance <= 0.898316016
-            order by distance
-            limit 10
-        ) sht
-        left outer join (
-            select * from sale_point
-            where (shop_id, event_start) in (
-                select shop_id, min(event_start) as event_start
-                from sale_point
-                where shop_id is not null
-                and event_start >= curdate() or event_end >= curdate()
-                group by shop_id
-            )) sp_sh
-        on sht.shop_id = sp_sh.shop_id
-        left outer join
-            (
-            select * from sale_point
-            where (store_id, event_start) in (
-                select store_id, min(event_start) as event_start
-                from sale_point
-                where store_id is not null
-                and event_start >= curdate() or event_end >= curdate()
-                group by store_id
-            )) sp_st 
-        on sht.store_id = sp_st.store_id
-        left outer join (
-            select 
-                c.shop_id, 
-                group_concat(c.card_name) as card_name, 
-                group_concat(c.link) as link,
-                c.P_or_D 
-            from card c
-            inner join shop s
-            on c.shop_id = s.shop_id
-            group by s.shop_id
-        ) c_sh
-        on sht.shop_id = c_sh.shop_id
-        inner join shop si on sht.shop_id = si.shop_id
-        inner join store st on sht.shop_id = st.shop_id and sht.store_id = st.store_id
-        order by sht.distance";
+                sht.shop_id,
+                sht.store_id,
+                sht.distance,
+                X(location) as lat,
+                Y(location) as lng,
+                se.series_name,
+                si.shop_name,
+                st.store_name,
+                sp_se.sp_title as se_title,
+                sp_sh.sp_title as sh_title, 
+                sp_st.sp_title as st_title,
+                sp_se.sp_subtitle as se_subtitle,
+                sp_sh.sp_subtitle as sh_subtitle,
+                sp_st.sp_subtitle as st_subtitle,
+                sp_se.sp_url as spse_url,
+                sp_sh.sp_url as spsh_url,
+                sp_st.sp_url as spst_url,
+                sp_se.event_start as se_start,
+                sp_sh.event_start as sh_start,
+                sp_st.event_start as st_start,
+                sp_se.event_end as se_end,
+                sp_sh.event_end as sh_end,
+                sp_st.event_end as st_end,
+                sp_se.cash_kubun as se_cash,
+                sp_sh.cash_kubun as sh_cash,
+                sp_st.cash_kubun as st_cash,
+                c_sh.card_name, 
+                c_sh.link
+            from (
+                select 
+                    s2.shop_id,
+                    s2.store_id,
+                    se.series_id,
+                    GLength(GeomFromText(CONCAT('LineString($search_lat $search_lng, ', 
+                    X(s2.location), ' ', Y(s2.location), ')'))) as distance 
+                from shop s 
+                inner join store s2 
+                on s.shop_id = s2.shop_id
+                left join series se
+                on s.series_id = se.series_id 
+                having distance <= 0.898316016
+                order by distance
+                limit 10
+            ) sht
+            left outer join (
+                select * from sale_point
+                where (series_id, event_start) in (
+                    select series_id, min(event_start) as event_start
+                    from sale_point
+                    where series_id is not null
+                    and event_start >= curdate() or event_end >= curdate()
+                    group by series_id
+                )) sp_se
+            on sht.series_id = sp_se.series_id
+            left outer join (
+                select * from sale_point
+                where (shop_id, event_start) in (
+                    select shop_id, min(event_start) as event_start
+                    from sale_point
+                    where shop_id is not null
+                    and event_start >= curdate() or event_end >= curdate()
+                    group by shop_id
+                )) sp_sh
+            on sht.shop_id = sp_sh.shop_id
+            left outer join
+                (
+                select * from sale_point
+                where (store_id, event_start) in (
+                    select store_id, min(event_start) as event_start
+                    from sale_point
+                    where store_id is not null
+                    and event_start >= curdate() or event_end >= curdate()
+                    group by store_id
+                )) sp_st 
+            on sht.store_id = sp_st.store_id
+            left outer join (
+                select 
+                    c.shop_id, 
+                    group_concat(c.card_name) as card_name, 
+                    group_concat(c.link) as link,
+                    c.P_or_D 
+                from card c
+                inner join shop s
+                on c.shop_id = s.shop_id
+                group by s.shop_id
+            ) c_sh
+            on sht.shop_id = c_sh.shop_id
+            left join series se
+            on sht.series_id = se.series_id
+            inner join shop si 
+            on sht.shop_id = si.shop_id
+            inner join store st 
+            on sht.shop_id = st.shop_id and sht.store_id = st.store_id
+            order by sht.distance";
 
             $shop_list = DB::select($sql);
 
         }
-        // Log::debug($shop_list);
+        
+        // キーワード検索のvalue値設定
+        $sql_2 = "select keyword 
+        from sale_point 
+        where keyword 
+        is not null and keyword != '' and event_start >= curdate() 
+        group by keyword";
+        $value = DB::select($sql_2);
+
 
         $output = [];
         $output['shop'] = '';
@@ -122,6 +152,7 @@ class ShopsiteController extends Controller
         $output['lng'] = $search_lng;
         $output['request_flag'] = $request_flag;
         $output['s_flag'] = $s_flag;
+        $output['value'] = $value;
         return view('page.top', $output);
         
     }
@@ -169,44 +200,76 @@ class ShopsiteController extends Controller
             // 1件分も用意している
             foreach($word_array as $val){
                 if(count($word_array) == 1){
-                    $add_shop_where .= "and s.shop_name LIKE '%$val%' ";
+                    $add_shop_where .= "and (se.series_name LIKE '%$val%' or s.shop_name LIKE '%$val%') ";
                     $add_store_where .= "and (s2.store_name like '%$val%'
-                    or s2.town LIKE '%$val%' or s2.ss_town like 
+                    or s2.prefectures LIKE '%$val%' or s2.town LIKE '%$val%' or s2.ss_town like 
                     '%$val%') ";
                 }elseif($val === $first){
-                    $add_shop_where .= "and s.shop_name LIKE '%$val%' or ";
+                    $add_shop_where .= "and (se.series_name LIKE '%$val%' or s.shop_name LIKE '%$val%') or ";
                     $add_store_where .= "and (s2.store_name like '%$val%'
-                    or s2.town LIKE '%$val%' or s2.ss_town like 
+                    or s2.prefectures LIKE '%$val%' or s2.town LIKE '%$val%' or s2.ss_town like 
                     '%$val%') or ";
                 }elseif($val === $end){
-                    $add_shop_where .= "s.shop_name LIKE '%$val%' ";
+                    $add_shop_where .= "(se.series_name LIKE '%$val%' or s.shop_name LIKE '%$val%') ";
                     $add_store_where .= "(s2.store_name like '%$val%'
-                    or s2.town LIKE '%$val%' or s2.ss_town like 
+                    or s2.prefectures LIKE '%$val%' or s2.town LIKE '%$val%' or s2.ss_town like 
                     '%$val%') ";
                 }else{
                     $add_shop_where .= "s.shop_name LIKE '%$val%' or ";
                     $add_store_where .= "(s2.store_name like '%$val%'
-                    or s2.town LIKE '%$val%' or s2.ss_town like 
-                    '%$val%')  or ";
+                    or s2.prefectures LIKE '%$val%' or s2.town LIKE '%$val%' or s2.ss_town like 
+                    '%$val%') or ";
                 }
             }
 
-            $add_order = "order by shop_name, store_name, event_start";
+            $add_order = "order by event_start, shop_name, store_name";
         }else{
             $add_order = "order by event_start";
         }
 
         $sql = "select 
-        sp.shop_id, sp.store_id, s.shop_name, 
-        s2.store_name, s.shop_url, s2.store_url, 
-        s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
-        sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day 
+            se.series_id, sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
+            sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day,
+            se.series_name, se.partner 
+        from series se
+        inner join sale_point sp 
+        on se.series_id = sp.series_id 
+        left join shop s
+        on sp.shop_id = s.shop_id
+        left join store s2 
+        on sp.store_id = s2.store_id
+        left outer join (
+            select 
+                c.shop_id,
+                group_concat(c.card_name) as card_name, 
+                group_concat(c.link) as link, 
+                c.P_or_D 
+            from card c
+            inner join shop s
+            on c.shop_id = s.shop_id 
+            group by s.shop_id
+        ) c_sh
+        on s.shop_id = c_sh.shop_id
+        where "
+        . $add_where . $add_shop_where .
+        "union all
+        select 
+            se.series_id, sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
+            sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, 
+            se.series_name, se.partner 
         from shop s
         inner join sale_point sp 
         on s.shop_id = sp.shop_id
         left join store s2 
         on sp.store_id = s2.store_id
+        left join series se
+        on se.series_id = sp.series_id 
         left outer join (
             select 
                 c.shop_id,
@@ -223,16 +286,19 @@ class ShopsiteController extends Controller
         . $add_where . $add_shop_where . 
         "union all 
         select 
-        sp.shop_id, sp.store_id, s.shop_name, 
-        s2.store_name, s.shop_url, s2.store_url, 
-        s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
-        sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day
+            se.series_id, sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
+            sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, 
+            se.series_name, se.partner 
         from store s2
         inner join sale_point sp 
         on s2.store_id = sp.store_id
         left join shop s 
-        on s2.shop_id = s.shop_id
+        on s2.shop_id = s.shop_id 
+        left join series se
+        on se.series_id = sp.series_id
         left outer join (
             select 
                 c.shop_id, 
@@ -244,14 +310,13 @@ class ShopsiteController extends Controller
             on c.shop_id = s.shop_id
             group by s.shop_id
         ) c_sh
-        on s2.shop_id = c_sh.shop_id
+        on s2.shop_id = c_sh.shop_id 
         where "
-        . $add_where . $add_store_where 
-        . $add_order;
+        . $add_where . $add_store_where . $add_order;
 
         // where構文はそれぞれ別だが$add_whereに統一することでif文にも対応できている
         $s = DB::select($sql);
-        Log::debug('sql:' .$sql);
+        // Log::debug('sql:' .$sql);
         $collect = collect($s); 
         
         $pagenate = new LengthAwarePaginator(
@@ -274,6 +339,7 @@ class ShopsiteController extends Controller
 
 
 
+
     public function keyRes(Request $request){
         // Log::debug('keyRes start!!');
         $keyword = $request->input('keyword');
@@ -285,16 +351,20 @@ class ShopsiteController extends Controller
         $add_order = "order by event_start";
 
         $sql = "select 
-        sp.shop_id, sp.store_id, s.shop_name, 
-        s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
-        sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, sp.card_true
-        from shop s
+            se.series_id, sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
+            sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day,
+            se.series_name, se.partner 
+        from series se
         inner join sale_point sp 
-        on s.shop_id = sp.shop_id
+        on se.series_id = sp.series_id 
+        left join shop s
+        on sp.shop_id = s.shop_id
         left join store s2 
-        on sp.store_id = s2.store_id 
-        left join (
+        on sp.store_id = s2.store_id
+        left outer join (
             select 
                 c.shop_id,
                 group_concat(c.card_name) as card_name, 
@@ -305,21 +375,54 @@ class ShopsiteController extends Controller
             on c.shop_id = s.shop_id 
             group by s.shop_id
         ) c_sh
-        on s.shop_id = c_sh.shop_id 
+        on s.shop_id = c_sh.shop_id
         where "
-        . $add_where .
+        . $add_where . 
+        "union all
+        select 
+            se.series_id, sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
+            sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, 
+            se.series_name, se.partner 
+        from shop s
+        inner join sale_point sp 
+        on s.shop_id = sp.shop_id
+        left join store s2 
+        on sp.store_id = s2.store_id
+        left join series se
+        on se.series_id = sp.series_id 
+        left outer join (
+            select 
+                c.shop_id,
+                group_concat(c.card_name) as card_name, 
+                group_concat(c.link) as link, 
+                c.P_or_D 
+            from card c
+            inner join shop s
+            on c.shop_id = s.shop_id 
+            group by s.shop_id
+        ) c_sh
+        on s.shop_id = c_sh.shop_id
+        where "
+        . $add_where . 
         "union all 
         select 
-        sp.shop_id, sp.store_id, s.shop_name, 
-        s2.store_name, s.shop_url, s2.store_url, s.img_src, sp.cash_kubun,
-        sp.sp_title, sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, sp.card_true
+            se.series_id, sp.shop_id, sp.store_id, s.shop_name, 
+            s2.store_name, s.shop_url, s2.store_url, 
+            s.img_src, sp.cash_kubun, sp.sp_title, sp.card_true,
+            sp.sp_subtitle, sp.sp_url, sp.event_start, sp.event_end,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.register_day, 
+            se.series_name, se.partner 
         from store s2
         inner join sale_point sp 
         on s2.store_id = sp.store_id
         left join shop s 
         on s2.shop_id = s.shop_id 
-        left join (
+        left join series se
+        on se.series_id = sp.series_id
+        left outer join (
             select 
                 c.shop_id, 
                 group_concat(c.card_name) as card_name, 
@@ -332,7 +435,7 @@ class ShopsiteController extends Controller
         ) c_sh
         on s2.shop_id = c_sh.shop_id 
         where "
-        .$add_where . $add_order;
+        . $add_where . $add_order;
 
         $list = DB::select($sql);
         $collect = collect($list); 
@@ -345,11 +448,22 @@ class ShopsiteController extends Controller
             ['path'=> $request->url()]
         );
 
+
+        // キーワード検索のvalue値設定
+        $sql_2 = "select keyword 
+        from sale_point 
+        where keyword 
+        is not null and keyword != '' and event_start >= curdate() 
+        group by keyword";
+        $value = DB::select($sql_2);
+
+
         $output = [];
         $output['keyword'] = $keyword;
         // リクエストパラメータのキーは上のキーと合わせるようにする
         $output['pagenate_params'] = [ 'keyword'=> $keyword ];
         $output['pagenate'] = $pagenate;
+        $output['value'] = $value;
         // Log::debug('keyRes end!!');
         return view('page.subResult', $output);
     }
@@ -415,33 +529,36 @@ class ShopsiteController extends Controller
         Log::debug($S_lat);
         // indexメソッドの方と同じsql文だが、こちらはasを使用していない
         $sql = "select
-            sht.shop_id,
-            sht.store_id,
             sht.distance,
             X(location) as lat,
             Y(location) as lng,
             si.shop_name,
             st.store_name,
-            si.img_src, 
+            sp_se.sp_title as se_title,
             sp_sh.sp_title as sh_title, 
-            sp_st.sp_title as st_title, 
+            sp_st.sp_title as st_title,
+            sp_se.sp_subtitle as se_subtitle,
             sp_sh.sp_subtitle as sh_subtitle,
             sp_st.sp_subtitle as st_subtitle,
+            sp_se.sp_url as spse_url,
             sp_sh.sp_url as spsh_url,
             sp_st.sp_url as spst_url,
+            sp_se.event_start as se_start,
             sp_sh.event_start as sh_start,
             sp_st.event_start as st_start,
+            sp_se.event_end as se_end,
             sp_sh.event_end as sh_end,
             sp_st.event_end as st_end,
-            sp_sh.cash_kubun,
-            sp_st.cash_kubun,
+            sp_se.cash_kubun as se_cash,
+            sp_sh.cash_kubun as sh_cash,
+            sp_st.cash_kubun as st_cash,
             c_sh.card_name, 
-            c_sh.link,
-            c_sh.P_or_D
+            c_sh.link
         from (
             select 
                 s2.shop_id,
                 s2.store_id,
+                s.series_id,
                 GLength(GeomFromText(CONCAT('LineString($S_lat $S_lng, ', 
                 X(s2.location), ' ', Y(s2.location), ')'))) as distance 
             from shop s 
@@ -451,6 +568,16 @@ class ShopsiteController extends Controller
             order by distance
             limit 10
         ) sht
+        left outer join (
+            select * from sale_point
+            where (series_id, event_start) in (
+                select series_id, min(event_start) as event_start
+                from sale_point
+                where series_id is not null
+                and event_start >= curdate() or event_end >= curdate()
+                group by series_id
+            )) sp_se
+        on sht.series_id = sp_se.series_id
         left outer join (
             select * from sale_point
             where (shop_id, event_start) in (
@@ -484,6 +611,8 @@ class ShopsiteController extends Controller
             group by s.shop_id
         ) c_sh
         on sht.shop_id = c_sh.shop_id
+        left join series se
+        on sht.series_id = se.series_id
         inner join shop si 
         on sht.shop_id = si.shop_id
         inner join store st 
@@ -501,11 +630,34 @@ class ShopsiteController extends Controller
 
     
     public function eventCalendar_2(Request $request){
-        // 会社全体のイベントを取得するためのsql
+        // グループ全体のイベントを取得するためのsql
         $sql = "select 
-        sp.sp_code, s.shop_name, s.shop_url, sp.sp_title, 
-        sp.sp_subtitle, sp.event_start, sp.event_end, sp.sp_url,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D
+            sp.sp_code, se.series_id, se.series_name, se.partner, sp.sp_title, 
+            sp.sp_subtitle, sp.event_start, sp.event_end, sp.sp_url,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.card_true
+        from series se
+        left join sale_point sp 
+        on se.series_id = sp.series_id
+        left join (
+            select 
+                c.series_id, 
+                group_concat(c.card_name) as card_name, 
+                group_concat(c.link) as link,
+                c.P_or_D
+            from card c
+            inner join series se
+            on c.series_id = se.series_id
+            group by se.series_id
+        ) c_sh
+        on se.series_id = c_sh.series_id";
+        $series = DB::select($sql);
+
+
+        // 会社全体のイベントを取得するためのsql
+        $sql_2 = "select 
+            sp.sp_code, s.shop_name, s.shop_url, s.img_src, sp.sp_title, 
+            sp.sp_subtitle, sp.event_start, sp.event_end, sp.sp_url,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.card_true
         from shop s 
         left join sale_point sp 
         on s.shop_id = sp.shop_id
@@ -522,14 +674,15 @@ class ShopsiteController extends Controller
         ) c_sh
         on s.shop_id = c_sh.shop_id
         where sp_code is not null";
-        $shop = DB::select($sql);
+        $shop = DB::select($sql_2);
 
+        
         // 店舗ごとのイベントを取得するためのsql
-        $sql_2 = "select 
-        sp.sp_code, s.shop_name, s2.store_name, s.shop_url, 
-        s2.store_url, sp.sp_title, sp.sp_subtitle, 
-        sp.event_start, sp.event_end, sp.sp_url,
-        c_sh.card_name, c_sh.link, c_sh.P_or_D
+        $sql_3 = "select 
+            sp.sp_code, s.shop_name, s2.store_name, s.shop_url, 
+            s2.store_url, sp.sp_title, sp.sp_subtitle, 
+            sp.event_start, sp.event_end, sp.sp_url,
+            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.card_true
         from shop s 
         left join store s2 
         on s.shop_id = s2.shop_id
@@ -548,12 +701,56 @@ class ShopsiteController extends Controller
         ) c_sh
         on s2.shop_id = c_sh.shop_id
         where sp_code is not null";
-        $store = DB::select($sql_2);
+        $store = DB::select($sql_3);
 
 
         $response = [];
         $output = [];
 
+        // グループイベントとして回す
+        foreach($series as $data){
+            $output['id'] = $data->sp_code;
+            $output['main_title'] = $data->sp_title;
+            $output['description'] = $data->sp_subtitle;
+            $output['url'] = $data->sp_url;
+            $output['title'] = $data->series_name . 'からのお知らせ';
+            $output['c_name'] = $data->card_name;
+            $output['c_link'] = $data->link;
+            $output['P_or_D'] = $data->P_or_D;
+            $output['partnaer'] = $data->partner;
+            $output['c_true'] = $data->card_true;
+            
+            // varchar(8) にハイフンをつける
+            $start = Common::hyphenFormat($data->event_start);
+            $end = Common::hyphenFormat($data->event_end);
+            // shop_id の是非判定で会社全体としてのイベントだけを取得する
+            // 会社イベントをインサートする際に sp.shop_id に+1の番号が振られる
+            
+            // event_startが無ければ、そのイベントは無視される（要検討
+            if($start == ''){
+                $data;
+                continue;
+            }else{        
+                // event_startとevent_endのセット
+                if($end != '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = $end;
+                }elseif($end == '' && $start != ''){
+                    $output['start'] = $start;
+                    $output['end'] = null;   
+                }elseif($end != '' && $start == ''){
+                    $output['start'] = null;
+                    $output['end'] = $end; 
+                }else{
+                    $output['start'] = null;
+                    $output['end'] = null;
+                }
+            }
+            // $outputに諸々をセットしてから、$responseとして入れなおす？
+            $response[] = $output;
+        }        
+        
+        
         // 会社イベントとして回す
         foreach($shop as $data){
             $output['id'] = $data->sp_code;
@@ -562,9 +759,11 @@ class ShopsiteController extends Controller
             $output['url'] = $data->sp_url;
             $output['sh_url'] = $data->shop_url;
             $output['title'] = $data->shop_name . 'からのお知らせ';
+            $output['img_src'] = $data->img_src;
             $output['c_name'] = $data->card_name;
             $output['c_link'] = $data->link;
             $output['P_or_D'] = $data->P_or_D;
+            $output['c_true'] = $data->card_true;
             
             // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
@@ -605,10 +804,11 @@ class ShopsiteController extends Controller
             $output['url'] = $data->sp_url;
             $output['sh_url'] = $data->shop_url;
             $output['st_url'] = $data->store_url;
-            $output['title'] = $data->shop_name . $data->store_name;
+            $output['title'] = $data->shop_name . $data->store_name . 'からのお知らせ';
             $output['c_name'] = $data->card_name;
             $output['c_link'] = $data->link;
             $output['P_or_D'] = $data->P_or_D;
+            $output['c_true'] = $data->card_true;
             
             // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
@@ -642,7 +842,7 @@ class ShopsiteController extends Controller
             $response[] = $output;
                     
         }   
-        // Log::debug($response);
+        Log::debug($response);
         return Response::json($response);
     }
 

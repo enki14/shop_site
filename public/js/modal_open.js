@@ -52,15 +52,14 @@ $(function() {
         error();
         // リクエストがあったときに右から左に流れるやつ
         window.addEventListener('load', function(){
-            let a_info = $(".animation-info");
+            let a_info = $(".board");
             let props = {
                 "display": "inline-block",
             }
             a_info.fadeIn(1000).css(props);
-            
-
-           
         });
+
+
     }
     
 });
@@ -144,16 +143,18 @@ function error(error) {
 
 // マーカーや吹き出しの表示
 function setMarker(markerData){
-    // console.log(markerData);
 
     for(let i = 0; i < markerData.length; i++){
         let latS = parseFloat(markerData[i]['lat']);
         let lngS = parseFloat(markerData[i]['lng']);
-
+        
+        let se_start = markerData[i]['se_start'] || '';
+        let se_end = markerData[i]['se_end'] || '';
         let sh_start = markerData[i]['sh_start'] || '';
         let sh_end = markerData[i]['sh_end'] || '';
         let st_start = markerData[i]['st_start'] || '';
         let st_end = markerData[i]['st_end'] || '';
+        let se_day = DateFormat(se_start, se_end);
         let sh_day = DateFormat(sh_start, sh_end);
         let st_day = DateFormat(st_start, st_end);
         
@@ -161,15 +162,17 @@ function setMarker(markerData){
         // 空値も変数にして含めないと、逆にほとんど表示されなくなる
         let shop = markerData[i]['shop_name'] || '';
         let store = markerData[i]['store_name'] || '';
+        let se_title = markerData[i]['se_title'] || '';
         let sh_title = markerData[i]['sh_title'] || '';
         let st_title = markerData[i]['st_title'] || '';
+        let se_subtitle = markerData[i]['se_subtitle'] || '';
         let sh_subtitle = markerData[i]['sh_subtitle'] || '';
         let st_subtitle = markerData[i]['st_subtitle'] || '';
+        let spse_url = markerData[i]['spse_url'] || '';
         let spsh_url = markerData[i]['spsh_url'] || '';
         let spst_url = markerData[i]['spst_url'] || '';
         let card_name = markerData[i]['card_name'] || '';
         let link = markerData[i]['link'] || '';
-
         let markerStore = new google.maps.LatLng({ lat: latS, lng: lngS });
 
 
@@ -196,10 +199,9 @@ function setMarker(markerData){
         "<div class='info_win'>" +
             "<h5 class='firstHeading'>" + shop + store + "</h5>"+
             "<div class='info_Content'>" +
-                spTitle(sh_title, st_title, spsh_url, spst_url) + 
-                spSubtitle(sh_subtitle, st_subtitle) +
-                eventExist(markerData[i]['sp_url']) + 
-                eventDay(sh_day, st_day) +
+                spTitle(se_title, sh_title, st_title, spse_url, spsh_url, spst_url) + 
+                spSubtitle(se_subtitle, sh_subtitle, st_subtitle) +
+                eventDay(se_day, sh_day, st_day) +
                 "<div class='container mt-5'>" + 
                     "<div class='row'>" +
                         "<small class='cocode col-8 d-flex justify-content-start'><b>ココで使えるカード&ensp;<i class='fas fa-angle-double-right'>&ensp;</i></small>" + 
@@ -233,9 +235,11 @@ function DateFormat(start, end){
     
 }
 
-// DateFormat関数を受けて、ショップ情報の日付かストア情報の日付かを判断している
-function eventDay(sh_day, st_day){
-    if(sh_day){
+// DateFormat関数を受けて、シリーズ情報の日付かショップ情報かストア情報かを判断している
+function eventDay(se_day, sh_day, st_day){
+    if(se_day){
+        return "<small class='modal-mDate'>" + se_day + "</small>";
+    }else if(sh_day){
         return "<small class='modal-mDate'>" + sh_day + "</small>";
     }else{
         return "<small class='modal-mDate'>" + st_day + "</small>";
@@ -246,8 +250,14 @@ function eventDay(sh_day, st_day){
 
 // jsで出力する際に、カラムはショップ情報とストア情報とそれぞれ別名義にする必要があった
 // 因みにbladeに渡した際はsqlには as で別名義にしなくても表示された
-function spTitle(sh_title, st_title, spsh_url, spst_url){
-    if(sh_title){
+function spTitle(se_title, sh_title, st_title, spse_url, spsh_url, spst_url){
+    if(se_title){
+        if(spse_url){
+            return "<a href='" + spse_url + "' target='_blank'><p class='spTitle font-weight-bold'>" + se_title + "</p></a>";
+        }else{
+            return "<p class='spTitle font-weight-bold'>" + se_title + "</p>";
+        }   
+    }else if(sh_title){
         if(spsh_url){
             return "<a href='" + spsh_url + "' target='_blank'><p class='spTitle font-weight-bold'>" + sh_title + "</p></a>";
         }else{
@@ -266,8 +276,10 @@ function spTitle(sh_title, st_title, spsh_url, spst_url){
 }
 
 
-function spSubtitle(sh_subtitle, st_subtitle){
-    if(sh_subtitle){
+function spSubtitle(se_subtitle, sh_subtitle, st_subtitle){
+    if(se_subtitle){
+        return "<p class='spSubtitle'>" + se_subtitle + "</p>";
+    }else if(sh_subtitle){
         return "<p class='spSubtitle'>" + sh_subtitle + "</p>";
     }else if(st_subtitle){
         return "<p class='spSubtitle'>" + st_subtitle + "</p>";
@@ -277,19 +289,6 @@ function spSubtitle(sh_subtitle, st_subtitle){
 }
 
 
-// functionの中にfunctionを書かないように注意！
-// sp_urlの値があるかどうかの判定
-function eventExist(sp_url){
-    if(sp_url){
-        // ダブルコーテーションで文字列を囲い、シングルで属性値を囲う
-        // この場合、sp_urlが文字列とつながるようにダブルをシングルで覆う
-        // returnも忘れずに
-        return "<small><a href='"+ sp_url +"' target='_blank'>詳しくはこちら</a></small>";
-    }else{
-        return '';
-    }
-}
-
 // カード情報を吹き出しの中で出力
 function cardOutput(card_name, link){
     // カンマ区切りの複数のカード情報があるかないか
@@ -297,7 +296,6 @@ function cardOutput(card_name, link){
         card_name = card_name.split(',');
         // console.log(card_name);
         link = link.split(',');
-        console.log(link);
         for(let i = 0; i < link.length; i++){
             return "<a href="+ link[i] +" target='_blank' class='pl-2'>" + card_name[i] + "</a>";
         }

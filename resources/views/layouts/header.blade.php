@@ -7,7 +7,7 @@
               <a href="{{ url('/') }}" class="logo_link"><img src="{{ asset('/img/point-card_logo4.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" width="100px" /></a>
             </div>
             <div class="col-6 board">
-              <p class="animation-info font-weight-bold pt-2 ml-2">地図下に検索の一覧が出ました</p>
+              <p class="animation-info font-weight-bold pt-1 ml-2">地図下に検索の一覧が出ました</p>
             </div>
           </div>
         </div>

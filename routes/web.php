@@ -66,6 +66,16 @@ Route::post('/comodi_donichi', 'EventSetController@comodi_donichi');
 Route::post('/keio_3times', 'EventSetController@keio_3times');
 Route::post('/tobu_Tmoney', 'EventSetController@tobu_Tmoney');
 Route::post('/alps_doniti', 'EventSetController@alps_doniti');
+Route::post('/aeon_wakuwaku', 'EventSetController@aeon_wakuwaku');
+
+// event_listテーブルにセットするものは'/event_list'へ
+Route::get('/seiyu_list', 'EventSetController@seiyu_list');
+Route::post('/donki_list', 'EventSetController@megadonki_list');
+Route::post('/aeon_list', 'EventSetController@aeon_list');
+Route::post('/york_list', 'EventSetController@york_list');
+Route::post('/seizyo_list', 'EventSetController@seizyo_list');
+
+// 不定期イベント出力用
 Route::get('/event_list', 'EventSetController@event_list');
 
 

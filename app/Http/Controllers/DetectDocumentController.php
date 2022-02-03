@@ -199,6 +199,8 @@ class DetectDocumentController extends Controller
             ->each(function($node){
                 return $node->attr("src");
             });
+
+            Log::debug($imgpath);
         }
         // dd($event_url);
 
@@ -242,18 +244,16 @@ class DetectDocumentController extends Controller
 
             $ret = Common::regExpression($allblockText);
 
-            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $id = "select max(el_id) + 1 as max_id from event_list";
             $max = DB::select($id);
             $max_id = $max[0]->max_id;
 
-            $sql = "insert into sale_point(shop_id, sp_code, sp_subtitle, sp_url, event_start, event_end) 
-            values(2, $max_id, '$allblockText', '$sp_url[$i]', '$ret->START_DATE', '$ret->END_DATE')";
-            // dd($sql);
-            DB::insert($sql);
+            $sql = "insert into event_list(el_id, el_name, link, ocr_text)
+            values ($max_id, 'イトーヨーカドーのイベ一覧', '$sp_url[$i]', '$allblockText[$i]')";
+            DB::select($sql);
             DB::commit();
         }
 
-        return redirect('/');
     }
 
 

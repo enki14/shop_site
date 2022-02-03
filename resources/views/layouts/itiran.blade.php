@@ -19,6 +19,7 @@
     </p>
 @if(isset($pagenate))
     @foreach($pagenate as $data) 
+    <?php Log::debug($data->series_name); ?>
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="itiran-card card mx-auto my-3">
@@ -36,7 +37,9 @@
                     @endif
                     <div class="row">
                         <h2 class="itiran_tenmei col-md-12 text-center font-weight-bold mt-4">
-                            @if(!empty($data->store_url))
+                            @if(!empty($data->series_id))
+                                {{ $data->series_name }}グループ
+                            @elseif(!empty($data->store_url))
                                 <a href="{{ $data->store_url }}" target="_blank" class="text-dark">
                                     {{ $data->shop_name }}{{ $data->store_name }}
                                 </a>

@@ -1,6 +1,6 @@
 create table shop
 (shop_id int(4), shop_name varchar(60), shop_url varchar(255), twitter_user_id varchar(30),
- img_src varchar(255), series varchar(80), primary key(shop_id));
+ img_src varchar(255), primary key(shop_id));
 
 create table sale_point
 (sp_code int(10), shop_id int(4), store_id int(5), sp_title varchar(255),
@@ -13,6 +13,10 @@ create table store
  store_tel varchar(20), store_url varchar(1024), business_hours varchar(250),
  prefectures varchar(15), town varchar(30), ss_town varchar(30), location geometry, 
  bfr_aftr int(1), primary key(shop_id, store_id));
+
+create table series
+(series_id int(3), series_name varchar(40), partner varchar(200), primary key(series_id));
+
 
 -- ※shopテーブルの説明
 -- series  ・・・・・・・・・・店の系列

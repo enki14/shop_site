@@ -22,7 +22,13 @@ class Kernel extends ConsoleKernel
         \app\Console\Commands\ComodoniCommand::class,
         \app\Console\Commands\Keio3dayCommand::class,
         \app\Console\Commands\TobuTCommand::class,
-        \app\Console\Commands\AlpsDonitiCommand::class
+        \app\Console\Commands\AlpsDonitiCommand::class,
+        \app\Console\Commands\AeonWakuCommand::class,
+        \app\Console\Commands\SeiyuList_Command::class,
+        \app\Console\Commands\DonkiList_Command::class,
+        \app\Console\Commands\AeonList_Command::class,
+        \app\Console\Commands\yorkList_Command::class,
+        \app\Console\Commands\seizyoList_Command::class
     ];
 
     /**
@@ -42,6 +48,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('Keio3day')->weeklyOn(6, '11:00');
         $schedule->command('tobuTmoney')->weeklyOn(1, '11:00');
         $schedule->command('alpsDoniti')->weeklyOn(1, '11:00');
+        $schedule->command('aeonwakuwaku')->monthlyOn(26, '11:00');
+        $schedule->command('seiyuList')->monthlyOn(1, '11:00');
+        $schedule->command('donkiList')->monthlyOn(2, '11:00');
+        $schedule->command('aeonList')->monthlyOn(1, '11:00');
+        $schedule->command('yorkList')->monthlyOn(2, '11:00');
+        $schedule->command('seizyoList')->monthlyOn(1, '11:00');
     }
 
     /**

@@ -16,7 +16,7 @@
                     </form>
 
                     <!-- 取得したいイベントによってaction先を変える -->
-                    <form class="form-group" method="post" action="alps_doniti">
+                    <form class="form-group" method="post" action="seizyo_list">
                     @csrf
                         <button type="submit">イベント登録</button>
                     </form>
