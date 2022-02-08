@@ -10,7 +10,7 @@ credit int(1), P_or_D int(1), primary key(card_id))
 
 create table event_list
 (el_id int(3), el_name varchar(80), link varchar(700), el_title varchar(500), 
-el_subtitle varchar(1000), ocr_text varchar(1000), primary key(el_id))
+el_subtitle varchar(1000), ocr_text varchar(1000), register_day char(8), primary key(el_id))
 
 
 -- localdataテーブルの説明　(現在は未使用)

@@ -7,7 +7,7 @@
               <a href="{{ url('/') }}" class="logo_link"><img src="{{ asset('/img/point-card_logo4.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" width="100px" /></a>
             </div>
             <div class="col-6 board">
-              <p class="animation-info font-weight-bold pt-1 ml-2">地図下に検索の一覧が出ました</p>
+              <p class="animation-info font-weight-bold pt-1 ml-2">地図の下&nbsp;&nbsp;検索の一覧を出しました</p>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@
             class="twitter" rel="nofollow" target="_blank">
                 <i class="fab fa-twitter fa-2x mb-5"></i>
             </a>
-            <a href="https://social-plugins.line.me/lineit/share?url=https://point-everyday.com/" 
+            <a href="https://line.me/R/ti/p/%40156hwqfo" 
             class="line_button" rel="nofollow" target="_blank">
                 <i class="fab fa-line fa-2x mb-5"></i>
             </a>

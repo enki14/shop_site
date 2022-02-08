@@ -20,6 +20,6 @@
             </a>
         </div>
     </div>
-    
+    <p class="d-flex justify-content-end mr-5 mt-4 font-weight-bold">Copyright © 2022 ポイントカード情報局</p>
 </footer>
 @endsection

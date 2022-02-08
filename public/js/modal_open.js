@@ -238,11 +238,11 @@ function DateFormat(start, end){
 // DateFormat関数を受けて、シリーズ情報の日付かショップ情報かストア情報かを判断している
 function eventDay(se_day, sh_day, st_day){
     if(se_day){
-        return "<small class='modal-mDate'>" + se_day + "</small>";
+        return "<small class='modal-mDate font-weight-bold'>" + se_day + "</small>";
     }else if(sh_day){
-        return "<small class='modal-mDate'>" + sh_day + "</small>";
+        return "<small class='modal-mDate font-weight-bold'>" + sh_day + "</small>";
     }else{
-        return "<small class='modal-mDate'>" + st_day + "</small>";
+        return "<small class='modal-mDate font-weight-bold'>" + st_day + "</small>";
     }
 
 }
@@ -297,10 +297,10 @@ function cardOutput(card_name, link){
         // console.log(card_name);
         link = link.split(',');
         for(let i = 0; i < link.length; i++){
-            return "<a href="+ link[i] +" target='_blank' class='pl-2'>" + card_name[i] + "</a>";
+            return "<a href="+ link[i] +" target='_blank' class='pl-2 font-weight-bold'>" + card_name[i] + "</a>";
         }
     }else{
-        return "<a href="+ link +" target='_blank' class='pl-2'>" + card_name + "</a>";
+        return "<a href="+ link +" target='_blank' class='pl-2 font-weight-bold'>" + card_name + "</a>";
     }
 
 }

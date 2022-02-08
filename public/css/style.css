@@ -13,18 +13,11 @@ nav{
 }
 
 
-img{
-    max-width: 100%;
-    height: auto;
-}
-
-
-
 
 @media only screen and (max-width: 420px) {
 
     h1, h2, h3, h4, p, button{
-        font-size: 60% !important;
+        font-size: 80% !important;
     }
 
     body{
@@ -37,10 +30,6 @@ img{
 
     ::placeholder{
         font-size: 60%;
-    }
-
-    input{
-        font-size: 60% !important;
     }
 
     small{
@@ -56,8 +45,9 @@ img{
     }
 
     input{
+        font-size: 60% !important;
         max-width: 30% !important;
-        height: 2rem !important;
+        height: 2.3rem !important;
     }
 
     select{
@@ -73,7 +63,7 @@ img{
  }
 
 
-/************ ロゴのきらりと光るアニメーション↓↓↓ ***********/
+/************ ロゴのきらりと光るアニメーション(なし)↓↓↓ ***********/
 .logo_link{
     position: relative; 
     text-decoration: none;
@@ -81,41 +71,20 @@ img{
     overflow: hidden; 
 }
 
-/* .logo_link:before{
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: -160%;
-    width: 10px;
-    height: 52px;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
-    transform: skewX(-25deg);
-} 
-
-.logo_link:hover::before{
-    animation: shine 0.7s;
-}
-
-@keyframes shine{
-    100%{
-        left: 125%;
-    }
-} */
 
 @media only screen and (max-width: 420px){
-    .logo_link{
-        width: 70px;
-        height: auto;
-    }
 
     .text-right{
         height: 100% !important;
     }
 
-    #my-name{
-        font-size: 12px !important;
-        font-weight: 800;
+} 
+
+@media only screen and (max-width: 300px){
+    .logo_link img{
+        width: 80px;
     }
+
 } 
 
 /************ ロゴのきらりと光るアニメーション ↑↑↑ ***********/
@@ -208,7 +177,7 @@ img{
     .animation-info{
         top: 10%;
         font-size: 1.3em !important;
-        padding-left: 0;
+        padding-left: 20px;
     }
 }
 
@@ -219,7 +188,8 @@ img{
 
     .animation-info{
         font-size: 1.3em !important;
-        padding-left: 0;
+        padding-left: 80px;
+        padding-right: 80px;
     }
 
     .facebook,
@@ -449,6 +419,11 @@ img{
         width: 40px;
         height: 40px;
     }
+
+    #content-container{
+        padding-left: 7px;
+        padding-right: 7px;
+    }
 }
 
 /**************** content-containerのアニメーション部分 ↑↑↑ ******************/
@@ -605,8 +580,14 @@ h2{
         margin-right: 5px !important;
     }
 
+    #kensaku-map{
+        width: 52px;
+        height: 34px;
+    }
+
     #search-schedule{
         max-width: 4rem !important;
+        height: 2.3rem !important;
     }
 
     #search-shop{
@@ -800,8 +781,6 @@ thead{
 /******************* maps **********************/
 
 #reset-btn{
-    /* width: 90px;
-    height: 38px; */
     margin-bottom: 5px; 
     background: #f9fdba;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -813,7 +792,6 @@ thead{
 }
 
 #maps-container{
-    /* padding: 2rem; */
     margin: 1rem;
     z-index: 4;
 }
@@ -821,6 +799,10 @@ thead{
 
 #map_search{
     border-radius: 5px;
+}
+
+.store_link{
+    font-weight: bold;
 }
 
 
@@ -837,7 +819,8 @@ thead{
 }
 
 .itiran_img{
-    width: 45em;
+    max-width: 100%;
+    height: auto;
 }
 
 .sub-card{
@@ -990,7 +973,7 @@ thead{
     }
 
     #map_search{
-        max-width: 70% !important; 
+        max-width: 95% !important; 
         margin-right: 5px !important;
     }
 
@@ -1291,7 +1274,7 @@ footer{
 .footer-main:nth-child(2),
 .footer-main:nth-child(3){
     padding-left: 1rem; 
-    border-left: 6px solid #d2691e;
+    border-left: 3px solid #d2691e;
 }
 
 .footer-link{
@@ -1312,11 +1295,27 @@ footer{
 .policy-heading{
     padding: 0.5em;/*文字周りの余白*/
     color: #494949;/*文字色*/
-  background: #f9fdba;/*背景色*/
-  border-left: solid 5px #decc54;/*左線（実線 太さ 色）*/
+    background: #f9fdba;/*背景色*/
+    border-left: solid 5px #decc54;/*左線（実線 太さ 色）*/
 }
 
 
+@media only screen and (max-width: 320px){
+    .footer-main:nth-child(1),
+    .footer-main:nth-child(2){
+        margin-right: 5px !important;
+    }
+
+    .footer-main:nth-child(2){
+        margin-left: 7px !important;
+    }
+
+    .footer-main:nth-child(2),
+    .footer-main:nth-child(3){
+        padding-left: 0.5rem; 
+        border-left: 3px solid #d2691e;
+    }
+}
 
 
 /******************* お問い合わせフォーム関係 ***********************/
@@ -1385,128 +1384,6 @@ footer{
 
 
 } 
-
-
-
-
-
-/******************* profileページ ******************/
-.profile_logo{
-    position: absolute;
-    width: 100%;
-    height: auto;
-    top: 5rem;
-}
-
-.history_back_2{
-    color: #ff8c00;
-    font-size: 15px;
-    font-weight: bold;
-    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
-}
-
-.history_back_2:hover{
-    color: #b8860b;
-}
-
-#h3-nav{
-    font-family: 'Amasis MT Pro Black', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-weight: 700;
-    font-size: 2rem;
-}
-
-#my-name{
-    font-family: 'Yu Mincho Light','YuMincho','Yu Mincho','游明朝体','游明朝体+36ポかな',
-    'YuMincho +36p Kana','ＭＳ 明朝', 'MS Mincho','ＭＳ Ｐ明朝','MS PMincho',sans-serif;
-    font-size: 2rem;
-}
-
-.cart{
-    background: #ADFF2F;
-}
-
-.bottom-line{
-    border-bottom: 1px solid #ADFF2F;
-}
-
-.border-h3{
-    
-    letter-spacing: 0.2em;
-}
-
-.writing{
-    letter-spacing: 0.2em;
-    line-height: 3em;
-    padding-left: 9rem;
-}
-
-.p_writing{
-    letter-spacing: 0.2em;
-    line-height: 2em;
-}
-
-@media only screen and (max-width: 780px) {
-    #one,
-    #two, 
-    #three{
-        padding-left: 0;
-        margin-left: 0;
-    }
-
-    .writing{
-        padding-left: 4rem; 
-    }
-
-    .cart{
-        display: none;
-    }
-
-    .europa{
-        margin-left: 4.5rem;
-        width: 40%;
-    }
-
-    #my-name{
-        justify-content: start !important;
-        left: 2rem;
-    }
-
-    .p_writing{
-        padding-left: 4rem;
-    }
-
- }
-
-
-@media only screen and (max-width: 420px) {
-
-    .profile .row .col-3:nth-of-type(1){
-        display: none;
-    }
-
-    .writing{
-        padding-left: 1rem; 
-    }
-
-    #profile-eria section .row:nth-of-type(1),
-    #profile-eria section .row:nth-of-type(2),
-    #profile-eria section .row:nth-of-type(3){
-        padding-left: 1rem !important;
-    }
-
-    .p_writing{
-        padding-left: 0;
-    }
-
-    .europa{
-        margin-left: 4.5rem;
-        width: 60%;
-    }
-
-
-}
-
-
 
 
 /******************* 各社カードの案内 ******************/

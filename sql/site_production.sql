@@ -35,3 +35,12 @@ create table series
 
 -- ※storeテーブルの説明
 -- bfr_aftr  ・・・・・・・同じイベントの前実施と後実施の店舗を振り分ける。0 が前実施の店舗、1 が後実施の店舗
+
+
+
+------------------ インデックス情報 ---------------------
+alter table sale_point add index idx_eStart(event_start);
+alter table sale_point add index idx_event_day(event_start, event_end);
+alter table sale_point add index idx_seshst(series_id, shop_id, store_id);
+alter table sale_point add index idx_shst(shop_id, store_id);
+alter table sale_point add index idx_st(store_id);

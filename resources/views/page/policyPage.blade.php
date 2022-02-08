@@ -11,7 +11,6 @@
         display: none;
     }
 </style>
-
 {{-- topページと違い、content-mainとcontent-containerには"height: auto;をブレード内で採用している --}}
 <div id="content-main" class="mx-auto">
     <div id="content_row" class="row">

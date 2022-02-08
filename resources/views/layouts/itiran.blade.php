@@ -38,7 +38,7 @@
                     <div class="row">
                         <h2 class="itiran_tenmei col-md-12 text-center font-weight-bold mt-4">
                             @if(!empty($data->series_id))
-                                {{ $data->series_name }}グループ
+                                {{ $data->series_name }}
                             @elseif(!empty($data->store_url))
                                 <a href="{{ $data->store_url }}" target="_blank" class="text-dark">
                                     {{ $data->shop_name }}{{ $data->store_name }}
@@ -140,60 +140,8 @@
                                     開催日：～ {{ Common::dateFormat_2($data->event_end) }}
                                 @endif
                             </p>
-                        {{--@if(!empty($data->sp_url))
-                            <a href="{{ $data->sp_url }}" target="_blank">
-                                <p class="font-weight-bold ml-5 px-4">詳しくはこちら</p>
-                            </a>
-                        @endif--}}
                         </div>
                     </div>
-                    {{--<div class="container mt-5">
-                        <span class="slash d-flex align-items-center position-relative font-weight-bold ml-5">
-                            ココで使える
-                        </span>
-                        <div class="row mt-2 card_link">
-                            <div class="col-12">
-                                <div class="card-text ml-3">
-                                    @if(!empty($data->card_name))
-                                        @if(preg_match('/,/', $data->card_name) == 1)
-                                            <?php $c_name = explode(',', $data->card_name); ?>
-                                            <?php $c_link = explode(',', $data->link); ?>
-                                            <span>
-                                            @for($i = 0; $i < count($c_name); $i++)
-                                                <a href="{{ $c_link[$i] }}" class="cLink ml-4" target="_blank">{{ $c_name[$i] }}</a>
-                                                <br class="visible-xs-block">
-                                            @endfor
-                                            </span>
-                                        @else
-                                            <span><a href="{{ $data->link }}" class="cLink ml-5" target="_blank">{{ $data->card_name }}</a></span>
-                                        @endif
-                                        
-                                    @endif
-                                </div>
-                                <br class="visible-xs-block">
-                                <div class="card-text">
-                                    @if(isset($data->P_or_D))
-                                        @if($data->P_or_D == 0)
-                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
-                                            credit_score<span class="ml-1">ポイントが貯まる</span>
-                                        </div>
-                                        @elseif($data->P_or_D == 1)
-                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
-                                            credit_score<span class="ml-1">割引がある</span>
-                                        </div>
-                                        @else
-                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
-                                            credit_score<span class="ml-1">割引がある</span>
-                                        </div>
-                                        <div class="material-icons-outlined d-flex justify-content-end mb-3 mr-5">
-                                            credit_score<span class="ml-1">ポイントが貯まる</span>
-                                        </div>
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>--}}
                 </div>
             </div>
         </div>    

@@ -69,31 +69,31 @@
                                         </span>
                                         @if(!empty($data->se_cash))
                                             @if(strlen($data->se_cash) >= 50)
-                                                <p class="sub-card-long mt-3">
+                                                <p class="sub-card-long mt-3 font-weight-bold">
                                                     <a href="{{ $data->link }}" target="_blank">{{ $data->se_cash }}</a>
                                                 </p>
                                             @else
-                                                <p class="sub-card mt-3">
+                                                <p class="sub-card mt-3 font-weight-bold">
                                                     <a href="{{ $data->link }}" target="_blank">{{ $data->se_cash }}</a>
                                                 </p>
                                             @endif
                                         @elseif(!empty($data->sh_cash))
                                             @if(strlen($data->sh_cash) >= 50)
-                                                <p class="sub-card-long mt-3">
+                                                <p class="sub-card-long mt-3 font-weight-bold">
                                                     <a href="{{ $data->link }}" target="_blank">{{ $data->sh_cash }}</a>
                                                 </p>
                                             @else
-                                                <p class="sub-card mt-3">
+                                                <p class="sub-card mt-3 font-weight-bold">
                                                     <a href="{{ $data->link }}" target="_blank">{{ $data->sh_cash }}</a>
                                                 </p>
                                             @endif
                                         @else    
                                             @if(strlen($data->st_cash) >= 50)
-                                                <p class="sub-card-long mt-3">
+                                                <p class="sub-card-long mt-3 font-weight-bold">
                                                     <a href="{{ $data->link }}" target="_blank">{{ $data->st_cash }}</a>
                                                 </p>
                                             @else
-                                                <p class="sub-card mt-3">
+                                                <p class="sub-card mt-3 font-weight-bold">
                                                     <a href="{{ $data->link }}" target="_blank">{{ $data->st_cash }}</a>
                                                 </p>
                                             @endif
@@ -101,7 +101,7 @@
                                     </div>
                                 </div>
                             @endif
-                            <p class="itiran_days d-flex justify-content-end pt-3 pr-3">
+                            <p class="itiran_days d-flex justify-content-end pt-3 pr-3 font-weight-bold">
                                 @if(!empty($data->se_start))
                                     @if(!empty($data->se_start) && !empty($data->se_end))
                                         開催日：{{ Common::dateFormat($data->se_start) }} ～ 

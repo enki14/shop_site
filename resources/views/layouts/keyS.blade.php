@@ -6,7 +6,9 @@
             @csrf
             {{-- ShopsiteController@keyRes_value()からvalue値を取得 --}}
             <div class="col-2 px-0">
-                <button type="submit" name="keyword" value="{{ $data->keyword }}" class="btn b-style m-3 p-2">{{ $data->keyword }}</button>
+                <button type="submit" name="keyword" value="{{ $data->keyword }}" class="btn b-style m-3 p-2 font-weight-bold">
+                    {{ $data->keyword }}
+                </button>
             </div>
         </form>
     @endforeach

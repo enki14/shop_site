@@ -2,6 +2,7 @@
     <h2 id="maps-h2" class="text-center mb-5">ご近所検索</h2>
     <div class="row justify-content-center">
         <div class="form-group" id="maps-form">
+            @csrf
             <input type="text" id="map_search" name="map_search" class="text-center border-warning mr-2" 
             placeholder="お住まいの地域・店名" aria-label="お住まいの地域・店名" aria-describedby="basic-addon1" 
             style="width: 22rem; height: 4rem;" data-toggle="tooltip"/>
