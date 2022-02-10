@@ -66,7 +66,7 @@ class EventSetController extends Controller
 
         $summit = "insert into sale_point
         (sp_code, shop_id, sp_title, sp_subtitle, sp_url, 
-        event_start, cash_kubun, register_day, 1)
+        event_start, cash_kubun, register_day, card_true)
         values
         ($max_id, 8, '毎週火曜日はキャッシュバックサービスデー', '貯まったポイント が 現金で戻る！', 
         'https://www.summitstore.co.jp/otoku/cashback/', '$tuesday', 'サミットポイントカード', '$today', 1)";
@@ -122,7 +122,7 @@ class EventSetController extends Controller
             values
             ($max_id, $s_id[$i], 'マルエツの対象店舗なら、毎月1日・第3金曜日はWAON POINTが基本の5倍！', 
             'クレジット払いで200円(税込)ごとに5ポイントプレゼント', 'https://www.aeon.co.jp/card/lineup/maruetsu/', '$firstday', 
-            'マルエツカード（クレジット）', '毎月イベント', '$today' 1)";
+            'マルエツカード（クレジット）', '毎月イベント', '$today', 1)";
             DB::insert($maruetsu);
             
         }

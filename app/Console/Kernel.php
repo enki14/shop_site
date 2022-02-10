@@ -39,8 +39,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('ItoyokadoCommand')->monthlyOn(28, '11:00');
-        $schedule->command('SummitCommand')->weeklyOn(3, '11:00');
+        $schedule->command('command:itoyokado_event')->monthlyOn(28, '11:00');
+        $schedule->command('command:summit_event')->weeklyOn(3, '11:00');
         $schedule->command('Maruetsu_5times')->weeklyOn(1, '11:00');
         $schedule->command('Maruetsu_5off')->monthlyOn(23, '11:00');
         $schedule->command('InasanCommand')->monthlyOn(1, '11:00');

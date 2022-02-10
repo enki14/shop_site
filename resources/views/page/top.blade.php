@@ -85,13 +85,11 @@ role="dialog" aria-hidden="true">
             // eventClickやeventDidMountなどの関数は、それぞれのfc-event-titleにすでに機能している
             eventClick: function(info){
                 info.jsEvent.preventDefault();
-                console.log(info);
                 let c_name = info.event._def.extendedProps.c_name;
                 let c_link = info.event._def.extendedProps.c_link;
-                console.log(c_link);
                 let start = new Date(info.event.start);
                 let end = new Date(info.event.end);
-                console.log(end);
+                console.log(start);
                 let s_month = start.getMonth() + 1;
                 let s_day = start.getDate();
                 let e_month = end.getMonth() + 1;

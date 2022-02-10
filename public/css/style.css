@@ -321,7 +321,7 @@ nav{
 
 @media only screen and (max-width: 420px) {
     .header-title{
-        font-size: 15px !important;
+        font-size: 20px !important;
     }
 
     /* max-width: 400px の時だけ改行して表示 */
@@ -330,6 +330,11 @@ nav{
     }
 }
 
+@media only screen and (max-width: 300px) {
+    .header-title{
+        font-size: 15px !important;
+    }
+}
 
 
 /********************* header タイトル部分 ↑↑↑ *********************/
@@ -421,8 +426,9 @@ nav{
     }
 
     #content-container{
-        padding-left: 7px;
-        padding-right: 7px;
+        padding-left: 0;
+        padding-right: 0;
+        background-color: #ecdc70;
     }
 }
 
@@ -543,6 +549,16 @@ h2{
     .kensaku-btn{
         width: 9rem !important;
     } 
+
+    .kensaku-btn,
+    .b-style{
+        background-color: #dfd433;
+    }
+
+    .kensaku-btn:hover,
+    .b-style:hover{
+        background-color: #f3e847;
+    }
 
     #search-shop{
         width: 17rem !important;
@@ -685,10 +701,7 @@ div.fc-header-toolbar{
 
 
 button.fc-prev-button,
-button.fc-today-button,
-button.fc-next-button,
-button.fc-dayGridMonth-button, 
-button.fc-listweek-button{
+button.fc-next-button{
     background-color: #dcf66a !important;
     border: none !important;
     color: black !important;
@@ -724,6 +737,16 @@ thead{
     .fc-toolbar-title{
         font-size: 1em !important;
         letter-spacing: 0.07em;
+    }
+
+    button.fc-prev-button,
+    button.fc-next-button{
+        background-color: #dfd433 !important;
+    }
+
+    button.fc-prev-button,
+    button.fc-next-button{
+        background-color: #f3e847 !important;
     }
 }
 

@@ -189,7 +189,6 @@ class ShopsiteController extends Controller
 	        $words = str_replace("　", " ", $shop);
 	        $words = trim($words);
 	        $word_array = preg_split("/[ ]+/", $words);
-            Log::debug($word_array);
 
 	        $add_shop_where = "";
 	        $add_store_where = "";
@@ -316,7 +315,6 @@ class ShopsiteController extends Controller
 
         // where構文はそれぞれ別だが$add_whereに統一することでif文にも対応できている
         $s = DB::select($sql);
-        // Log::debug('sql:' .$sql);
         $collect = collect($s); 
         
         $pagenate = new LengthAwarePaginator(
@@ -477,7 +475,6 @@ class ShopsiteController extends Controller
         // MapS.bladeのmap_search, name属性
         $req = $request->input('namae');
 
-        Log::debug($lat);
 
         // スペースあるなしで対応する曖昧検索
         $words = str_replace("　", " ", $req);
@@ -526,7 +523,7 @@ class ShopsiteController extends Controller
     public function mapData(Request $request){
         $S_lat = $request->input('lat');
         $S_lng = $request->input('lng');
-        Log::debug($S_lat);
+
         // indexメソッドの方と同じsql文だが、こちらはasを使用していない
         $sql = "select
             sht.distance,
@@ -621,19 +618,20 @@ class ShopsiteController extends Controller
 
         $location = DB::select($sql);
 
-        // Log::debug($location);
         $response['location'] = $location;
         return Response::json($response);
     
     }
     
 
+
     
     public function eventCalendar_2(Request $request){
         // グループ全体のイベントを取得するためのsql
         $sql = "select 
             sp.sp_code, se.series_id, se.series_name, se.partner, sp.sp_title, 
-            sp.sp_subtitle, sp.event_start, sp.event_end, sp.sp_url,
+            sp.sp_subtitle, sp.event_start, sp.event_end, 
+            pe.period, sp.sp_url,
             c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.card_true
         from series se
         left join sale_point sp 
@@ -649,7 +647,19 @@ class ShopsiteController extends Controller
             on c.series_id = se.series_id
             group by se.series_id
         ) c_sh
-        on se.series_id = c_sh.series_id";
+        on se.series_id = c_sh.series_id
+        left join (
+            select
+                sp.sp_code, 
+                event_start, event_end,
+                datediff(event_end, event_start) as period
+            from 
+                sale_point sp
+            having 
+                period < 3
+        ) pe
+        on sp.sp_code = pe.sp_code
+        where sp.sp_code is not null";
         $series = DB::select($sql);
 
 
@@ -657,7 +667,7 @@ class ShopsiteController extends Controller
         $sql_2 = "select 
             sp.sp_code, s.shop_name, s.shop_url, s.img_src, sp.sp_title, 
             sp.sp_subtitle, sp.event_start, sp.event_end, sp.sp_url,
-            c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.card_true
+            pe.period, c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.card_true
         from shop s 
         left join sale_point sp 
         on s.shop_id = sp.shop_id
@@ -673,7 +683,18 @@ class ShopsiteController extends Controller
             group by s.shop_id
         ) c_sh
         on s.shop_id = c_sh.shop_id
-        where sp_code is not null";
+        left join (
+            select
+                sp.sp_code, 
+                event_start, event_end,
+                datediff(event_end, event_start) as period
+            from 
+                sale_point sp
+            having 
+                period < 3
+        ) pe
+        on sp.sp_code = pe.sp_code
+        where sp.sp_code is not null";
         $shop = DB::select($sql_2);
 
         
@@ -681,7 +702,7 @@ class ShopsiteController extends Controller
         $sql_3 = "select 
             sp.sp_code, s.shop_name, s2.store_name, s.shop_url, 
             s2.store_url, sp.sp_title, sp.sp_subtitle, 
-            sp.event_start, sp.event_end, sp.sp_url,
+            sp.event_start, sp.event_end, sp.sp_url, pe.period,
             c_sh.card_name, c_sh.link, c_sh.P_or_D, sp.card_true
         from shop s 
         left join store s2 
@@ -700,25 +721,36 @@ class ShopsiteController extends Controller
             group by s.shop_id
         ) c_sh
         on s2.shop_id = c_sh.shop_id
-        where sp_code is not null";
+        left join (
+            select
+                sp.sp_code, 
+                event_start, event_end,
+                datediff(event_end, event_start) as period
+            from 
+                sale_point sp
+            having 
+                period < 3
+        ) pe
+        on sp.sp_code = pe.sp_code
+        where sp.sp_code is not null";
         $store = DB::select($sql_3);
 
 
         $response = [];
-        $output = [];
+        $output_1 = [];
 
         // グループイベントとして回す
         foreach($series as $data){
-            $output['id'] = $data->sp_code;
-            $output['main_title'] = $data->sp_title;
-            $output['description'] = $data->sp_subtitle;
-            $output['url'] = $data->sp_url;
-            $output['title'] = $data->series_name . 'からのお知らせ';
-            $output['c_name'] = $data->card_name;
-            $output['c_link'] = $data->link;
-            $output['P_or_D'] = $data->P_or_D;
-            $output['partnaer'] = $data->partner;
-            $output['c_true'] = $data->card_true;
+            $output_1['id'] = $data->sp_code;
+            $output_1['main_title'] = $data->sp_title;
+            $output_1['description'] = $data->sp_subtitle;
+            $output_1['url'] = $data->sp_url;
+            $output_1['title'] = $data->series_name . 'からのお知らせ';
+            $output_1['c_name'] = $data->card_name;
+            $output_1['c_link'] = $data->link;
+            $output_1['P_or_D'] = $data->P_or_D;
+            $output_1['partnaer'] = $data->partner;
+            $output_1['c_true'] = $data->card_true;
             
             // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
@@ -732,83 +764,74 @@ class ShopsiteController extends Controller
                 continue;
             }else{        
                 // event_startとevent_endのセット
-                if($end != '' && $start != ''){
-                    $output['start'] = $start;
-                    $output['end'] = $end;
+                if($end != '' && $start != '' && $data->period != ''){
+                    $output_1['start'] = $start;
+                    $output_1['end'] = $end;
                 }elseif($end == '' && $start != ''){
-                    $output['start'] = $start;
-                    $output['end'] = null;   
-                }elseif($end != '' && $start == ''){
-                    $output['start'] = null;
-                    $output['end'] = $end; 
-                }else{
-                    $output['start'] = null;
-                    $output['end'] = null;
+                    $output_1['start'] = $start;
+                    $output_1['end'] = null;   
                 }
             }
             // $outputに諸々をセットしてから、$responseとして入れなおす？
-            $response[] = $output;
+            $response[] = $output_1;
         }        
         
-        
+        $output_2 = [];
         // 会社イベントとして回す
         foreach($shop as $data){
-            $output['id'] = $data->sp_code;
-            $output['main_title'] = $data->sp_title;
-            $output['description'] = $data->sp_subtitle;
-            $output['url'] = $data->sp_url;
-            $output['sh_url'] = $data->shop_url;
-            $output['title'] = $data->shop_name . 'からのお知らせ';
-            $output['img_src'] = $data->img_src;
-            $output['c_name'] = $data->card_name;
-            $output['c_link'] = $data->link;
-            $output['P_or_D'] = $data->P_or_D;
-            $output['c_true'] = $data->card_true;
+            $output_2['id'] = $data->sp_code;
+            $output_2['main_title'] = $data->sp_title;
+            $output_2['description'] = $data->sp_subtitle;
+            $output_2['url'] = $data->sp_url;
+            $output_2['sh_url'] = $data->shop_url;
+            $output_2['title'] = $data->shop_name . 'からのお知らせ';
+            $output_2['img_src'] = $data->img_src;
+            $output_2['c_name'] = $data->card_name;
+            $output_2['c_link'] = $data->link;
+            $output_2['P_or_D'] = $data->P_or_D;
+            $output_2['c_true'] = $data->card_true;
             
             // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
             $end = Common::hyphenFormat($data->event_end);
+
             // shop_id の是非判定で会社全体としてのイベントだけを取得する
             // 会社イベントをインサートする際に sp.shop_id に+1の番号が振られる
             
             // event_startが無ければ、そのイベントは無視される（要検討
-            if($start == ''){
+            if($start == '' or ($start != '' && $end != '' && $data->period == '')){
                 $data;
                 continue;
             }else{        
                 // event_startとevent_endのセット
                 if($end != '' && $start != ''){
-                    $output['start'] = $start;
-                    $output['end'] = $end;
+                    $output_2['start'] = $start;
+                    $output_2['end'] = $end;
                 }elseif($end == '' && $start != ''){
-                    $output['start'] = $start;
-                    $output['end'] = null;   
-                }elseif($end != '' && $start == ''){
-                    $output['start'] = null;
-                    $output['end'] = $end; 
-                }else{
-                    $output['start'] = null;
-                    $output['end'] = null;
+                    $output_2['start'] = $start;
+                    $output_2['end'] = null;   
                 }
             }
             // $outputに諸々をセットしてから、$responseとして入れなおす？
-            $response[] = $output;
+            
+            $response[] = $output_2;
         }        
 
+        $output_3 = [];
         // 店舗イベントとして回す
         foreach($store as $data){
-            $output['id'] = $data->sp_code;
+            $output_3['id'] = $data->sp_code;
             // カレンダー上のイベントタイトルとは分けている
-            $output['main_title'] = $data->sp_title;
-            $output['description'] = $data->sp_subtitle;
-            $output['url'] = $data->sp_url;
-            $output['sh_url'] = $data->shop_url;
-            $output['st_url'] = $data->store_url;
-            $output['title'] = $data->shop_name . $data->store_name . 'からのお知らせ';
-            $output['c_name'] = $data->card_name;
-            $output['c_link'] = $data->link;
-            $output['P_or_D'] = $data->P_or_D;
-            $output['c_true'] = $data->card_true;
+            $output_3['main_title'] = $data->sp_title;
+            $output_3['description'] = $data->sp_subtitle;
+            $output_3['url'] = $data->sp_url;
+            $output_3['sh_url'] = $data->shop_url;
+            $output_3['st_url'] = $data->store_url;
+            $output_3['title'] = $data->shop_name . $data->store_name . 'からのお知らせ';
+            $output_3['c_name'] = $data->card_name;
+            $output_3['c_link'] = $data->link;
+            $output_3['P_or_D'] = $data->P_or_D;
+            $output_3['c_true'] = $data->card_true;
             
             // varchar(8) にハイフンをつける
             $start = Common::hyphenFormat($data->event_start);
@@ -823,26 +846,20 @@ class ShopsiteController extends Controller
                 continue;
             }else{
                 // event_startとevent_endのセット
-                if($end != '' && $start != ''){
-                    $output['start'] = $start;
-                    $output['end'] = $end;
+                if(($end != '' && $start != '') && ($data->period != '' or $data->period != null)){
+                    $output_3['start'] = $start;
+                    $output_3['end'] = $end;
                 }elseif($end == '' && $start != ''){
-                    $output['start'] = $start;
-                    $output['end'] = null;   
-                }elseif($end != '' && $start == ''){
-                    $output['start'] = null;
-                    $output['end'] = $end; 
-                }else{
-                    $output['start'] = null;
-                    $output['end'] = null;
+                    $output_3['start'] = $start;
+                    $output_3['end'] = null;   
                 }
 
             }   
             // $outputに諸々をセットしてから、$responseとして入れなおす？           
-            $response[] = $output;
+            $response[] = $output_3;
                     
         }   
-        Log::debug($response);
+
         return Response::json($response);
     }
 
