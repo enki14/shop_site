@@ -20,7 +20,7 @@
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ url('/') }}" />
         <meta property="og:image" content="{{ asset('img/nrd-D6Tu_L3chLE-unsplash.jpg') }}" />
-        <meta property="og:site_name" content="ポイントカード情報局" />
+        <meta property="og:site_name" content="ポイント王国" />
         <meta property="og:description" content="グループ企業やサービスの垣根を越えて、皆様が必要とするポイントカードの情報をお届けします‼  
         今のところは東京限定ですm(__)m" />
         <!-- Facebook用設定 -->
@@ -35,9 +35,11 @@
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.css" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-        @yield('resultCss')
-        @yield('subResultCss')
+        <link rel="shortcut icon" href="{{ asset('img/site_logo5.png') }}">
         @yield('profileCss')
+        @yield('contactCss')
+        @yield('disclaimerCss')
+        @yield('policyCss')
         {{--Bootstrapを利用するサイトで、ajax等を使いたい場合は通常版を使う(もしくはbundle)。slimではなく--}}  
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>

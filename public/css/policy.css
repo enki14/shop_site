@@ -1,0 +1,1083 @@
+
+.wrraper{
+    overflow: hidden; 
+ }
+ 
+ 
+ nav{
+   position: relative;
+   padding: 0;
+   width: 100%;
+   height: 700px;
+   z-index: 1; 
+ }
+ 
+ 
+ 
+ @media only screen and (max-width: 420px) {
+ 
+   h1, h2, h3, h4, p, button{
+       font-size: 80% !important;
+   }
+ 
+   body{
+       font-size: 60%;
+   }
+ 
+   a{
+       font-size: 40% !important;
+   }
+ 
+   ::placeholder{
+       font-size: 60%;
+   }
+ 
+   small{
+       font-size: 40%;
+   }
+ 
+   span{
+       font-size: 0.2rem !important;
+   }
+ 
+   .material-icons-outlined{
+       font-size: 80% !important;
+   }
+ 
+   input{
+       font-size: 60% !important;
+       max-width: 30% !important;
+       height: 2.3rem !important;
+   }
+ 
+   select{
+       max-width: 30% !important;
+       height: 2rem !important;
+   }
+ 
+   .history_back,
+   .history_back_2{
+       font-size: 0.8em !important;
+   }
+ 
+ }
+ 
+ 
+ 
+ 
+ /************ ロゴのきらりと光るアニメーション ↑↑↑ ***********/
+ 
+ .fa-facebook{
+   color: #1778f2;
+ }
+ 
+ .fa-twitter{
+   color: #1da1f2;
+ }
+ 
+ .fa-line{
+   color: #00b900;
+ }
+ 
+ 
+ /* hoverしたときに色を変えない仕様 */
+ .fa-facebook:hover{
+  color: #1778f2;
+   transform: scale(1.3);
+   transition-duration: 0.5s;
+ }
+ 
+ .fa-twitter:hover{
+   color: #1da1f2;
+   transform: scale(1.3);
+   transition-duration: 0.5s;
+ }
+ 
+ .fa-line:hover{
+  color: #00b900;
+   transform: scale(1.3);
+   transition-duration: 0.5s;
+ }
+ 
+ #black_out{
+   height: 700px;
+   z-index: 2;
+   background-color: rgba(0, 0, 0, 0.3);
+ }
+ 
+ #fixed_nav{
+   background-color: #fdcea7;
+   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+ }
+ 
+ 
+ 
+ /****** 右から左に文字が流れる ******/
+ .animation-info{
+   font-size:1.5em;   
+   color: #333;  
+   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+   position: relative;
+   padding-left: 30%;
+   white-space: nowrap;
+   animation: marquee 14s linear infinite;
+   letter-spacing: 0.2em; 
+   font-family: "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN",
+   "ＭＳ Ｐゴシック", "MS P Gothic", Verdana, Arial, Helvetica, sans-serif;
+ }
+ 
+ 
+ @keyframes marquee {
+   from {
+       transform: translate(100%);
+   }
+   to {
+       transform: translate(-200%);
+   }
+ }
+ 
+ .board{
+   top: 5px;
+   height: 3.7em;
+   background: #d9e5f2;
+   box-shadow:0px 3px 8px 3px #ccc inset;
+   overflow: hidden;
+   border: 2.5mm ridge rgba(242,242,140,1);
+   display: none;
+ 
+ }
+ 
+ @media only screen and (max-width:780px){
+   .board{
+       left: 10%;
+   }
+   .animation-info{
+       top: 10%;
+       font-size: 1.3em !important;
+       padding-left: 20px;
+   }
+ }
+ 
+ @media only screen and (max-width:420px){
+   .board{
+       height: 5.7em;
+   }
+ 
+   .animation-info{
+       font-size: 1.3em !important;
+       padding-left: 80px;
+       padding-right: 80px;
+   }
+ 
+   .facebook,
+   .line_button,
+   .twitter{
+       font-size: 100% !important;
+   }
+ 
+ }
+ 
+ 
+ 
+ /********************* header タイトル部分 ↓↓↓ *********************/
+ 
+ @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+ 
+ 
+ .header-eria{
+   height: 300px;
+   top: 150px; 
+   font-family: 'Josefin Sans', sans-serif; 
+   text-align: center;
+   position: absolute;   
+ }
+ 
+ .header-eria.-visible:before {
+   transform: translate(0, 0);
+ }
+ 
+ .header-eria:before {
+   display: block;
+   position: absolute; 
+   top: 0;
+   left: 0;
+   transform: translate(0, 100%);
+   transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) .6s;
+   content: '';
+ }
+ 
+ .midashi-top{
+   font-weight: bold;
+   font-size: 42px; 
+   color: white;
+   letter-spacing: 2px; 
+   display: block;
+   opacity: 0; 
+   transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s, opacity linear 0.7s;
+   transform: translate(0, 40px);
+   transition-delay: 0.25s; 
+ }
+ 
+ .header-title{
+   opacity: 0;  
+   transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s, opacity linear 0.7s;
+   transform: translate(0, 30px);
+   transition-delay: 0.45s;
+   letter-spacing: 0.2em; 
+   line-height: 1.6em;
+   font-family: "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN",
+   "ＭＳ Ｐゴシック", "MS P Gothic", Verdana, Arial, Helvetica, sans-serif;
+ }
+ 
+ /* PC表示では改行しない仕様 */
+ .header-title br{
+   display: none;
+ }
+ 
+ .description-top{
+   opacity: 0;  
+   transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s, opacity linear 0.7s;
+   transform: translate(0, 30px);
+   transition-delay: 0.45s; 
+ }
+ 
+ .header-eria.-visible .midashi-top{
+   opacity: 1;
+   transform: translate(0, 0);
+ }
+ 
+ .header-eria.-visible .header-title{
+   opacity: 1;
+   transform: translate(0, 0);
+ }
+ 
+ .header-eria.-visible .description-top{
+   opacity: 1;
+   transform: translate(0, 0);
+ }
+ 
+ @media only screen and (max-width: 780px) {
+   .header-title{
+       font-size: 30px !important;
+   }
+ 
+   .description-top{
+       font-size: 15px !important;
+   }
+ 
+   /* max-width: 400px の時だけ改行して表示 */
+   .header-title br{
+       display: inline-block;
+   }
+ 
+ 
+ }
+ 
+ 
+ @media only screen and (max-width: 420px) {
+   .header-title{
+       font-size: 20px !important;
+   }
+ 
+   /* max-width: 400px の時だけ改行して表示 */
+   .header-title br{
+       display: inline-block;
+   }
+ }
+ 
+ @media only screen and (max-width: 300px) {
+   .header-title{
+       font-size: 15px !important;
+   }
+ }
+ 
+ 
+ /********************* header タイトル部分 ↑↑↑ *********************/
+ 
+ #content-main{
+   background: #f7d9fc;
+   width: 100%;   
+   z-index: 2;
+ }
+ 
+ #content_row{
+   margin: auto 0;
+ }
+ 
+ 
+ 
+ /**************** content-containerのアニメーション部分 ↓↓↓ ******************/
+ 
+ 
+ 
+ #lens{
+   text-decoration: none;
+   outline: none; 
+   display: inline;
+   color:	#2F4F4F;
+   box-shadow:0px 3px 8px 3px #ccc inset;
+ 
+ }
+ 
+ #lens::before{ 
+   border-radius: 50%;  
+   background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(0,255,0,.4) 100%);
+   transform: skewX(-25deg);
+ }
+ 
+ #content-container.-visible_2:before {
+   transform: translate(0, 0);
+ }
+ 
+ #content-container::before{
+   display: block;
+   position: absolute; 
+   top: 0;
+   left: 0;
+   opacity: 0;
+   transform: translate(0, 100%);
+   transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) .6s; 
+ }
+ 
+ #content-container{
+   top: -200px;  
+   z-index: 3;
+   background: #fd9886;
+   padding-top: 70px;
+   padding-bottom: 100px; 
+   border-radius: 20px;  
+   filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.6));  
+   opacity: 0;
+   transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s, opacity linear 0.7s;
+   transform: translate(0, 40px);
+   transition-delay: 0.25s; 
+ }
+ 
+ #content-container.-visible_2{
+   opacity: 1;
+   transform: translate(0, 0);
+ }
+ 
+ #smart-dis{
+   border-radius: 3px; 
+   box-shadow:0px 3px 8px 3px #ccc inset; 
+ }
+ 
+ .smart-button{
+   display: inline;
+   background: #FFF;
+   height: 60px;
+   width: 60px;
+   border: 5px solid #C0C0C0;
+   border-radius: 50%;
+   box-shadow:0px 0px 5px 2px #ccc inset;
+ }
+ 
+ 
+ @media only screen and (max-width: 420px) {
+   .smart-button{
+       width: 40px;
+       height: 40px;
+   }
+ 
+   #content-container{
+       padding-left: 0;
+       padding-right: 0;
+   }
+ }
+ 
+ /**************** content-containerのアニメーション部分 ↑↑↑ ******************/
+ 
+ h2{
+   font-family: 'Tsukushi A Round Gothic', 'Tsukushi B Round Gothic', 'YuGothic', 'Hiragino Sans';
+ }
+
+ .policy-heading{
+  padding: 0.5em;/*文字周りの余白*/
+  color: #494949;/*文字色*/
+  background: #f7d9fc;/*背景色*/
+  border-left: solid 5px #f07854;/*左線（実線 太さ 色）*/
+}
+ 
+ .horizon {
+   position: relative;
+  height: 3px;
+  border-width: 0;
+  background-color: #00bcd4;
+  background-image: -webkit-linear-gradient( 135deg, #FD6585 10%, #0D25B9 100%);
+  background-image: linear-gradient( 135deg, #FD6585 10%, #0D25B9 100%);
+ }
+ 
+ 
+ #content-h2,
+ #keys-h2,
+ #calendar-h2,
+ #maps-h2,
+ #privacy-h1,
+ .contact-h2{
+   margin-bottom: 20px;
+   font-size: 3em;
+  line-height:0.95em;
+   letter-spacing: 0.3em;
+  font-weight:bold;
+  text-shadow:
+     0 0.03em 0.03em #FFAB91,
+     0 0.03em 0.03em #000,
+     0 0.03em 0.03em #FBE9E7;
+ } 
+ 
+ 
+ 
+ 
+ /****** 「 お得を探す 」「 話題・キーワード 」部分 ↓↓↓ *******/
+ 
+ .form-content{
+   margin-top: 35px;
+ }
+ 
+ .search-schedule,
+ .search-select{
+   border-radius: 3px;
+ }
+ 
+ #search-form,
+ #maps-form{
+   margin-top:1.5rem;
+ }
+ 
+ #keys-form{
+   margin-top: 0.5rem;
+ }
+ 
+ .tooltip-inner{
+   background: #fbd4cb;
+   color: #000;
+   padding: 12px;
+ }
+ 
+ .tooltip.arrow{
+   background: #fbd4cb;
+ }
+ 
+ .tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
+   border-top-color: #fbd4cb;
+   border-width: .6rem .6rem 0; 
+ }
+ 
+ 
+ .kensaku-btn{
+   margin-right: 1rem;
+   vertical-align: top !important;
+   background-color: #e5ed5a;
+   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+ }
+ 
+ .kensaku-btn:hover{
+   background: #dcf66a;
+ }
+ 
+ 
+ 
+ .keys-container{
+   text-align: center;
+   z-index: 4;
+ }
+ 
+ .b-style{
+   border-radius: 25px;
+   height: 50px;
+   min-width: 150px;
+   display: inline-block;
+   background-color: #e5ed5a;
+   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+ }
+ 
+ .b-style:hover{
+   background: #dcf66a;
+ }
+ 
+ 
+ @media only screen and (max-width: 780px) {
+   #content-h2,
+   #keys-h2,
+   #calendar-h2,
+   #maps-h2{
+       font-size: 1.8em !important;
+   }
+ 
+   .kensaku-btn{
+       width: 9rem !important;
+   } 
+ 
+   .kensaku-btn,
+   .b-style{
+       background-color: #dfd433;
+   }
+ 
+   .kensaku-btn:hover,
+   .b-style:hover{
+       background-color: #f3e847;
+   }
+ 
+   #search-shop{
+       width: 17rem !important;
+   }
+ 
+ }
+ 
+ 
+ @media only screen and (max-width: 420px) {
+ 
+   #content-h2,
+   #keys-h2,
+   #calendar-h2,
+   #maps-h2{
+       font-size: 1.5em !important;
+   }
+ 
+   #search-form{
+       width: 80% !important;
+       height: auto !important; 
+   }
+ 
+   .top-card .row{
+       justify-content: start;
+   }
+ 
+   .b-style{
+       height: 30px !important;
+       margin: 0.2rem !important;
+   }
+ 
+   #search-schedule,
+   #search-shop,
+   #kensaku-map{
+       margin-right: 5px !important;
+   }
+ 
+   #kensaku-map{
+       width: 52px;
+       height: 34px;
+   }
+ 
+   #search-schedule{
+       max-width: 4rem !important;
+       height: 2.3rem !important;
+   }
+ 
+   #search-shop{
+       max-width: 12rem !important;
+   }
+ 
+   .kensaku-btn{
+       max-width: 4rem !important;
+   }
+ 
+   .top-card{
+       padding-top: 50px !important;
+   }
+ 
+   #search-form{
+       margin-top: 0;
+   }
+ 
+ }
+ 
+ /****** 「 お得を探す 」「 話題・キーワード 」部分 ↑↑↑ *******/
+ 
+ 
+ 
+ 
+ /******************* calendar ↓↓↓　**********************/
+ 
+ #modal_frame{
+   padding: 60px 20px 50px;
+   background: #eee55d;
+   border-radius: 5%;
+   box-shadow: 3px 3px 4px 3px #111111;
+   
+ }
+ 
+ .modal_conta{
+   box-shadow: 0px 5px 10px 3px #ccc inset;
+ }
+ 
+ #modalShop,
+ .modal-body{
+   letter-spacing: 0.2em;
+   line-height: 1.5em;
+ }
+ 
+ #modalShop{
+   font-size: 24px;
+ }
+ 
+ #modal-date{
+   letter-spacing: 0.2em;
+ }
+ 
+ .c_name{
+   font-size: 14px;
+ }
+ 
+ .modal_a{
+   font-size: 22px;
+   font-weight: bold;
+ }
+ 
+ 
+ a.fc-daygrid-event{
+   padding: 0.5em 1em;
+   margin: 2em 0;
+   color: #474747;
+   background: #CEF9DC;/*背景色*/
+   border-left: double 7px #000066;/*左線*/
+   border-top: none;
+   border-bottom: none;
+   border-right: none;
+ }
+ 
+ 
+ div.fc-event-title-container{
+   z-index: 2;
+ }
+ 
+ div .fc-event-title {
+   white-space: normal;
+   color: captiontext;
+ } 
+ 
+ 
+ div.fc-header-toolbar{
+   margin-top: 48px !important;
+ }
+ 
+ /* タイトルの先頭にあった「all-day」とかいう表示 */
+ .fc-list-event-time,
+ .fc-list-event-dot{
+   display: none !important;
+ }
+ 
+ 
+ button.fc-prev-button,
+ button.fc-next-button{
+   background-color: #dcf66a !important;
+   border: none !important;
+   color: black !important;
+   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+ }
+ 
+ 
+ thead{
+   background-color: #f9fdba;
+ }
+ 
+ .fc-col-header-cell.fc-day-sat{
+   background-color: #AFEEEE;
+ }
+ 
+ .fc-col-header-cell.fc-day-sun{
+   background-color: #FFE4E1;
+ }
+ 
+ 
+ .fc-toolbar-title{
+   font-size: 1.8em !important;
+   letter-spacing: 0.12em;
+ }
+ 
+ .fc-list-day-side-text{
+   letter-spacing: 0.1em;
+ }
+ 
+ 
+ @media only screen and (max-width: 780px) {
+   .fc-toolbar-title{
+       font-size: 1em !important;
+       letter-spacing: 0.07em;
+   }
+ 
+   button.fc-prev-button,
+   button.fc-next-button{
+       background-color: #dfd433 !important;
+   }
+ 
+   button.fc-prev-button,
+   button.fc-next-button{
+       background-color: #f3e847 !important;
+   }
+ }
+ 
+ 
+ @media only screen and (max-width: 420px) {
+   .fc-toolbar-title{
+       font-size: 0.7em !important;
+       letter-spacing: 0.07em;
+   }
+ 
+   button.fc-button,
+   button.fc-next-button{
+       width: 20%;
+       height: 40%;
+   }
+ 
+   #modal_frame{
+       padding: 40px 10px 30px
+   }
+ 
+ 
+   .modal_a{
+       font-size: 18px !important;
+       display: flex;
+       justify-content: center;
+   }
+ 
+   #modal-date{
+       letter-spacing: 0.1em !important;
+       font-size: 13px !important;
+   }
+ 
+   #modal_description{
+       padding-left: 0 !important;
+       padding-right: 0 !important;
+       font-size: 13px !important;
+   }
+ 
+   #modalShop{
+       font-size: 20px;
+   }
+ 
+   
+ }
+ 
+ @media only screen and (max-width: 300px) {
+   #modal-date{
+       padding-left: 0;
+   }
+ }
+ 
+ /******************* calendar ↑↑↑　**********************/
+ 
+ 
+ /******************* maps **********************/
+ 
+ #reset-btn{
+   margin-bottom: 5px; 
+   background: #f9fdba;
+   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+ }
+ 
+ #reset-btn:hover{
+   background: #fafad2;
+ }
+ 
+ #maps-container{
+   margin: 1rem;
+   z-index: 4;
+ }
+ 
+ 
+ #map_search{
+   border-radius: 5px;
+ }
+ 
+ .store_link{
+   font-weight: bold;
+ }
+ 
+ 
+ .itiran_h4,
+ .itiran_pgh,
+ .itiran_days{
+   letter-spacing: 0.2rem;
+   line-height: 1.5;
+ }
+ 
+ .itiran_days{
+   letter-spacing: 0.1rem;
+   line-height: 1.5;
+ }
+ 
+ .itiran_img{
+   max-width: 100%;
+   height: auto;
+ }
+ 
+ .sub-card{
+   width: 21.5rem;
+   height: 5rem;
+   padding: 1em 1.5em;
+   overflow: hidden;
+   box-shadow: .25rem 0 .25rem hsla(0, 0%, 0%, .2);
+   background-image:
+       linear-gradient(90deg, hsla(0, 0%, 45%, .1) 2rem, hsla(0, 100%, 100%, 0) 2.5rem)
+       , linear-gradient(90deg, hsla(15, 100%, 85%, 1), hsla(15, 100%, 85%, 1));
+   font-size: 1.125rem;
+   line-height: 2.2;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+ }
+ 
+ .sub-card-long{
+   width: 16.5rem;
+   height: 14rem;
+   padding: 1.5em;
+   overflow: hidden;
+   box-shadow: 0 .25rem .25rem hsla(0, 0%, 0%, .2);
+   background-image:
+     linear-gradient(180deg, hsla(0, 0%, 45%, .1) 2rem, hsla(0, 100%, 100%, 0) 2.5rem)
+   , linear-gradient(180deg, hsla(200, 100%, 85%, 1), hsla(200, 100%, 85%, 1));
+   font-size: 1.125rem;
+   line-height: 1.8;
+ }
+ 
+ 
+ 
+ 
+ 
+ .top_down{
+   position: fixed;
+   right: 50px;
+   top: 400px;
+   color: #ff8c00;
+   font-size: 15px;
+   font-weight: bold;
+   text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   z-index: 4;
+ }
+ 
+ 
+ .history_back{
+   position: fixed;
+   right: 50px;
+   bottom: 150px;
+   color: rgb(219, 216, 30);
+   font-size: 15px;
+   font-weight: bold;
+   text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   z-index: 4;
+ }
+ 
+ .history_back:hover{
+   color: rgb(182, 179, 42);
+ }
+ 
+ .policy-conta{
+   line-height: 2.5em;
+   letter-spacing: 0.2em;
+ }
+ 
+ 
+ @media only screen and (max-width: 780px) {
+   #privacy-h1{
+       font-size: 1.8em;
+   }
+ 
+   .policy-conta{
+       padding: 5rem 0 !important;
+   }
+ 
+   .policy-heading{
+       font-size: 1.3em !important;
+   }
+ }
+ 
+ @media only screen and (max-width: 420px) {
+   #privacy-h1{
+       font-size: 1.7em !important;
+   }
+ 
+   #smart-dis{
+       padding: 0 !important;
+   }
+ 
+   .policy-conta{
+       font-size: 0.8em !important;
+       width: 90%;
+       padding-left: 0 !important;
+   }
+ 
+   .sengen{
+       padding: 1rem;
+   }
+ 
+   .policy-heading{
+       font-size: 1.2em !important;
+   }
+ 
+ }
+ 
+ 
+ 
+ 
+ #fixed-button{
+   position: fixed;
+ }
+ 
+ 
+ footer{
+   bottom: 0;
+   background-color: #f07854;
+ } 
+ 
+ 
+ .footer-main:nth-child(2),
+ .footer-main:nth-child(3),
+ .footer-main:nth-child(4){
+   padding-left: 1.3rem;
+   border-left: 3px solid #d2691e;
+ }
+ 
+ .footer-main:nth-child(3){
+   letter-spacing: 0.1em;
+ }
+ 
+ .footer-link{
+   color:#000;
+ }
+ 
+ .footer-link:hover{
+   color: #000;
+ }
+ 
+ .footer-link:hover{
+   text-decoration: none;
+   text-shadow: 0 0 6px #fad5b7,0 0 12px #bd6044;
+   transition: 0.8s;
+ }
+
+ 
+ 
+ @media only screen and (max-width: 780px){
+   .footer-main:nth-child(1),
+   .footer-main:nth-child(2),
+   .footer-main:nth-child(3){
+       padding-left: 1rem !important;
+       margin-right: 20px !important;
+   }
+ 
+   .footer-main b{
+       font-size: 13px;
+   }
+ }
+ 
+ @media only screen and (max-width: 420px){
+   .footer-main:nth-child(1),
+   .footer-main:nth-child(2),
+   .footer-main:nth-child(3),
+   .footer-main:nth-child(4){
+       padding-left: 0.5rem !important;
+       margin-right: 12px !important;
+   }
+ 
+   .footer-main b{
+       font-size: 10px !important;
+   }
+ 
+ }
+ 
+ 
+ /******************* お問い合わせフォーム関係 ***********************/
+ .contact-btn{
+   margin-right: 1rem;
+   vertical-align: top !important;
+   background: #e5ed5a;
+   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+ }
+ 
+ .contact-btn:hover{
+   background: #dcf66a;
+ }
+ 
+ .contact-back{
+   margin-right: 1rem;
+   vertical-align: top !important;
+   background: #f9fdba;
+   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+ }
+ 
+ .contact-back:hover{
+   background: #fafad2;
+ }
+ 
+ 
+ @media only screen and (max-width: 780px) {
+   .contact-h2{
+       font-size: 2rem;
+   }
+ 
+ } 
+ 
+ @media only screen and (max-width: 420px) {
+   .contact-h2{
+       font-size: 0.8em;
+       margin-top: 50px;
+   }
+ 
+   .contact-btn{
+       font-size: 80%;
+       width: 90px !important;
+       height: 30px !important;
+   }
+ 
+   label{
+       font-size: 0.6rem;
+   }
+ 
+   textarea{
+       font-size: 0.6em !important;
+       width: 100% !important;
+       height: auto !important;
+   }
+ 
+   .contact-input{
+       max-width: 100% !important;
+   } 
+ 
+   .conta-container{
+       margin-bottom: 3rem;
+   }
+ 
+ 
+ } 
+ 
+ 
+ /******************* 各社カードの案内 ******************/
+ 
+ .slash::before,
+ .slash::after {
+ content: "";
+ width: 25px;
+ height: 2px;
+ background-color: #000;
+ margin: 0px 4px 4px;
+ }
+ 
+ .slash::before {
+ transform: rotate(45deg);
+ }
+ 
+ .slash::after {
+ transform: rotate(-45deg);
+ }
+ 
+ .card_link{
+   border-bottom: 1px solid #000;
+ }
+ 
+ 
+ .kakuten{
+   font-size: 16px;
+   font-weight: bold;
+ }
+ 
+ .cLink{
+   font-size: 23px;
+ }

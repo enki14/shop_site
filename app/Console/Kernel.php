@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
         \app\Console\Commands\DonkiList_Command::class,
         \app\Console\Commands\AeonList_Command::class,
         \app\Console\Commands\yorkList_Command::class,
-        \app\Console\Commands\seizyoList_Command::class
+        \app\Console\Commands\SeizyoList_Command::class,
+        \app\Console\Commands\AeonThanks_Command::class
     ];
 
     /**
@@ -54,6 +55,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('aeonList')->monthlyOn(1, '11:00');
         $schedule->command('yorkList')->monthlyOn(2, '11:00');
         $schedule->command('seizyoList')->monthlyOn(1, '11:00');
+        $schedule->command('aeonThanks')->monthlyOn(5, '11:00');
     }
 
     /**

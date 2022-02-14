@@ -23,8 +23,11 @@ Route::get('/policy', function () {
 	return view('page.policyPage');
  })->name('policy');
 Route::get('/profile', function() {
-	return view('page.profile');
+	return view('page.profile_P');
 })->name('profile');
+Route::get('/disclaimer', function() {
+	return view('page.disclaimer_P');
+})->name('disclaimer');
 
 
 /********* 問い合わせフォーム **********/
@@ -67,6 +70,8 @@ Route::post('/keio_3times', 'EventSetController@keio_3times');
 Route::post('/tobu_Tmoney', 'EventSetController@tobu_Tmoney');
 Route::post('/alps_doniti', 'EventSetController@alps_doniti');
 Route::post('/aeon_wakuwaku', 'EventSetController@aeon_wakuwaku');
+Route::post('/aeon_thanks', 'EventSetController@aeon_thanks');
+
 
 // event_listテーブルにセットするものは'/event_list'へ
 Route::get('/seiyu_list', 'EventSetController@seiyu_list');

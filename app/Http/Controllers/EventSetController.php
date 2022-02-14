@@ -309,6 +309,37 @@ class EventSetController extends Controller
 
     }
 
+    // 当月５日に実施
+    // 2月は30日部分を手書きで変更
+    public static function aeon_thanks(){
+        $ymd = [];
+        $ym = date('Ym', strtotime('this month'));
+        $ymd[0] = $ym . '20';
+        $ymd[1] = $ym . '30';
+
+        $today = date('Ymd');
+
+        for($i = 0; $i < count($ymd); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $aeon = "insert into sale_point
+            (sp_code, series_id, sp_title, sp_subtitle, sp_url,
+            event_start, cash_kubun, keyword, register_day, card_true)
+            values
+            ($max_id, 1, 'お客様感謝デー', 
+            '各種イオンマークの付いたカードのご利用・読み取り、イオン銀行キャッシュカードの読み取り、
+            または電子マネーWAONのお支払いで今ついている本体価格からレジにて５％off', 
+            'https://www.waon.net/campaign/otoku/00000000_thanks_day/',
+            '$ymd[$i]', 'イオンカード、イオンiDでのクレジット払い、現金など　※WAON POINTカードは割引対象外',
+            '毎月イベント', '$today', 1)";
+            DB::insert($aeon);
+            DB::commit();
+
+        }
+    }
+
 
     // コマンド実施対象外
     // 画像の識字は読み取り専用なのでテーブルに格納できなかった

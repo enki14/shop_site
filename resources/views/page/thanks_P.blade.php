@@ -4,6 +4,9 @@
 
 
 @section('title', 'お問い合わせフォーム')
+@section('contactCss')
+<link href="{{ asset('css/contact.css') }}" rel="stylesheet" type="text/css">
+@endsection
 
 
 @section('layouts.content')

@@ -4,7 +4,7 @@
       <div class="container-fulid">
         <div class="row">
             <div class="col-3">
-              <a href="{{ url('/') }}" class="logo_link"><img src="{{ asset('/img/point-card_logo4.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" width="100px" /></a>
+              <a href="{{ url('/') }}" class="logo_link"><img src="{{ asset('/img/site_logo7.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" /></a>
             </div>
             <div class="col-6 board">
               <p class="animation-info font-weight-bold pt-1 ml-2">地図の下&nbsp;&nbsp;検索の一覧を出しました</p>
@@ -27,13 +27,25 @@
               <h1 class="header-title text-light col-md-8 m-5 font-weight-bold">「 お得を探す 」の検索</h1>
             </div>
           </div>
+        @elseif(Request::routeIs('page.profile_P'))
+          <div class="header-eria brand w-100 d-block">
+            <div class="row justify-content-center">
+              <h1 class="header-title text-light col-md-8 m-5 font-weight-bold">ポイント王国のご紹介</h1>
+            </div>
+          </div>
         @elseif(Request::routeIs('policy'))
           <div class="header-eria brand w-100 d-block">
             <div class="row justify-content-center">
               <h1 class="header-title text-light col-md-8 m-5 font-weight-bold">Privacy Policy</h1>
             </div>
           </div>
-          @elseif(Request::routeIs('page.contact_P') || Request::routeIs('page.confirm_P') || Request::routeIs('page.thanks_P'))
+        @elseif(Request::routeIs('disclaimer'))
+          <div class="header-eria brand w-100 d-block">
+            <div class="row justify-content-center">
+              <h1 class="header-title text-light col-md-8 m-5 font-weight-bold">免責事項</h1>
+            </div>
+          </div>
+        @elseif(Request::routeIs('page.contact_P') || Request::routeIs('page.confirm_P') || Request::routeIs('page.thanks_P'))
           <div class="header-eria brand w-100 d-block">
             <div class="row justify-content-center">
               <h1 class="header-title text-light col-md-8 m-5 font-weight-bold">お問い合わせ</h1>

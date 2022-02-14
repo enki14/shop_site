@@ -1,152 +1,278 @@
 
-
-/************ sns ↑↑↑ ***********/
-
-.fa-facebook{
-   color: #dcdcdc;
-}
-
-.fa-twitter{
-   color: #dcdcdc;
-}
-
-.fa-line{
-   color: #dcdcdc;
+.wrraper{
+    overflow: hidden;
 }
 
 
-/******************* profileページ ******************/
-.profile{
-   top: 200px;
+nav{
+    position: relative;
+    padding: 0;
+    width: 100%;
+    height: 700px;
+    z-index: 1;
 }
 
-#one .row,
-#two .row, 
-#three .row{
-   padding-left: 5rem;
+#black_out{
+    height: 700px;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#fixed_nav{
+    background-color: #ffd1e8;
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
 
 
-.profile_logo{
-   position: absolute;
-   width: 100%;
-   height: auto;
-   top: 5rem;
+#content-main{
+    top: 700px;
+    background: #fde3e5;
+    width: 100%;
+    z-index: 2;
 }
 
-.history_back_2{
-   color: #ff8c00;
-   font-size: 15px;
-   font-weight: bold;
-   text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+
+.original{
+    max-width: 70px;
+    height: auto;
 }
 
-.history_back_2:hover{
-   color: #b8860b;
-}
-
-#h3-nav{
-   font-family: 'Amasis MT Pro Black', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-   font-weight: 700;
-   font-size: 2rem;
-}
-
-#my-name{
-   font-family: 'Yu Mincho Light','YuMincho','Yu Mincho','游明朝体','游明朝体+36ポかな',
-   'YuMincho +36p Kana','ＭＳ 明朝', 'MS Mincho','ＭＳ Ｐ明朝','MS PMincho',sans-serif;
-   font-size: 2rem;
-}
-
-.cart{
-   background: #ADFF2F;
-}
 
 .bottom-line{
-   border-bottom: 1px solid #ADFF2F;
+    border-bottom: 2px solid #43bb2a;
+}
+
+.p_writing,
+.writing{
+    letter-spacing: 0.2em;
+    line-height: 3em;
 }
 
 .border-h3{
-   
-   letter-spacing: 0.2em;
+    letter-spacing: 0.2em;
+    font-size: 28px;
 }
 
-.writing{
-   letter-spacing: 0.2em;
-   line-height: 3em;
-   padding-left: 9rem;
+#my-name{
+    letter-spacing: 0.2em;
+    font-family: "serif","ＭＳ Ｐ明朝", "ＭＳ 明朝", "HG正楷書体-PRO";
+    font-weight: 700;
 }
 
-.p_writing{
-   letter-spacing: 0.2em;
-   line-height: 2em;
+@media only screen and (max-width: 420px){
+    .writing{
+        padding-left: 0 !important;
+    }
+
+    .p_wri{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .original{
+        max-width: 50px;
+    }
 }
 
-@media only screen and (max-width: 780px) {
 
-   .karisuto{
-      justify-content: center !important;
-   }
+@media only screen and (max-width: 320px){
+    .cart{
+        padding-right: 5px !important;
+    }
+}
 
+/**************** content-container部分 ↓↓↓ ******************/
 
-   #one,
-   #two, 
-   #three{
-       padding-left: 0;
-       margin-left: 0;
-   }
-
-   .writing{
-       padding-left: 4rem; 
-   }
-
-   .cart{
-       display: none;
-   }
-
-   #my-name{
-       justify-content: center !important;
-       left: 4rem;
-   }
-
-   .p_writing{
-       padding-left: 4rem;
-   }
+#lens{
+    text-decoration: none;
+    outline: none; 
+    display: inline;
+    color: 	#2F4F4F;
+    box-shadow:0px 3px 8px 3px #ccc inset;
 
 }
 
+#lens::before{ 
+    border-radius: 50%;  
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+    transform: skewX(-25deg);
+}
+
+.search-select{
+    border-radius: 3px;
+}
+
+#content-container{
+    top: -200px;
+    background: #ebc1b0;
+    padding-top: 70px;
+    padding-bottom: 100px; 
+    border-radius: 30px;
+    z-index: 3;
+    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.6));
+    opacity: 0;
+    transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s, opacity linear 0.7s;
+    transform: translate(0, 40px);
+    transition-delay: 0.25s; 
+}
+
+
+section div h3{
+    display: inline;
+}
+
+#smart-dis{
+    border-radius: 3px; 
+    box-shadow:0px 3px 8px 3px #ccc inset; 
+}
+
+.smart-button{
+    display: inline;
+    background: #FFF;
+    height: 60px;
+    width: 60px;
+    border: 5px solid #C0C0C0;
+    border-radius: 50%;
+    box-shadow:0px 0px 5px 2px #ccc inset;
+}
 
 @media only screen and (max-width: 420px) {
-
-   #my-name{
-      font-size: 1.1rem !important;
-   }
-
-
-
-   .profile .row .col-3:nth-of-type(1){
-       display: none;
-   }
-
-   .writing{
-       padding-left: 1rem; 
-   }
-
-   #profile-eria section .row:nth-of-type(1),
-   #profile-eria section .row:nth-of-type(2),
-   #profile-eria section .row:nth-of-type(3){
-       padding-left: 1rem !important;
-   }
-
-   .p_writing{
-       padding-left: 0;
-   }
-
-   .fa-facebook,
-   .fa-line,
-   .fa-twitter{
-      margin-right: 0 !important;
-   }
-
-
+    .smart-button{
+        width: 40px;
+        height: 40px;
+    }
 }
 
+/**************** content-container部分 ↑↑↑ ******************/
+
+
+
+
+#content-h2{
+    margin-bottom: 20px;
+}
+
+.form-content{
+    margin-top: 35px;
+}
+
+#search-form,
+#keys-form,
+#maps-form{
+    margin-top:1.5rem;
+}
+
+.tooltip-inner{
+    background-color: #fbd4cb;
+    color: #000;
+    padding: 12px;
+}
+
+.tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
+    border-top-color: #fbd4cb;
+    border-width: .6rem .6rem 0;
+}
+
+.kensaku-btn{
+    width: 120px;
+    height: 37px;
+    background-color: #ffd1e8;
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.kensaku-btn:hover{
+    background: #fdaad3;
+}
+
+
+
+.history_back{
+    position: fixed;
+    right: 50px;
+    bottom: 150px;
+    color: #fd8d72;
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    z-index: 4;
+}
+
+.history_back:hover{
+    color: #fec5a5;
+}
+
+
+.itiran-card:nth-child(odd){
+    background-color: #EDFFBE;
+}
+
+.itiran-card:nth-child(even){
+    background-color: skyblue;
+}
+
+.ribbon{
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    display: inline-block;
+    width: 52px;
+    height: 50px;
+    text-align: center; 
+    background: #fa4141;
+    box-shadow: 1px 1px 5px;
+}
+
+.ribbon:before,
+.ribbon:after{
+    position: absolute;
+    content: '';
+}
+
+.ribbon:before{
+    right: -10px;
+    width: 0;
+    height: 0;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #d90606;
+}
+
+.new{
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    font-family: "cursive", "Franklin Gothic", "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN",
+    "ＭＳ Ｐゴシック", "MS P Gothic", Verdana, Arial, Helvetica, sans-serif;
+}
+
+/* #ribbon:after{
+    top: 50%;
+    left: 0;
+    display: block;
+    height: 50%;
+    border: 1em solid #fa4141;
+    border-bottom-width: 15px;
+    border-bottom-color: transparent;
+} */
+
+#fixed-button{
+    position: fixed;
+}
+
+footer{
+    bottom: 0;
+    background-color: #e39c68;
+} 
+
+.footer-link{
+    color:#000;
+ }
+ 
+ .footer-link:hover{
+    text-decoration: none;
+    text-shadow: 0 0 6px #FF99FF,0 0 12px #FF66CC;
+    transition: 0.8s;
+ }
+
+ 

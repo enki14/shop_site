@@ -4,6 +4,9 @@
 
 
 @section('title', 'Privacy Poricy')
+@section('policyCss')
+<link href="{{ asset('css/policy.css') }}" rel="stylesheet" type="text/css">
+@endsection
 
 @section('layouts.content')
 <style>

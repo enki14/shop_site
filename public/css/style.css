@@ -71,6 +71,10 @@ nav{
     overflow: hidden; 
 }
 
+.logo_link img{
+    width: 170px;
+}
+
 
 @media only screen and (max-width: 420px){
 
@@ -1247,21 +1251,21 @@ thead{
     background-color: #CC0000;
     font-size: 11px;
     font-weight: bold;
-    -webkit-animation-name: bg-change;
-    -webkit-animation-duration: 0.5s;
-    -webkit-animation-timing-function: ease-in-out;
-    -webkit-animation-delay: 0s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-direction: alternate;
-    animation-name: bg-change;
+    animation-name: change_color;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-delay: 0s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+    -webkit-animation-name: change_color;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
 }
 /* ↑ のbg-changeの前半と後半の色の間隔 */
-@-webkit-keyframes bg-change {
+@-webkit-keyframes change_color {
     from {
       background-color: #CC0000;
   }
@@ -1269,7 +1273,7 @@ thead{
       background-color: #FF2222;
   }
 }
-@keyframes bg-change {
+@keyframes change_color {
     0% {
       background-color: #CC0000;
   }
@@ -1295,9 +1299,14 @@ footer{
 
 
 .footer-main:nth-child(2),
-.footer-main:nth-child(3){
-    padding-left: 1rem; 
+.footer-main:nth-child(3),
+.footer-main:nth-child(4){
+    padding-left: 1.3rem;
     border-left: 3px solid #d2691e;
+}
+
+.footer-main:nth-child(3){
+    letter-spacing: 0.1em;
 }
 
 .footer-link{
@@ -1323,21 +1332,32 @@ footer{
 }
 
 
-@media only screen and (max-width: 320px){
+@media only screen and (max-width: 780px){
     .footer-main:nth-child(1),
-    .footer-main:nth-child(2){
-        margin-right: 5px !important;
-    }
-
-    .footer-main:nth-child(2){
-        margin-left: 7px !important;
-    }
-
     .footer-main:nth-child(2),
     .footer-main:nth-child(3){
-        padding-left: 0.5rem; 
-        border-left: 3px solid #d2691e;
+        padding-left: 1rem !important;
+        margin-right: 20px !important;
     }
+
+    .footer-main b{
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 420px){
+    .footer-main:nth-child(1),
+    .footer-main:nth-child(2),
+    .footer-main:nth-child(3),
+    .footer-main:nth-child(4){
+        padding-left: 0.5rem !important;
+        margin-right: 12px !important;
+    }
+
+    .footer-main b{
+        font-size: 10px !important;
+    }
+
 }
 
 
@@ -1398,7 +1418,6 @@ footer{
 
     .contact-input{
         max-width: 100% !important;
-        /* height: 2rem !important; */
     } 
 
     .conta-container{
