@@ -8,7 +8,6 @@
     @foreach($shop_list as $data)
     <div class="accordion" id="accordionExample{{ $data->shop_id }}_{{ $data->store_id }}">
         @if(!empty($data->se_title) or !empty($data->sh_title) or !empty($data->st_title))
-            <?php Log::debug($data->se_title); ?>
             <div class="card">
                 <div class="card-header" id="headingOne{{ $data->shop_id }}_{{ $data->store_id }}">
                     <h5 class="mb-0">
@@ -70,31 +69,31 @@
                                         @if(!empty($data->se_cash))
                                             @if(strlen($data->se_cash) >= 50)
                                                 <p class="sub-card-long mt-3 font-weight-bold">
-                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->se_cash }}</a>
+                                                    {{ $data->se_cash }}
                                                 </p>
                                             @else
                                                 <p class="sub-card mt-3 font-weight-bold">
-                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->se_cash }}</a>
+                                                    {{ $data->se_cash }}
                                                 </p>
                                             @endif
                                         @elseif(!empty($data->sh_cash))
                                             @if(strlen($data->sh_cash) >= 50)
                                                 <p class="sub-card-long mt-3 font-weight-bold">
-                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->sh_cash }}</a>
+                                                    {{ $data->sh_cash }}
                                                 </p>
                                             @else
                                                 <p class="sub-card mt-3 font-weight-bold">
-                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->sh_cash }}</a>
+                                                    {{ $data->sh_cash }}
                                                 </p>
                                             @endif
                                         @else    
                                             @if(strlen($data->st_cash) >= 50)
                                                 <p class="sub-card-long mt-3 font-weight-bold">
-                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->st_cash }}</a>
+                                                    {{ $data->st_cash }}
                                                 </p>
                                             @else
                                                 <p class="sub-card mt-3 font-weight-bold">
-                                                    <a href="{{ $data->link }}" target="_blank">{{ $data->st_cash }}</a>
+                                                    {{ $data->st_cash }}
                                                 </p>
                                             @endif
                                         @endif

@@ -27,7 +27,7 @@
               <h1 class="header-title text-light col-md-8 m-5 font-weight-bold">「 お得を探す 」の検索</h1>
             </div>
           </div>
-        @elseif(Request::routeIs('page.profile_P'))
+        @elseif(Request::routeIs('profile'))
           <div class="header-eria brand w-100 d-block">
             <div class="row justify-content-center">
               <h1 class="header-title text-light col-md-8 m-5 font-weight-bold">ポイント王国のご紹介</h1>

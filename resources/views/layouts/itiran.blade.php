@@ -54,21 +54,22 @@
                             @endif
                         </h2>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 mt-3">
+                    <div class="row d-flex justify-content-center">
+                        {{-- ロゴの使用許可があれば以下をitiran_imgを加える --}}
+                        {{--<div class="col-md-4 mt-3">
                         @if(!empty($data->img_src))
                             <img src="{{ asset($data->img_src) }}" alt="テスト画像" class="itiran_img"/>
                         @else
                             <img src="{{ asset('/img/thumbnail-20200501_noimage.png') }}" alt="no_image" class="itiran_img"/>
                         @endif
-                        </div>
-                        <div class="itiran_title col-md-7 pt-5"> 
+                        </div>--}}
+                        <div class="itiran_title col-md-10 pt-5"> 
                             @if(!empty($data->sp_url))
-                                <h4 class="itiran_h4 card-title font-weight-bold">
+                                <h4 class="itiran_h4 card-title font-weight-bold mb-4">
                                     <a href="{{ $data->sp_url }}" target="_blank">{{ $data->sp_title }}</a>
                                 </h4>
                             @else
-                                <h4 class="itiran_h4 card-title font-weight-bold">
+                                <h4 class="itiran_h4 card-title font-weight-bold mb-4">
                                     {{ $data->sp_title }}
                                 </h4>
                             @endif
@@ -78,56 +79,25 @@
                             <div class="row">
                                 <div class="col-11 d-flex justify-content-center">
                                 @if(!empty($data->cash_kubun))
-                                    @if($data->card_true == 1)
-                                        <div class="row d-flex align-items-start">
-                                            <div class="col-2 arrow pt-2 mt-5">
-                                                <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
-                                            </div>
-                                            <div class="col-9 pl-0 mt-3 itiran_cash">
-                                                <span class="slash d-flex align-items-center position-relative font-weight-bold">
-                                                    対象カード
-                                                </span>
-                                                    @if(strlen($data->cash_kubun) >= 50)
-                                                        <p class="sub-card-long mt-3">
-                                                            @if(!empty($data->link))
-                                                                <a href="{{ $data->link }}" target="_blank" class="text-dark font-weight-bold">
-                                                                    {{ $data->cash_kubun }}
-                                                                </a>
-                                                            @else
-                                                                {{ $data->cash_kubun }}
-                                                            @endif
-                                                        </p>
-                                                    @else
-                                                        <p class="sub-card mt-3">
-                                                            @if(!empty($data->link))
-                                                            <?php Log::debug($data->link); ?>
-                                                                <a href="{{ $data->link }}" target="_blank" class="text-dark font-weight-bold">
-                                                                    {{ $data->cash_kubun }}
-                                                                </a>
-                                                            @else
-                                                                {{ $data->cash_kubun }}
-                                                            @endif
-                                                        </p>
-                                                    @endif   
-                                            </div>
+                                    <div class="row d-flex align-items-start my-4">
+                                        <div class="col-2 arrow pt-2 mt-5">
+                                            <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
                                         </div>
-                                    @else
-                                        <div class="row d-flex align-items-start">
-                                            <div class="col-2 arrow d-flex justify-content-end mt-5">
-                                                <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
-                                            </div>
-                                            <div class="col-9 mt-3 itiran_cash">
-                                                <span class="slash d-flex align-items-center position-relative font-weight-bold">
-                                                    対象のお支払
-                                                </span>
-                                                @if(strlen($data->cash_kubun) >= 50)
-                                                    <p class="sub-card-long mt-3 font-weight-bold">{{ $data->cash_kubun }}</p>
-                                                @else
-                                                    <p class="sub-card mt-3 font-weight-bold">{{ $data->cash_kubun }}</p>
-                                                @endif   
-                                            </div>
+                                        <div class="col-9 pl-0 mt-3 itiran_cash">
+                                            <span class="slash d-flex align-items-center position-relative font-weight-bold">
+                                                対象カード
+                                            </span>
+                                            @if(strlen($data->cash_kubun) >= 50)
+                                                <p class="sub-card-long mt-3 font-weight-bold">
+                                                    {{ $data->cash_kubun }}
+                                                </p>
+                                            @else
+                                                <p class="sub-card mt-3 font-weight-bold">
+                                                    {{ $data->cash_kubun }}
+                                                </p>
+                                            @endif   
                                         </div>
-                                    @endif
+                                    </div>
                                 @endif
                                 </div>
                             </div>

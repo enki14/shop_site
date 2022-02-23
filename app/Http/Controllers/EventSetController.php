@@ -80,7 +80,6 @@ class EventSetController extends Controller
         $sunday = date('Ymd', strtotime('sunday next week'));
 
         $today = date('Ymd');
-        dd($today);
 
         $s_id = array(10, 134);
         for($i = 0; $i < count($s_id); $i++){
@@ -578,6 +577,12 @@ class EventSetController extends Controller
 
             for($i = 0; $i < count($title_even); $i++){
 
+                if(!preg_match('/^http/', $link_even[$i])){
+                    $york_link = 'https://www.york-inc.com' . $link_even[$i];
+                }else{
+                    $york_link = $link_even[$i];
+                }
+
                 $today = date('Ymd');
 
                 $id = "select max(el_id) + 1 as max_id from event_list";
@@ -585,7 +590,7 @@ class EventSetController extends Controller
                 $max_id = $max[0]->max_id; 
 
                 $sql = "insert into event_list(el_id, el_name, link, el_title, el_subtitle, register_day)
-                values ($max_id, 'ヨークのイベ一覧', '$link_even[$i]', '$title_even[$i]', '$subtitle[$i]', $today)";
+                values ($max_id, 'ヨークのイベ一覧', '$york_link', '$title_even[$i]', '$subtitle[$i]', $today)";
                 DB::insert($sql);
                 DB::commit();
 

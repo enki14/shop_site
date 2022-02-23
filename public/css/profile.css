@@ -212,39 +212,6 @@ section div h3{
     background-color: skyblue;
 }
 
-.ribbon{
-    position: absolute;
-    top: -10px;
-    left: 20px;
-    display: inline-block;
-    width: 52px;
-    height: 50px;
-    text-align: center; 
-    background: #fa4141;
-    box-shadow: 1px 1px 5px;
-}
-
-.ribbon:before,
-.ribbon:after{
-    position: absolute;
-    content: '';
-}
-
-.ribbon:before{
-    right: -10px;
-    width: 0;
-    height: 0;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #d90606;
-}
-
-.new{
-    position: absolute;
-    top: 10px;
-    left: 5px;
-    font-family: "cursive", "Franklin Gothic", "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN",
-    "ＭＳ Ｐゴシック", "MS P Gothic", Verdana, Arial, Helvetica, sans-serif;
-}
 
 /* #ribbon:after{
     top: 50%;

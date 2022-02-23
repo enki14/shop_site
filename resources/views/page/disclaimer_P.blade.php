@@ -3,7 +3,7 @@
 @extends('layouts.footer')
 
 
-@section('title', 'Privacy Poricy')
+@section('title', '免責事項')
 @section('disclaimerCss')
 <link href="{{ asset('css/disclaimer.css') }}" rel="stylesheet" type="text/css">
 @endsection
