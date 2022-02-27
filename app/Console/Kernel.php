@@ -29,7 +29,11 @@ class Kernel extends ConsoleKernel
         \app\Console\Commands\AeonList_Command::class,
         \app\Console\Commands\yorkList_Command::class,
         \app\Console\Commands\SeizyoList_Command::class,
-        \app\Console\Commands\AeonThanks_Command::class
+        \app\Console\Commands\AeonThanks_Command::class,
+        \app\Console\Commands\TobuBonus_Command::class,
+        \app\Console\Commands\Tokyu5off_Command::class,
+        \app\Console\Commands\AeonBonus_Command::class,
+        \app\Console\Commands\AeonArigato_Command::class
     ];
 
     /**
@@ -56,6 +60,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('yorkList')->monthlyOn(2, '11:00');
         $schedule->command('seizyoList')->monthlyOn(1, '11:00');
         $schedule->command('aeonThanks')->monthlyOn(5, '11:00');
+        // ↓↓↓　第一日曜日としたいが、わからず...
+        $schedule->command('tobuBonus')->monthly();
+        $schedule->command('tokyu5off')->monthlyOn(1, '11:00');
+        $schedule->command('aeonBonus')->lastDayOfMonth('15:00');
+        $schedule->command('aeonArigato')->monthlyOn(1, '11:00');
     }
 
     /**

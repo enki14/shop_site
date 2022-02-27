@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="col-10 pl-0 itiran_cash">
                                         <span class="slash d-flex align-items-center position-relative font-weight-bold">
-                                            対象カード
+                                            対象のお支払
                                         </span>
                                         @if(!empty($data->se_cash))
                                             @if(strlen($data->se_cash) >= 50)

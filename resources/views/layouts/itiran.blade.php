@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="col-9 pl-0 mt-3 itiran_cash">
                                             <span class="slash d-flex align-items-center position-relative font-weight-bold">
-                                                対象カード
+                                                対象のお支払
                                             </span>
                                             @if(strlen($data->cash_kubun) >= 50)
                                                 <p class="sub-card-long mt-3 font-weight-bold">

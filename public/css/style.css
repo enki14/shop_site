@@ -1195,6 +1195,104 @@ thead{
 /******************* maps ↑↑↑↑↑↑ **********************/
 
 
+/******************* sidebar ↓↓↓↓↓↓ **********************/
+.aco-eria{
+    top: -200px;  
+    z-index: 3;
+    background: #decc54;
+    padding-top: 70px;
+    padding-bottom: 100px; 
+    border-radius: 20px;  
+    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.6));  
+    /* opacity: 0; */
+    transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 1s, opacity linear 0.7s;
+    transform: translate(0, 40px);
+    transition-delay: 0.25s; 
+}
+
+#eMoney-h,
+#cCard-h,
+#pCard-h{
+    border-bottom: 2px solid #333333;
+}
+
+#eMoney-h::after,
+#cCard-h::after,
+#pCard-h::after{
+    position: absolute;
+    right: 5px;
+    font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f105";
+}
+
+.acordion-item::before,
+.acordion-item::after{
+    content: '';
+    display: inline;
+    width: 15px;
+    height: 3px;
+    border-radius: 1px;
+    background-color: #333333;
+    position: absolute;
+    right: 10px;
+    top: 50%; 
+    transform: translateY(-50%);
+}
+
+#headingOne::after,
+#headingTwo::after,
+#headingTree::after{
+    /* 横棒を縦にするために90℃回転させる */
+    transform: translateY(-50%) rotate(90deg);
+    /* プラスからマイナスへの切り替えをゆっくり行いアニメーションさせる */
+    transition: 0.5s;
+}
+
+.activeOne::after,
+.activeTwo::after,
+.activeThree::after{
+    transform: rotate(0);
+    transition: 0.5s;
+}
+
+
+/*    ↓↓↓　animation部分（jsの方でセッティングしたらコメントアウトを外す）   */
+/* .aco-eria.-visible_2:before {
+    transform: translate(0, 0);
+}
+
+.aco-eria::before{
+    display: block;
+    position: absolute; 
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: translate(0, 100%);
+    transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) .6s; 
+}
+
+.aco-eria.-visible_2{
+    opacity: 1;
+    transform: translate(0, 0);
+} */
+
+.aco-body{
+    border-radius: 3px; 
+    box-shadow:0px 3px 8px 3px #ccc inset; 
+}
+
+.aco-parent{
+    border: 10px solid #444444;
+}
+
+.aco-parent button:focus{
+    outline: none;
+    box-shadow: none;
+}
+
+
+/******************* sidebar ↑↑↑↑↑↑↑ **********************/
 
 .top_down{
     position: fixed;

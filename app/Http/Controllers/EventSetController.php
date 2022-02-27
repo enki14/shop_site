@@ -339,6 +339,130 @@ class EventSetController extends Controller
         }
     }
 
+    // 当月の第一日曜日実施
+    public static function tobu_bonus(){
+        $sat = date('Ymd', strtotime('first saturday of next month'));
+        $sun = date('Ymd', strtotime('first sunday of this month'));
+
+        $today = date('Ymd');
+
+        $id = "select max(sp_code) + 1 as max_id from sale_point";
+        $max = DB::select($id);
+        $max_id = $max[0]->max_id;
+
+        $tobu = "insert into sale_point
+        (sp_code, shop_id, sp_title, sp_subtitle, sp_url,
+        event_start, event_end, cash_kubun, keyword, register_day)
+        values
+        ($max_id, 20, '商品ボーナスポイントプレゼント', 
+        '通常のポイントに加えてさらに商品ボーナスポイントプレゼント', 
+        'https://www.tobustore.co.jp/index.php/pickup/card_point',
+        '$sun', '$sat', 'Tカード',
+        '商品ごとのポイント', '$today')";
+        DB::insert($tobu);
+        DB::commit();
+
+    }
+
+    public static function tokyu_5off(){
+        $ymd = [];
+        $ym = date('Ym', strtotime('this month'));
+        $ymd[0] = $ym . '19';
+        $ymd[1] = $ym . '29';
+
+        $today = date('Ymd');
+
+        for($i = 0; $i < count($ymd); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $tokyu = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url,
+            event_start, cash_kubun, keyword, register_day)
+            values
+            ($max_id, 14, 'TOKYU CARD ５％キャッシュバック', 
+            'TOKYU CARDでクレジット決済すると請求時に５％分割引されます', 
+            'https://www.topcard.co.jp/info/campaign/2202store/index.html',
+            '$ymd[$i]', 'TOKYU CARD ClubQ JMBまたは各種ゴールドカードでのクレジット決済',
+            '毎月イベント', '$today')";
+            DB::insert($tokyu);
+
+        }
+
+        for($i = 0; $i < count($ymd); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $presse = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url,
+            event_start, cash_kubun, keyword, register_day)
+            values
+            ($max_id, 133, 'TOKYU CARD ５％キャッシュバック', 
+            'TOKYU CARDでクレジット決済すると請求時に５％分割引されます', 
+            'https://www.topcard.co.jp/info/campaign/2202store/index.html',
+            '$ymd[$i]', 'TOKYU CARD ClubQ JMBまたは各種ゴールドカードでのクレジット決済',
+            '毎月イベント', '$today')";
+            DB::insert($presse);
+
+        }
+        DB::commit();
+    
+    }
+
+    // 月末表示
+    public static function aeon_bonus(){
+        $start = date('Ymd', strtotime('first day of next month'));
+        $end = date('Ymd', strtotime('last day of next month'));
+
+        $shop = array(4,7);
+        $today = date('Ymd');
+
+        for($i = 0; $i < count($shop); $i++){
+            $id = "select max(sp_code) + 1 as max_id from sale_point";
+            $max = DB::select($id);
+            $max_id = $max[0]->max_id;
+
+            $aeon = "insert into sale_point
+            (sp_code, shop_id, sp_title, sp_subtitle, sp_url,
+            event_start, event_end, cash_kubun, keyword, register_day)
+            values
+            ($max_id, $shop[$i], '今月の対象商品ボーナスポイント', 
+            '※ WAON POINTカードはボーナスポイントの対象外となります', 
+            'https://chirashi.otoku.aeonsquare.net/pc/chirashi/bp/',
+            '$start', '$end', '電子マネーWAONカード、イオンカード、JMB WAON',
+            '商品ごとのポイント', '$today')";
+            DB::insert($aeon);
+            DB::commit();
+        }
+
+    }
+
+
+    public static function aeon_arigato(){
+        $ym = date('Ym', strtotime('this month'));
+        $ymd = $ym . '10';
+
+        $today = date('Ymd');
+
+        $id = "select max(sp_code) + 1 as max_id from sale_point";
+        $max = DB::select($id);
+        $max_id = $max[0]->max_id;
+
+        $aeon = "insert into sale_point
+        (sp_code, series_id, sp_title, sp_subtitle, sp_url,
+        event_start, cash_kubun, keyword, register_day)
+        values
+        ($max_id, 1, 'ありが10デー', 
+        '基本のポイント５倍！　食料品・衣料品・暮らしの品までほとんど全品対象', 
+        'https://www.aeonretail.jp/campaign/ariga10/',
+        '$ymd', '電子マネーWAONカード、イオンカード、WAON POINTカード',
+        '毎月イベント', '$today')";
+        DB::insert($aeon);
+        DB::commit();
+    }
+
 
     // コマンド実施対象外
     // 画像の識字は読み取り専用なのでテーブルに格納できなかった

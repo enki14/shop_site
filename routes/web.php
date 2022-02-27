@@ -71,6 +71,10 @@ Route::post('/tobu_Tmoney', 'EventSetController@tobu_Tmoney');
 Route::post('/alps_doniti', 'EventSetController@alps_doniti');
 Route::post('/aeon_wakuwaku', 'EventSetController@aeon_wakuwaku');
 Route::post('/aeon_thanks', 'EventSetController@aeon_thanks');
+Route::post('/tobu_bonus', 'EventSetController@tobu_bonus');
+Route::post('/tokyu_5off', 'EventSetController@tokyu_5off');
+Route::post('/aeon_bonus', 'EventSetController@aeon_bonus');
+Route::post('/aeon_arigato', 'EventSetController@aeon_arigato');
 
 
 // event_listテーブルにセットするものは'/event_list'へ

@@ -46,7 +46,7 @@ role="dialog" aria-hidden="true">
 @section('layouts.content')
 <div id="content-main" class="mx-auto">
     <div id="content_row" class="row">
-        <div id="content-container" class="card mt-3 mx-auto col-lg-8">
+        <div id="content-container" class="card mt-3 col-7">
             <div class="container">
                 <div id="lens-set" class="col-lg-12 d-flex justify-content-center" style="top: -120%;">
                     <i id="lens" class="fas fa-circle fa-sm"></i>
@@ -65,6 +65,7 @@ role="dialog" aria-hidden="true">
                 </div>
             </div>
         </div>
+        @include('layouts.sidebar')
     </div>
 </div>
 @endsection
@@ -158,5 +159,6 @@ role="dialog" aria-hidden="true">
 </script>
 <script src="{{ asset('/js/modal_open.js') }}"></script>
 <script src="{{ asset('/js/elevator.js') }}"></script>
+<script src="{{ asset('/js/aco_open.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places" async defer></script>
 @endsection
