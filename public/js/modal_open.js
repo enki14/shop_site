@@ -196,15 +196,15 @@ function setMarker(markerData){
         }
 
         var contentString = 
-        "<div class='info_win'>" +
+        "<div id='info_win' class='info_win'>" +
             "<h5 class='firstHeading'>" + shop + store + "</h5>"+
-            "<div class='info_Content'>" +
+            "<div id='info_Content' class='info_Content'>" +
                 spTitle(se_title, sh_title, st_title, spse_url, spsh_url, spst_url) + 
                 spSubtitle(se_subtitle, sh_subtitle, st_subtitle) +
                 eventDay(se_day, sh_day, st_day) +
                 "<div class='container mt-5'>" + 
                     "<div class='row'>" +
-                        "<small class='cocode col-8 d-flex justify-content-start'><b>ココで使えるカード&ensp;<i class='fas fa-angle-double-right'>&ensp;</i></small>" + 
+                        "<small id='cocode' class='cocode col-8 d-flex justify-content-start'><b>ココで使えるカード&ensp;<i class='fas fa-angle-double-right'>&ensp;</i></small>" + 
                         "<small class='col-4'>" + cardOutput(card_name, link) + "</small>" +
                     "</div>"
             "</div>" +

@@ -2,7 +2,7 @@
     <section class="container" style="margin-bottom: 10rem;">
         <div class="col-11 pt-5 pb-1 pl-2 bottom-line">
             <img src="{{ asset( '/img/cart_3.png') }}" class="cart pr-4 pb-1">
-            <span class="mb-3 border-h3">ポイントカード王国とは</span>
+            <span class="mb-3 border-h3">ポイント王国とは</span>
         </div>
         <p class="mt-4 mb-5 pl-5 text-break writing">
             スーパーマーケットのポイントカードを対象にしたお得情報を発信するサイト。<br>

@@ -16,8 +16,8 @@
             style="width: 9.5rem; height: 3.6rem;" />
             <a href="{{ url('/') }}" id="reset-btn" class="btn btn-lg" 
             role="button">
-                <span class="material-icons-outlined align-middle">restart_alt</span>
-                <small class="font-weight-bold pt-1">RESET</small>
+                <span id="restart" class="material-icons-outlined">restart_alt</span>
+                <small class="font-weight-bold">RESET</small>
             </a>
         </div>
         

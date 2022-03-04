@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    <a href="{{ url('/') }}" class="history_back"><i class="fas fa-home fa-5x" data-toggle="backtip"></i></a>
+    <a href="{{ url('/') }}" id="history_back" class="history_back"><i class="fas fa-home fa-5x" data-toggle="backtip"></i></a>
 </div>
 <script src="{{ asset('/js/elevator.js') }}"></script> 
 @endsection

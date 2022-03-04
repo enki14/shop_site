@@ -83,16 +83,16 @@
                                         <div class="col-2 arrow pt-2 mt-5">
                                             <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
                                         </div>
-                                        <div class="col-9 pl-0 mt-3 itiran_cash">
+                                        <div class="col-9 mt-3 itiran_cash">
                                             <span class="slash d-flex align-items-center position-relative font-weight-bold">
                                                 対象のお支払
                                             </span>
                                             @if(strlen($data->cash_kubun) >= 50)
-                                                <p class="sub-card-long mt-3 font-weight-bold">
+                                                <p id="sub-card-long" class="sub-card-long mt-3 font-weight-bold">
                                                     {{ $data->cash_kubun }}
                                                 </p>
                                             @else
-                                                <p class="sub-card mt-3 font-weight-bold">
+                                                <p id="sub-card" class="sub-card mt-3 font-weight-bold">
                                                     {{ $data->cash_kubun }}
                                                 </p>
                                             @endif   
@@ -101,7 +101,7 @@
                                 @endif
                                 </div>
                             </div>
-                            <p class="itiran_days card-text mt-3 pr-5 d-flex justify-content-end font-weight-bold">
+                            <p id="itiran_days" class="itiran_days card-text mt-3 pr-5 d-flex justify-content-end font-weight-bold">
                                 @if(!empty($data->event_start) && !empty($data->event_end))
                                     開催日：{{ Common::dateFormat($data->event_start) }} ～ {{ Common::dateFormat_2($data->event_end) }}
                                 @elseif(!empty($data->event_start) && empty($data->event_end))

@@ -59,20 +59,20 @@
                             {{-- 親要素にd-flex align-items-startを加えることでflexboxの子要素同士の可変が可能 --}}
                             @if(!empty($data->se_cash) or !empty($data->sh_cash) or !empty($data->st_cash))
                                 <div class="row d-flex align-items-start">
-                                    <div class="col-2 arrow d-flex justify-content-end mt-5">
+                                    <div id="arrow" class="col-2 arrow d-flex justify-content-end mt-5">
                                         <i class="fas fa-reply fa-rotate-180 fa-2x" style="color: #B8860B;"></i>
                                     </div>
-                                    <div class="col-10 pl-0 itiran_cash">
+                                    <div class="col-10 itiran_cash">
                                         <span class="slash d-flex align-items-center position-relative font-weight-bold">
                                             対象のお支払
                                         </span>
                                         @if(!empty($data->se_cash))
                                             @if(strlen($data->se_cash) >= 50)
-                                                <p class="sub-card-long mt-3 font-weight-bold">
+                                                <p id="sub-card-long" class="sub-card-long mt-3 font-weight-bold">
                                                     {{ $data->se_cash }}
                                                 </p>
                                             @else
-                                                <p class="sub-card mt-3 font-weight-bold">
+                                                <p id="sub-card" class="sub-card mt-3 font-weight-bold">
                                                     {{ $data->se_cash }}
                                                 </p>
                                             @endif
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                             @endif
-                            <p class="itiran_days d-flex justify-content-end pt-3 pr-3 font-weight-bold">
+                            <p id="itiran_days" class="itiran_days d-flex justify-content-end pt-3 pr-3 font-weight-bold">
                                 @if(!empty($data->se_start))
                                     @if(!empty($data->se_start) && !empty($data->se_end))
                                         開催日：{{ Common::dateFormat($data->se_start) }} ～ 

@@ -25,7 +25,7 @@
             <p class="error-message mt-3 text-danger font-weight-bold">{{ $errors->first('body') }}</p>
         @endif
 
-        <button type="submit" class="contact-btn btn mt-3" style="width: 150px; height: 45px;">
+        <button type="submit" class="contact-btn btn mt-3 font-weight-bold">
             入力内容確認
         </button>
     </form>

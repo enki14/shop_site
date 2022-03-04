@@ -16,48 +16,25 @@ nav{
 
 @media only screen and (max-width: 420px) {
 
-    h1, h2, h3, h4, p, button{
-        font-size: 80% !important;
-    }
-
-    body{
-        font-size: 60%;
-    }
-
-    a{
-        font-size: 40% !important;
+    p, a, span, b, li, button{
+        font-size: 14px;
     }
 
     ::placeholder{
-        font-size: 60%;
+        font-size: 13px;
     }
 
     small{
-        font-size: 40%;
+        font-size: 12px;
     }
 
-    span{
-        font-size: 0.2rem !important;
+    #restart{
+        font-size: 16px;
     }
 
-    .material-icons-outlined{
-        font-size: 80% !important;
-    }
-
-    input{
-        font-size: 60% !important;
-        max-width: 30% !important;
-        height: 2.3rem !important;
-    }
-
-    select{
-        max-width: 30% !important;
-        height: 2rem !important;
-    }
-
-    .history_back,
-    .history_back_2{
-        font-size: 0.8em !important;
+    #history_back,
+    #history_back_2{
+        font-size: 0.8em;
     }
 
  }
@@ -75,18 +52,9 @@ nav{
     width: 170px;
 }
 
-
 @media only screen and (max-width: 420px){
-
-    .text-right{
-        height: 100% !important;
-    }
-
-} 
-
-@media only screen and (max-width: 300px){
     .logo_link img{
-        width: 80px;
+        width: 120px;
     }
 
 } 
@@ -178,28 +146,29 @@ nav{
     .board{
         left: 10%;
     }
-    .animation-info{
+
+    #animation-info{
         top: 10%;
-        font-size: 1.3em !important;
+        font-size: 1.3em;
         padding-left: 20px;
     }
 }
 
 @media only screen and (max-width:420px){
     .board{
-        height: 5.7em;
+        height: 3.7em;
     }
 
-    .animation-info{
-        font-size: 1.3em !important;
+    #animation-info{
+        font-size: 1em;
         padding-left: 80px;
         padding-right: 80px;
     }
 
-    .facebook,
-    .line_button,
-    .twitter{
-        font-size: 100% !important;
+    .fa-facebook,
+    .fa-line,
+    .fa-twitter{
+        font-size: 1.2em;
     }
 
 }
@@ -307,11 +276,11 @@ nav{
 
 @media only screen and (max-width: 780px) {
     .header-title{
-        font-size: 30px !important;
+        font-size: 30px;
     }
 
     .description-top{
-        font-size: 15px !important;
+        font-size: 20px;
     }
 
     /* max-width: 400px の時だけ改行して表示 */
@@ -325,7 +294,11 @@ nav{
 
 @media only screen and (max-width: 420px) {
     .header-title{
-        font-size: 20px !important;
+        font-size: 20px;
+    }
+
+    .description-top{
+        font-size: 15px;
     }
 
     /* max-width: 400px の時だけ改行して表示 */
@@ -336,8 +309,13 @@ nav{
 
 @media only screen and (max-width: 300px) {
     .header-title{
-        font-size: 15px !important;
+        font-size: 15px;
     }
+
+    .description-top{
+        font-size: 13px;
+    }
+
 }
 
 
@@ -478,9 +456,20 @@ h2{
     margin-top: 35px;
 }
 
-.search-schedule,
+.search-schedule{
+    width: 10rem; 
+    height: 3.8rem;
+    border-radius: 3px; 
+}
+
+
 .search-select{
     border-radius: 3px;
+}
+
+.search-shop{
+    width: 22rem; 
+    height: 3.8rem; 
 }
 
 #search-form,
@@ -509,8 +498,10 @@ h2{
 
 
 .kensaku-btn{
+    width: 10rem; 
+    height: 3.6rem;
     margin-right: 1rem;
-    vertical-align: top !important;
+    vertical-align: top;
     background-color: #e5ed5a;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -571,7 +562,7 @@ h2{
 .new{
     position: absolute;
     top: 10px;
-    left: 5px;
+    left: 10px;
     font-family: "cursive", "Franklin Gothic", "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN",
     "ＭＳ Ｐゴシック", "MS P Gothic", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -583,11 +574,11 @@ h2{
     #keys-h2,
     #calendar-h2,
     #maps-h2{
-        font-size: 1.8em !important;
+        font-size: 1.8em;
     }
 
-    .kensaku-btn{
-        width: 9rem !important;
+    #kensaku-main{
+        width: 7.2rem;
     } 
 
     .kensaku-btn,
@@ -600,9 +591,6 @@ h2{
         background-color: #f3e847;
     }
 
-    #search-shop{
-        width: 17rem !important;
-    }
 
 }
 
@@ -613,28 +601,17 @@ h2{
     #keys-h2,
     #calendar-h2,
     #maps-h2{
-        font-size: 1.5em !important;
+        font-size: 1.5em;
     }
 
     #search-form{
-        width: 80% !important;
-        height: auto !important; 
+        width: 90%;
     }
 
     .top-card .row{
         justify-content: start;
     }
 
-    .b-style{
-        height: 30px !important;
-        margin: 0.2rem !important;
-    }
-
-    #search-schedule,
-    #search-shop,
-    #kensaku-map{
-        margin-right: 5px !important;
-    }
 
     #kensaku-map{
         width: 52px;
@@ -642,20 +619,17 @@ h2{
     }
 
     #search-schedule{
-        max-width: 4rem !important;
-        height: 2.3rem !important;
+        height: 2.5em;
     }
 
     #search-shop{
-        max-width: 12rem !important;
-    }
+        height: 2.5em;
+        width: 55%; 
+    } 
 
-    .kensaku-btn{
-        max-width: 4rem !important;
-    }
+    #kensaku-main{
+        height: 2.5em;
 
-    .top-card{
-        padding-top: 50px !important;
     }
 
     #search-form{
@@ -730,8 +704,8 @@ div .fc-event-title {
 
 
 div.fc-header-toolbar{
-    margin-top: 48px !important;
-}
+    margin-top: 48px;
+} 
 
 /* タイトルの先頭にあった「all-day」とかいう表示 */
 .fc-list-event-time,
@@ -773,9 +747,10 @@ thead{
 }
 
 
+
 @media only screen and (max-width: 780px) {
     .fc-toolbar-title{
-        font-size: 1em !important;
+        font-size: 2em !important;
         letter-spacing: 0.07em;
     }
 
@@ -784,16 +759,12 @@ thead{
         background-color: #dfd433 !important;
     }
 
-    button.fc-prev-button,
-    button.fc-next-button{
-        background-color: #f3e847 !important;
-    }
 }
 
 
 @media only screen and (max-width: 420px) {
     .fc-toolbar-title{
-        font-size: 0.7em !important;
+        font-size: 1em !important;
         letter-spacing: 0.07em;
     }
 
@@ -809,20 +780,20 @@ thead{
 
 
     .modal_a{
-        font-size: 18px !important;
+        font-size: 18px;
         display: flex;
         justify-content: center;
     }
 
     #modal-date{
-        letter-spacing: 0.1em !important;
-        font-size: 13px !important;
+        letter-spacing: 0.2em;
+        font-size: 13px;
     }
 
+    
+
     #modal_description{
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        font-size: 13px !important;
+        font-size: 13px;
     }
 
     #modalShop{
@@ -841,7 +812,7 @@ thead{
 /******************* calendar ↑↑↑　**********************/
 
 
-/******************* maps **********************/
+/******************* maps ↓↓↓ **********************/
 
 #reset-btn{
     margin-bottom: 5px; 
@@ -919,9 +890,9 @@ thead{
 /*************** infowindowのCSS *******************/
 
 .gm-style-iw {
-    width: 250px !important;
-    top: 15px !important;
-    left: 0 !important;
+    width: 250px;
+    top: 15px;
+    left: 0;
     background-color: #fff;
  }
  
@@ -949,7 +920,6 @@ thead{
 
 
 .gm-style-iw{
-    top: 0 !important;
     border-radius: 0 !important;
 } 
 
@@ -981,23 +951,10 @@ thead{
 /* fontawesomeの消すボタン */
 .gm-ui-hover-effect:before{
     font-family: "Font Awesome 5 Free";
-	font-size: 28px !important;
+	font-size: 28px;
     color: #000099;
 	content: "\f057";
 }
-
- 
- /* PC対応 */
- @media only screen and (min-width: 1200px) {
-    .gm-style-iw {
-        width: 300px !important;
-    }
-    .content {
-        width: 300px;
-    }
-
-    
- }
 
 
  @media only screen and (max-width: 780px) {
@@ -1022,8 +979,8 @@ thead{
         font-size: 16px;
     }
 
-    .cocode{
-        font-size: 60% !important;
+    #cocode{
+        font-size: 90%;
     }
 
  }
@@ -1032,22 +989,21 @@ thead{
 @media only screen and (max-width: 420px) {
 
     #maps-form{
-        width: 80% !important;
-        height: auto !important; 
+        width: 80%; 
     }
 
     #map_search{
-        max-width: 95% !important; 
-        margin-right: 5px !important;
+        max-width: 95%; 
     }
 
     #kensaku-map{
-        margin-top: 0 !important;
+        margin-top: 10px;
     }
 
     #reset-btn{
-        width: 25% !important;
-        padding: 5px 0 !important;
+        margin-top: 5px;
+        width: 25%;
+        padding: 5px 0;
     }
 
     .firstHeading{
@@ -1055,45 +1011,47 @@ thead{
     }
 
     .ribbon{
-        width: 18% !important;
-        height: 2.3rem !important;
+        width: 18%;
+        height: 2.3rem;
     }
 
     .sub-card{
-        width: 13rem !important;
-        height: 2.8rem !important;
-        font-size: 0.4rem !important;
+        width: 13rem;
+        height: 2.8rem;
+        font-size: 0.4rem;
         line-height: 1.6;
         padding-top: 2em;
-        padding-left: 1.4em;
+        padding-left: 2.4em;
     }
 
     .sub-card-long{
-        width: 12rem !important;
-        height: 10.5rem !important;
-        font-size: 0.4rem !important;
+        width: 12rem;
+        height: 10.5rem;
+        font-size: 0.4rem;
         padding: 2.5em;
     }
 
     .sub-card a,
     .sub-card{
         margin-left: 1rem;
-        letter-spacing: 0.6em !important;
+        letter-spacing: 0.6em;
     }
 
     .sub-card-long a,
     .sub-card-long{
         margin-left: 0;
-        letter-spacing: 0.6em !important;
+        letter-spacing: 0.6em;
     }
 
 
     .itiran_pgh{
-        font-size: 60% !important;
+        font-size: 85%;
+        letter-spacing: 0.3em;
+        line-height: 1.8em;
     }
 
     .itiran_cash{
-        margin-top: 1.5em !important;
+        margin-top: 1.5em;
         
     }
 
@@ -1101,17 +1059,20 @@ thead{
         margin-top: 1.2em;
     }
 
-    .itiran_h4 a,
-    .itiran_h4{
-        font-size: 20px !important;
+
+    .itiran_h4 a{
+        font-size: 22px;
     }
 
+    .itiran_tenmei,
     .itiran_tenmei a{
-        font-size: 18px !important;
+        font-size: 20px;
+        margin-bottom: 20px;
     }
+
 
     .kakuten{
-        font-size: 10px !important;
+        font-size: 14px;
     }
 
     .itiran_img{
@@ -1120,17 +1081,8 @@ thead{
         margin: 0em 2rem 0.5rem;
     }
 
-    .itiran_title{
-        padding-top: 0 !important;
-        text-align: center;
-    }
-
-    .spTitle{
-        font-size: 14px !important;
-    }
-
-    .cocode{
-        font-size: 50% !important;
+    #cocode{
+        font-size: 70%;
     }
 
  }
@@ -1138,14 +1090,14 @@ thead{
 
  @media only screen and (max-width: 300px) {
 
-    .sub-card{
-        width: 10rem !important;
-        height: 2.5rem !important;
+    #sub-card{
+        width: 10rem;
+        height: 2.5rem;
     }
 
-    .sub-card-long{
-        width: 10rem !important;
-        height: 7.8rem !important;
+    #sub-card-long{
+        width: 10rem;
+        height: 7.8rem;
     }
 
     .sub-card a, 
@@ -1160,32 +1112,36 @@ thead{
         margin: 0em 0.8rem 0.8rem;
     }
 
-
     .itiran_h4 a,
     .itiran_h4{
-        font-size: 16px !important;
+        font-size: 16px;
     }
 
-    .slash::before,
-    .slash::after {
-        width: 15px !important;
-        height: 1px !important;
-        font-size: 2vw !important;
+    .itiran_cash{
+        padding-left: 0;
     }
 
+    .slash{
+        width: 160px;
+    } 
 
-    .itiran_days{
-        padding-right: 0 !important;
+
+    #itiran_days{
+        width: 190px;
     }
 
     .fa-reply{
         display: none;
     }
 
-    #conta_cash{
-        margin-top: 0 !important;
+    #arrow{
+        display: none;
     }
 
+
+    #conta_cash{
+        margin-top: 0;
+    }
 
 
  }
@@ -1237,7 +1193,7 @@ thead{
     position: absolute;
     right: 10px;
     top: 50%; 
-    transform: translateY(-50%);
+    transform: translateY(-50%); 
 }
 
 #headingOne::after,
@@ -1337,18 +1293,18 @@ thead{
         font-size: 1.8em;
     }
 
-    .policy-conta{
+    #policy-conta{
         padding: 5rem 0 !important;
     }
 
     .policy-heading{
-        font-size: 1.3em !important;
+        font-size: 1.3em;
     }
 }
 
 @media only screen and (max-width: 420px) {
     #privacy-h1{
-        font-size: 1.7em !important;
+        font-size: 1.7em;
     }
 
     #smart-dis{
@@ -1356,9 +1312,8 @@ thead{
     }
 
     .policy-conta{
-        font-size: 0.8em !important;
+        font-size: 0.8em;
         width: 90%;
-        padding-left: 0 !important;
     }
 
     .sengen{
@@ -1366,7 +1321,7 @@ thead{
     }
 
     .policy-heading{
-        font-size: 1.2em !important;
+        font-size: 1.3em;
     }
 
  }
@@ -1448,9 +1403,6 @@ footer{
     color:#000;
 }
 
-.footer-link:hover{
-    color: #000;
-}
 
 .footer-link:hover{
     text-decoration: none;
@@ -1471,8 +1423,8 @@ footer{
     .footer-main:nth-child(1),
     .footer-main:nth-child(2),
     .footer-main:nth-child(3){
-        padding-left: 1rem !important;
-        margin-right: 20px !important;
+        padding-left: 1rem;
+        margin-right: 20px;
     }
 
     .footer-main b{
@@ -1489,18 +1441,16 @@ footer{
         margin-right: 12px !important;
     }
 
-    .footer-main b{
-        font-size: 10px !important;
-    }
-
 }
 
 
 /******************* お問い合わせフォーム関係 ***********************/
 .contact-btn{
     margin-right: 1rem;
-    vertical-align: top !important;
+    vertical-align: top;
     background: #e5ed5a;
+    width: 150px; 
+    height: 45px;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
@@ -1511,7 +1461,7 @@ footer{
 
 .contact-back{
     margin-right: 1rem;
-    vertical-align: top !important;
+    vertical-align: top;
     background: #f9fdba;
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -1536,23 +1486,19 @@ footer{
     }
 
     .contact-btn{
-        font-size: 80%;
-        width: 90px !important;
-        height: 30px !important;
+        font-size: 14px;
+    }
+
+    .contact-back{
+        font-size: 14px;
     }
 
     label{
         font-size: 0.6rem;
     }
 
-    textarea{
-        font-size: 0.6em !important;
-        width: 100% !important;
-        height: auto !important;
-    }
-
     .contact-input{
-        max-width: 100% !important;
+        max-width: 100%;
     } 
 
     .conta-container{
@@ -1592,6 +1538,7 @@ footer{
     font-weight: bold;
 }
 
-.cLink{
+/* たぶん要らない */
+/* .cLink{
     font-size: 23px;
-}
+} */

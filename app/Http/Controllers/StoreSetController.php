@@ -1339,13 +1339,94 @@ class StoreSetController extends Controller
                 }
 
             }
+        }
 
+    }
+
+
+
+    public function corp_mirai(){
+        $client = new Client(HttpClient::create(['verify_peer' => false, 'verify_host' => false]));
+
+        $sql_55 = 'select url, element_path from scrape where id = 55';
+        $s_55 = DB::select($sql_55);
+        foreach($s_55 as $data){
+            $url = $data->url;
+            $crawler = $client->request('GET', $url);
+
+            $link = $crawler->filter($data->element_path)->filter('p > a')
+            ->each(function($node){
+                return $node->attr('href');
+            });
+
+            $store = $crawler->filter($data->element_path)->filter('p > a')
+            ->each(function($node){
+                return $node->text();
+            });
             
+            $address = $crawler->filter($data->element_path)->filter('div > dl.box01 > dd')
+            ->each(function($node){
+                return $node->text();
+            });
 
+            $tel = $crawler->filter($data->element_path)->filter('div > dl.box02 > dd > a')
+            ->each(function($node){
+                return $node->text();
+            });
+
+            $time = $crawler->filter($data->element_path)->filter('div > dl.box03 > dd')
+            ->each(function($node){
+                return $node->text();
+            });
+            
         }
 
 
+        for($i = 0; $i < count($store); $i++){
+            $separate = Common::separate_address_one($address[$i]);
+            $city = $separate['city'];
+            $district = $separate['district'];
+            $st_link = 'https://shop-mirai.coopnet.or.jp/shop/tokyo' . $link[$i];
 
+            if(preg_match('/^ミニコープ/', $store[$i])){
+                $st_name = str_replace('ミニコープ', '', $store[$i]);
+
+                $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+                $exist = DB::select($count);
+
+                // Log::debug($district);
+                if($exist[0]->cnt == 0){
+                    $id = "select max(store_id) + 1 as max_id from store";
+                    $max = DB::select($id);
+                    $max_id = $max[0]->max_id;
+
+                    $sql = "insert into store(shop_id, store_id, store_name, store_address, store_url, store_tel, town, ss_town) 
+                    values(155, $max_id, '$st_name', '$address[$i]', '$st_link', '$tel[$i]', '$city', '$district')";
+                    // dd($sql);
+                    DB::insert($sql);
+                }
+            
+            }elseif(preg_match('/^コープ/', $store[$i])){
+                $st_name2 = str_replace('コープ', '', $store[$i]);
+
+                $count = "select count(*) as cnt from store where store_name = '$store[$i]'";
+                $exist = DB::select($count);
+
+                // Log::debug($district);
+                if($exist[0]->cnt == 0){
+                    $id = "select max(store_id) + 1 as max_id from store";
+                    $max = DB::select($id);
+                    $max_id = $max[0]->max_id;
+
+                    $sql_2 = "insert into store(shop_id, store_id, store_name, store_address, store_url, store_tel, town, ss_town) 
+                    values(140, $max_id, '$st_name2', '$address[$i]', '$st_link', '$tel[$i]', '$city', '$district')";
+                    // dd($sql_2);
+                    DB::insert($sql_2);
+                }
+            }
+            DB::commit();
+            
+        }
     }
 
 

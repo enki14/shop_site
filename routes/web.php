@@ -58,6 +58,7 @@ Route::post('/aeon_store', 'StoreSetController@aeon_store');
 Route::post('/superalps', 'StoreSetController@superalps');
 Route::post('/york', 'StoreSetController@york');
 Route::post('/ok_store', 'StoreSetController@ok_store');
+Route::post('/corp_mirai', 'StoreSetController@corp_mirai');
 
 // event登録
 Route::post('/itoyokado_event', 'EventSetController@itoyokado_event');

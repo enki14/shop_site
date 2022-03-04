@@ -19,11 +19,11 @@
             <input name="body" value="{{ $inputs['body'] }}" type="hidden" />
         </p>
         <button type="submit" name="action" value="back"
-        class="contact-back btn mt-5">
+        class="contact-back btn my-5">
             入力内容修正
         </button>
         <button type="submit" name="action" value="submit"
-        class="contact-btn btn mt-5">
+        class="contact-btn btn my-5">
             送信する
         </button>
     </form>

@@ -10,7 +10,7 @@
                 
                 <div class="col text-left mt-5">
                     <!-- 取得したい店舗によってaction先を変える -->    
-                    <form class="form-group" method="post" action="ok_store">
+                    <form class="form-group" method="post" action="corp_mirai">
                     @csrf
                         <button type="submit">ストア登録</button>
                     </form>

@@ -44,9 +44,9 @@ role="dialog" aria-hidden="true">
     </div>
 </div>
 @section('layouts.content')
-<div id="content-main" class="mx-auto">
+<div id="content-main">
     <div id="content_row" class="row">
-        <div id="content-container" class="card mt-3 col-7">
+        <div id="content-container" class="card mt-3 col-lg-8 mx-auto">
             <div class="container">
                 <div id="lens-set" class="col-lg-12 d-flex justify-content-center" style="top: -120%;">
                     <i id="lens" class="fas fa-circle fa-sm"></i>
@@ -65,7 +65,7 @@ role="dialog" aria-hidden="true">
                 </div>
             </div>
         </div>
-        @include('layouts.sidebar')
+        {{--@include('layouts.sidebar')--}}
     </div>
 </div>
 @endsection
