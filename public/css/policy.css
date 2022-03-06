@@ -52,3 +52,10 @@
  .footer-link:hover{
    text-shadow: 0 0 6px #fad5b7,0 0 12px #bd6044;
  }
+
+
+@media only screen and (max-width: 420px) {
+    .policy-heading{
+        padding: 0.7em;
+    }
+}

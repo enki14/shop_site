@@ -34,7 +34,7 @@ nav{
 
    #history_back,
    #history_back_2{
-       font-size: 0.6em;
+       font-size: 0.8em;
    }
 
 }
@@ -289,13 +289,12 @@ nav{
    }
 
 
-
 }
 
 
 @media only screen and (max-width: 420px) {
    .header-title{
-       font-size: 22px;
+       font-size: 20px;
    }
 
    .description-top{
@@ -578,6 +577,10 @@ h2{
        font-size: 1.8em;
    }
 
+   #kensaku-main{
+       width: 7.2rem;
+   } 
+
    .kensaku-btn,
    .b-style{
        background-color: #dfd433;
@@ -616,15 +619,16 @@ h2{
    }
 
    #search-schedule{
-       height: 60px;
+       height: 2.5em;
    }
 
    #search-shop{
-       height: 60px; 
+       height: 2.5em;
+       width: 55%; 
    } 
 
    #kensaku-main{
-       height: 60px;
+       height: 2.5em;
 
    }
 
@@ -632,15 +636,6 @@ h2{
        margin-top: 0;
    }
 
-}
-
-@media only screen and (max-width: 300px) {
-    #content-h2,
-    #keys-h2,
-    #calendar-h2,
-    #maps-h2{
-        font-size: 1.2em;
-    }
 }
 
 /****** 「 お得を探す 」「 話題・キーワード 」部分 ↑↑↑ *******/
@@ -768,14 +763,7 @@ thead{
 
 
 @media only screen and (max-width: 420px) {
-
-    .fc-toolbar{
-        display: block !important;
-    }
-
    .fc-toolbar-title{
-       padding-top: 25px;
-       text-align: center;
        font-size: 1em !important;
        letter-spacing: 0.07em;
    }
@@ -1005,7 +993,7 @@ thead{
    }
 
    #map_search{
-       max-width: 100%; 
+       max-width: 95%; 
    }
 
    #kensaku-map{
@@ -1014,9 +1002,9 @@ thead{
 
    #reset-btn{
        margin-top: 5px;
+       width: 25%;
+       padding: 5px 0;
    }
-
-
 
    .firstHeading{
        font-size: 12px;
@@ -1154,6 +1142,7 @@ thead{
    #conta_cash{
        margin-top: 0;
    }
+
 
 }
 
@@ -1331,7 +1320,9 @@ thead{
        padding: 1rem;
    }
 
-
+   .policy-heading{
+       font-size: 1.3em;
+   }
 
 }
 
@@ -1437,7 +1428,7 @@ footer{
    }
 
    .footer-main b{
-       font-size: 15px;
+       font-size: 13px;
    }
 }
 
@@ -1446,11 +1437,8 @@ footer{
    .footer-main:nth-child(2),
    .footer-main:nth-child(3),
    .footer-main:nth-child(4){
-        border-left-style: none;
-   }
-
-   #footer-eria{
-        flex-direction: column;
+       padding-left: 0.5rem !important;
+       margin-right: 12px !important;
    }
 
 }

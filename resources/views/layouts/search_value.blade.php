@@ -1,4 +1,4 @@
-<div class="top-card card-img-top p-2">
+<div class="top-card card-img-top p-2 mt-5">
     <h2 id="content-h2" class="text-center">お得を探す</h2>
     <div class="row justify-content-center">
         <form method="post" action="result" id="search-form">

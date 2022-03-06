@@ -14,8 +14,10 @@
                         {{-- 動的にループ処理 --}}
                         <div class="accordion" id="ac_child">
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="eMoney-h">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#eMoney" aria-expanded="false" aria-controls="eMoney">
+                                <h2 class="accordion-header my-4" id="eMoney-h">
+                                    <button class="btn btn-link font-weight-bold text-decoration-none pl-4"
+                                     type="button" data-toggle="collapse" data-target="#eMoney" 
+                                     aria-expanded="false" aria-controls="eMoney">
                                         電子マネー⓵
                                     </button>
                                 </h2>
@@ -40,8 +42,10 @@
                         {{-- 動的にループ処理 --}}
                         <div class="accordion" id="ac_child">
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="cCard-h">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#cCard" aria-expanded="false" aria-controls="cCard">
+                                <h2 class="accordion-header my-4" id="cCard-h">
+                                    <button class="btn btn-link font-weight-bold text-decoration-none pl-4"
+                                     type="button" data-toggle="collapse" data-target="#cCard"
+                                      aria-expanded="false" aria-controls="cCard">
                                         クレジットカード⓵
                                     </button>
                                 </h2>
@@ -66,8 +70,10 @@
                         {{-- 動的にループ処理 --}}
                         <div class="accordion" id="ac_child">
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="pCard-h">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#pCard" aria-expanded="false" aria-controls="pCard">
+                                <h2 class="accordion-header my-4" id="pCard-h">
+                                    <button class="btn btn-link font-weight-bold text-decoration-none pl-4"
+                                     type="button" data-toggle="collapse" data-target="#pCard"
+                                      aria-expanded="false" aria-controls="pCard">
                                         point card⓵
                                     </button>
                                 </h2>
