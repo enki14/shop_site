@@ -7,7 +7,7 @@
             <div class="container">
                 <h2>データベースの管理・編集</h2> 
                 
-                
+                <?php phpinfo();?>
                 <div class="col text-left mt-5">
                     <!-- 取得したい店舗によってaction先を変える -->    
                     <form class="form-group" method="post" action="corp_mirai">

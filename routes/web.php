@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use \App\Http\Controllers\ImageUploadController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -113,6 +114,10 @@ Route::get('itoyokado_event', 'DetectDocumentController@itoyokado_event');
 // twitter api
 Route::get('twitter', 'TwitterController@index');
 
+
+// webp作成用
+Route::get('image_upload', [ImageUploadController::class, 'create']);
+Route::post('image_upload', [ImageUploadController::class, 'store']);
 
 
 /*************************** 管理画面用↓↓↓ *************************/

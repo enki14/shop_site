@@ -3,15 +3,21 @@
     <div id="fixed_nav" class="fixed-top" style="height:70px;">
       <div class="container-fulid">
         <div class="row">
-            <div class="col-3">
-              <a href="{{ url('/') }}" class="logo_link"><img src="{{ asset('/img/site_logo7.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" /></a>
-            </div>
-            <div class="col-6 board">
-              <p id="animation-info" class="animation-info font-weight-bold pt-1 ml-2">地図の下&nbsp;&nbsp;検索の一覧を出しました</p>
-            </div>
+          <div class="col-3">
+            <a href="{{ url('/') }}" class="logo_link">
+              <picture>
+                <source type="image/webp" srcset="{{ asset('/img/site_logo7.webp') }}">
+                <source type="image/png" srcset="{{ asset('/img/site_logo7.png') }}">
+                <img src="{{ asset('/img/site_logo7.png') }}" class="m-2" alt="ポイントカード情報局のロゴ" aria-label="site logo" />
+              </picture>
+            </a>
+          </div>
+          <div class="col-6 board">
+            <p id="animation-info" class="animation-info font-weight-bold pt-1 ml-2">地図の下&nbsp;&nbsp;検索の一覧を出しました</p>
           </div>
         </div>
       </div>
+    </div>
     <nav class="navbar navbar-expand-lg navbar-light jumbotron p-0 mb-0">
       <div id="black_out" class="container-fluid p-0">
         {{-- web.phpのname()でページを指定している --}}

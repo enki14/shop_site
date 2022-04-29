@@ -1,5 +1,6 @@
 /******************** 下降するボタンの仕様　↓↓↓ *********************/
-$(function(){
+window.addEventListener('DOMContentLoaded', function(){
+    
     let speed = 600;
     let position = $("#content-container").offset().top;
 

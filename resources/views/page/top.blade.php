@@ -70,7 +70,7 @@ role="dialog" aria-hidden="true">
 </div>
 @endsection
 @section('resultScript')
-<script>
+<script defer>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -157,8 +157,8 @@ role="dialog" aria-hidden="true">
     }
  
 </script>
-<script src="{{ asset('/js/modal_open.js') }}"></script>
-<script src="{{ asset('/js/elevator.js') }}"></script>
-<script src="{{ asset('/js/aco_open.js') }}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places" async defer></script>
+<script defer src="{{ asset('/js/modal_open.js') }}"></script>
+<script defer src="{{ asset('/js/elevator.js') }}"></script>
+<script defer src="{{ asset('/js/aco_open.js') }}"></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places"></script>
 @endsection
