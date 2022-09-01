@@ -3,9 +3,10 @@
 @extends('layouts.footer')
 
 
-
 @section('title', 'スーパーマーケットのポイントカード情報♪　～東京都～')
 @section('description', 'スーパーマーケットのポイントカードのお得な情報が検索できるサイトです♪♪')
+
+@section('layouts.content')
 {{-- カレンダー用モーダル --}}
 <div id="calendarModal" class="modal fade" aria-hidden="true" style="display: none">
     <div class="modal-dialog modal-dialog-centered">
@@ -43,7 +44,6 @@ role="dialog" aria-hidden="true">
         </div>
     </div>
 </div>
-@section('layouts.content')
 <div id="content-main">
     <div id="content_row" class="row">
         <div id="content-container" class="card mt-3 col-lg-8 mx-auto">
@@ -160,5 +160,5 @@ role="dialog" aria-hidden="true">
 <script defer src="{{ asset('/js/modal_open.js') }}"></script>
 <script defer src="{{ asset('/js/elevator.js') }}"></script>
 <script defer src="{{ asset('/js/aco_open.js') }}"></script>
-<script defer src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyBAEY8ljaq0u8SXzKNz_M2GGKGahHJYpAo&callback=initMap&libraries=places"></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{ config('services.gcp') }}&callback=initMap&libraries=places"></script>
 @endsection
