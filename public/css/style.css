@@ -12,6 +12,9 @@ nav{
    z-index: 1; 
 }
 
+h2{
+   line-height: 2rem;
+}
 
 
 @media only screen and (max-width: 420px) {
@@ -319,6 +322,35 @@ nav{
 
 }
 
+/********************* header部のSNSエリア ↓↓↓ *********************/
+@media only screen and (max-width: 780px) {
+   #black_out .sns_area{
+      display: block !important;
+      top: -13rem;
+      position: relative;
+   }
+   #black_out .sns_area .row{
+      display: block !important;
+   }
+   #black_out .sns_area .row div{
+      text-align: right;
+      padding-right: 3rem;
+      max-width: 100%;
+   }
+   #black_out .sns_area .row div a{
+      padding-left: 2rem;
+
+   }
+}
+
+@media only screen and (max-width: 420px) {
+   #black_out .sns_area .row div{
+      text-align: center;
+   }
+}
+/********************* header部のSNSエリア ↑↑↑ *********************/
+
+
 
 /********************* header タイトル部分 ↑↑↑ *********************/
 
@@ -412,8 +444,16 @@ nav{
        padding-left: 0;
        padding-right: 0;
        background-color: #ecdc70;
+       border-radius: 10px;
    }
 }
+
+@media only screen and (max-width: 300px) {
+   #content-container{
+      border-radius: 5px;
+   }
+}
+
 
 /**************** content-containerのアニメーション部分 ↑↑↑ ******************/
 
@@ -956,7 +996,7 @@ thead{
 
 
 /* デフォルトの消すボタンを非表示 */
-.gm-ui-hover-effect img{
+.gm-ui-hover-effect span{
    display: none !important;
 }
 
@@ -1390,19 +1430,30 @@ thead{
 footer{
    bottom: 0;
    background-color: #decc54;
+   height: auto;
+   padding: 1.5rem 0;
+   
 } 
 
 .cart{
    color: #43bb2a;
 }
 
+#footer-eria{
+   padding: 2rem 0;
+}
+
+
 
 .footer-main:nth-child(2),
 .footer-main:nth-child(3),
 .footer-main:nth-child(4){
-   padding-left: 1.3rem;
+   /* padding-left: 1.5rem;
+   padding-right: 1.5rem; */
    border-left: 3px solid #d2691e;
 }
+
+
 
 .footer-main:nth-child(3){
    letter-spacing: 0.1em;
@@ -1412,6 +1463,10 @@ footer{
    color:#000;
 }
 
+.footer-p{
+   margin-right: 2rem;
+   justify-content: end;
+}
 
 .footer-link:hover{
    text-decoration: none;
@@ -1429,11 +1484,16 @@ footer{
 
 
 @media only screen and (max-width: 780px){
+   footer{
+      height: auto;
+   }
+
    .footer-main:nth-child(1),
    .footer-main:nth-child(2),
-   .footer-main:nth-child(3){
-       padding-left: 1rem;
-       margin-right: 20px;
+   .footer-main:nth-child(3),
+   .footer-main:nth-child(4){
+       padding-left: 1rem !important;
+       padding-right: 1rem !important;
    }
 
    .footer-main b{
@@ -1449,8 +1509,18 @@ footer{
         border-left-style: none;
    }
 
+   .footer-main b{
+      font-size: 18px;
+   }
+
    #footer-eria{
         flex-direction: column;
+   }
+
+   .footer-p{
+      margin-right: 0;
+      justify-content: center !important;
+
    }
 
 }
@@ -1549,8 +1619,3 @@ footer{
    font-size: 16px;
    font-weight: bold;
 }
-
-/* たぶん要らない */
-/* .cLink{
-   font-size: 23px;
-} */

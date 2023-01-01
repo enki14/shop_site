@@ -67,7 +67,7 @@
             </div>
           </div>
         @endif
-        <div class="container d-flex justify-content-end mr-0">
+        <div class="container d-flex justify-content-end mr-0 sns_area">
           <div class="row">
             <div class="col-1">
             <a href="http://www.facebook.com/share.php?u=https://point-everyday.com/" 
